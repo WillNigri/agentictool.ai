@@ -136,7 +136,7 @@
             width: 32px;
             height: 32px;
             background: var(--accent-cyan);
-            border-radius: 6px;
+            border-radius: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -174,7 +174,7 @@
             border: 1px solid var(--accent-cyan);
             color: var(--accent-cyan) !important;
             padding: 8px 18px;
-            border-radius: 8px;
+            border-radius: 0;
             font-size: 0.85rem !important;
             font-weight: 600 !important;
             transition: background 0.2s, color 0.2s;
@@ -228,7 +228,7 @@
             gap: 8px;
             background: rgba(0, 255, 213, 0.06);
             border: 1px solid rgba(0, 255, 213, 0.2);
-            border-radius: 100px;
+            border-radius: 0;
             padding: 6px 16px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.78rem;
@@ -241,7 +241,7 @@
             width: 6px;
             height: 6px;
             background: var(--accent-cyan);
-            border-radius: 50%;
+            border-radius: 0;
         }
 
         .hero-title {
@@ -315,7 +315,7 @@
             background: var(--accent-cyan);
             color: var(--bg-dark);
             padding: 14px 28px;
-            border-radius: 10px;
+            border-radius: 0;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 600;
             font-size: 1rem;
@@ -336,7 +336,7 @@
             background: transparent;
             color: var(--text-primary);
             padding: 14px 28px;
-            border-radius: 10px;
+            border-radius: 0;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 600;
             font-size: 1rem;
@@ -361,7 +361,7 @@
             right: -60px;
             width: 110%;
             height: 100%;
-            border-radius: 20px;
+            border-radius: 0;
             opacity: 0.8;
         }
 
@@ -412,7 +412,7 @@
         .problem-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 0;
             padding: 32px;
             transition: border-color 0.3s, transform 0.3s;
         }
@@ -425,7 +425,7 @@
         .problem-card-icon {
             width: 44px;
             height: 44px;
-            border-radius: 10px;
+            border-radius: 0;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -529,7 +529,7 @@
         .feature-mockup {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 0;
             padding: 24px;
             font-family: 'JetBrains Mono', monospace;
             font-size: 0.85rem;
@@ -571,7 +571,7 @@
         .context-bar {
             height: 28px;
             background: var(--bg-surface);
-            border-radius: 6px;
+            border-radius: 0;
             overflow: hidden;
             display: flex;
         }
@@ -600,7 +600,7 @@
             content: '';
             width: 8px;
             height: 8px;
-            border-radius: 2px;
+            border-radius: 0;
         }
 
         .legend-system::before { background: var(--accent-coral); }
@@ -642,7 +642,7 @@
         .skill-toggle {
             width: 36px;
             height: 20px;
-            border-radius: 10px;
+            border-radius: 0;
             position: relative;
         }
 
@@ -683,7 +683,7 @@
 
         .usage-card {
             background: var(--bg-surface);
-            border-radius: 8px;
+            border-radius: 0;
             padding: 14px;
         }
 
@@ -718,7 +718,7 @@
         .usage-bar-chart div {
             flex: 1;
             background: var(--accent-cyan);
-            border-radius: 3px 3px 0 0;
+            border-radius: 0;
             opacity: 0.5;
             transition: opacity 0.2s;
         }
@@ -782,7 +782,7 @@
         .terminal-block {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 0;
             overflow: hidden;
             max-width: 700px;
             margin: 0 auto;
@@ -838,7 +838,7 @@
         .arch-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 0;
             padding: 36px;
             transition: border-color 0.3s, transform 0.3s;
         }
@@ -925,7 +925,7 @@
         .i18n-badge {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 10px;
+            border-radius: 0;
             padding: 14px 28px;
             font-family: 'Space Grotesk', sans-serif;
             font-weight: 600;
@@ -964,7 +964,7 @@
         .download-btn {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 12px;
+            border-radius: 0;
             padding: 20px;
             text-align: center;
             transition: border-color 0.3s, transform 0.3s;
@@ -1004,7 +1004,7 @@
             background: var(--bg-card);
             border: 1px solid var(--border);
             padding: 4px 12px;
-            border-radius: 6px;
+            border-radius: 0;
             font-size: 0.85rem;
             color: var(--accent-cyan);
         }
@@ -1026,7 +1026,7 @@
         .ecosystem-card {
             background: var(--bg-card);
             border: 1px solid var(--border);
-            border-radius: 14px;
+            border-radius: 0;
             padding: 32px;
             transition: border-color 0.3s, transform 0.3s;
             display: block;
@@ -1821,7 +1821,7 @@
                     float n3 = snoise(vec2(uv.x * 2.0 + t * 0.3, uv.y * 3.0 - t * 0.2));
                     float n4 = snoise(vec2(uv.x * 4.0 + t * 0.7, uv.y * 4.0 + t * 0.5));
 
-                    // Color palette — cyan, green, purple
+                    // Color palette — cyan, coral, blue (matches ASO)
                     vec3 col1 = vec3(0.0, 1.0, 0.835); // cyan #00ffd5
                     vec3 col2 = vec3(0.133, 0.773, 0.369); // green
                     vec3 col3 = vec3(0.545, 0.361, 0.965); // purple
