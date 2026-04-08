@@ -1295,6 +1295,10 @@
                         <div class="hero-stat-label">MCP Tools</div>
                     </div>
                     <div class="hero-stat">
+                        <div class="hero-stat-value">20+</div>
+                        <div class="hero-stat-label">Dashboard Panels</div>
+                    </div>
+                    <div class="hero-stat">
                         <div class="hero-stat-value">MIT</div>
                         <div class="hero-stat-label">Open Source</div>
                     </div>
@@ -1555,6 +1559,194 @@
         </div>
     </section>
 
+    <!-- v1.0.0 FEATURES -->
+    <section class="features" id="enterprise" style="border-top:1px solid var(--border);">
+        <div class="container">
+            <div class="section-label fade-in">v1.0.0</div>
+            <h2 class="section-title fade-in">Production-ready for teams and companies</h2>
+
+            <!-- LLM API Key Management -->
+            <div class="feature-block fade-in">
+                <div class="feature-info">
+                    <h3>LLM API Key Management</h3>
+                    <p>Centralized dashboard to store, rotate, and scope API keys for every major LLM provider. Keys are encrypted locally &mdash; never sent to any server.</p>
+                    <ul class="feature-bullets">
+                        <li>Anthropic, OpenAI, Google, Mistral, Groq, Cohere + more</li>
+                        <li>One-click key rotation with masked preview</li>
+                        <li>Per-runtime scoping (assign keys to specific agents)</li>
+                        <li>Usage tracking: see which keys are active and how often</li>
+                    </ul>
+                </div>
+                <div class="feature-mockup">
+                    <div class="feature-mockup-header">
+                        <div class="feature-mockup-dot red"></div>
+                        <div class="feature-mockup-dot yellow"></div>
+                        <div class="feature-mockup-dot green"></div>
+                    </div>
+                    <div class="skill-row">
+                        <span class="skill-name" style="display:flex;align-items:center;gap:8px;"><span style="background:#D4A574;color:#000;padding:2px 6px;border-radius:2px;font-size:0.7rem;font-weight:700;">A</span> Anthropic Production</span>
+                        <div class="skill-meta"><span class="skill-tokens" style="font-family:'JetBrains Mono',monospace;">sk-a...4f2x</span></div>
+                    </div>
+                    <div class="skill-row">
+                        <span class="skill-name" style="display:flex;align-items:center;gap:8px;"><span style="background:#74AA9C;color:#000;padding:2px 6px;border-radius:2px;font-size:0.7rem;font-weight:700;">O</span> OpenAI GPT-4</span>
+                        <div class="skill-meta"><span class="skill-tokens" style="font-family:'JetBrains Mono',monospace;">sk-p...9k3m</span></div>
+                    </div>
+                    <div class="skill-row">
+                        <span class="skill-name" style="display:flex;align-items:center;gap:8px;"><span style="background:#4285F4;color:#fff;padding:2px 6px;border-radius:2px;font-size:0.7rem;font-weight:700;">G</span> Google AI Staging</span>
+                        <div class="skill-meta"><span class="skill-tokens" style="font-family:'JetBrains Mono',monospace;">AI...7xq2</span></div>
+                    </div>
+                    <div class="skill-row">
+                        <span class="skill-name" style="display:flex;align-items:center;gap:8px;"><span style="background:#F55036;color:#fff;padding:2px 6px;border-radius:2px;font-size:0.7rem;font-weight:700;">G</span> Groq Fast</span>
+                        <div class="skill-meta"><span class="skill-tokens" style="font-family:'JetBrains Mono',monospace;">gsk...r4p1</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Agent Monitor -->
+            <div class="feature-block fade-in">
+                <div class="feature-info">
+                    <h3>Real-time Agent Monitor</h3>
+                    <p>Live dashboard showing active agent sessions, token consumption rates, runtime health, and smart alerts &mdash; across all your AI coding tools at once.</p>
+                    <ul class="feature-bullets">
+                        <li>Live session tracking with 3-second refresh (Pro)</li>
+                        <li>Token usage timeline charts and burn rate</li>
+                        <li>Smart alerts: error spikes, high token usage, offline runtimes</li>
+                        <li>Basic stats and recent sessions free for everyone</li>
+                    </ul>
+                </div>
+                <div class="feature-mockup">
+                    <div class="feature-mockup-header">
+                        <div class="feature-mockup-dot red"></div>
+                        <div class="feature-mockup-dot yellow"></div>
+                        <div class="feature-mockup-dot green"></div>
+                    </div>
+                    <div class="usage-summary">
+                        <div class="usage-card">
+                            <div class="usage-card-label">Tokens/hr</div>
+                            <div class="usage-card-value" style="color:var(--accent-cyan);">24.5K</div>
+                        </div>
+                        <div class="usage-card">
+                            <div class="usage-card-label">Sessions</div>
+                            <div class="usage-card-value">18</div>
+                        </div>
+                        <div class="usage-card">
+                            <div class="usage-card-label">Avg Duration</div>
+                            <div class="usage-card-value">4.2s</div>
+                        </div>
+                        <div class="usage-card">
+                            <div class="usage-card-label">Errors</div>
+                            <div class="usage-card-value" style="color:var(--accent-green);">0</div>
+                        </div>
+                    </div>
+                    <div style="padding:8px 16px;">
+                        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);">
+                            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent-green);"></span>
+                            <span style="font-size:0.75rem;color:#D4A574;">claude</span>
+                            <span style="flex:1;font-size:0.8rem;">code-review session</span>
+                            <span style="font-size:0.7rem;color:var(--text-muted);">2.1K tok &middot; 3.4s</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--border);">
+                            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent-green);"></span>
+                            <span style="font-size:0.75rem;color:#74AA9C;">codex</span>
+                            <span style="flex:1;font-size:0.8rem;">test generation</span>
+                            <span style="font-size:0.7rem;color:var(--text-muted);">1.8K tok &middot; 2.1s</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;padding:6px 0;">
+                            <span style="width:6px;height:6px;border-radius:50%;background:#3b82f6;"></span>
+                            <span style="font-size:0.75rem;color:#8B5CF6;">hermes</span>
+                            <span style="flex:1;font-size:0.8rem;">documentation update</span>
+                            <span style="font-size:0.7rem;color:var(--text-muted);">956 tok &middot; 1.8s</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Audit Log -->
+            <div class="feature-block fade-in">
+                <div class="feature-info">
+                    <h3>Audit Log</h3>
+                    <p>Complete audit trail of every action across your agentic systems. Filter by action type, resource, and time range. Export to JSON for compliance.</p>
+                    <ul class="feature-bullets">
+                        <li>Track skill changes, key rotations, config updates, cron triggers</li>
+                        <li>Filterable by action type and resource</li>
+                        <li>Stats dashboard: today, this week, top actions</li>
+                        <li>One-click JSON export</li>
+                    </ul>
+                </div>
+                <div class="feature-mockup">
+                    <div class="feature-mockup-header">
+                        <div class="feature-mockup-dot red"></div>
+                        <div class="feature-mockup-dot yellow"></div>
+                        <div class="feature-mockup-dot green"></div>
+                    </div>
+                    <div style="padding:12px 16px;">
+                        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);">
+                            <span style="color:var(--accent-green);font-size:0.8rem;">skill.create</span>
+                            <span style="flex:1;font-size:0.8rem;color:var(--text-muted);">&mdash; code-review.md</span>
+                            <span style="font-size:0.7rem;color:var(--text-muted);">2m ago</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);">
+                            <span style="color:var(--accent-blue);font-size:0.8rem;">config.update</span>
+                            <span style="flex:1;font-size:0.8rem;color:var(--text-muted);">&mdash; claude runtime</span>
+                            <span style="font-size:0.7rem;color:var(--text-muted);">5m ago</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--border);">
+                            <span style="color:var(--accent-cyan);font-size:0.8rem;">cron.trigger</span>
+                            <span style="flex:1;font-size:0.8rem;color:var(--text-muted);">&mdash; daily-backup</span>
+                            <span style="font-size:0.7rem;color:var(--text-muted);">1h ago</span>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:8px;padding:8px 0;">
+                            <span style="color:var(--accent-red);font-size:0.8rem;">secret.delete</span>
+                            <span style="flex:1;font-size:0.8rem;color:var(--text-muted);">&mdash; old-api-key</span>
+                            <span style="font-size:0.7rem;color:var(--text-muted);">3h ago</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SSO / Enterprise -->
+            <div class="feature-block fade-in">
+                <div class="feature-info">
+                    <h3>SSO &amp; Enterprise Auth <span style="font-size:0.7rem;padding:2px 8px;background:rgba(0,255,213,0.1);color:var(--accent-cyan);border-radius:2px;margin-left:8px;">PRO</span></h3>
+                    <p>Connect your company's identity provider. Google Workspace, Okta, Microsoft Entra, or any OIDC provider &mdash; with domain restriction and auto-provisioning.</p>
+                    <ul class="feature-bullets">
+                        <li>Google Workspace, Okta, Microsoft Entra built-in</li>
+                        <li>Any custom OIDC provider via URL config</li>
+                        <li>Domain restriction: only @company.com can join</li>
+                        <li>Auto-provision users on first SSO login</li>
+                    </ul>
+                </div>
+                <div class="feature-mockup">
+                    <div class="feature-mockup-header">
+                        <div class="feature-mockup-dot red"></div>
+                        <div class="feature-mockup-dot yellow"></div>
+                        <div class="feature-mockup-dot green"></div>
+                    </div>
+                    <div style="padding:16px;">
+                        <div style="font-size:0.75rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">SSO Providers</div>
+                        <div style="display:flex;gap:12px;flex-wrap:wrap;">
+                            <div style="flex:1;min-width:120px;background:var(--bg-surface);border:1px solid var(--border);padding:12px;text-align:center;">
+                                <div style="font-size:1.5rem;margin-bottom:4px;">G</div>
+                                <div style="font-size:0.8rem;">Google</div>
+                                <div style="font-size:0.65rem;color:var(--accent-green);margin-top:4px;">Active</div>
+                            </div>
+                            <div style="flex:1;min-width:120px;background:var(--bg-surface);border:1px solid var(--border);padding:12px;text-align:center;">
+                                <div style="font-size:1.5rem;margin-bottom:4px;">M</div>
+                                <div style="font-size:0.8rem;">Microsoft</div>
+                                <div style="font-size:0.65rem;color:var(--text-muted);margin-top:4px;">Configure</div>
+                            </div>
+                            <div style="flex:1;min-width:120px;background:var(--bg-surface);border:1px solid var(--border);padding:12px;text-align:center;">
+                                <div style="font-size:1.5rem;margin-bottom:4px;">O</div>
+                                <div style="font-size:0.8rem;">Okta</div>
+                                <div style="font-size:0.65rem;color:var(--text-muted);margin-top:4px;">Configure</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- MCP SERVER -->
     <section class="mcp-section" id="mcp-server">
         <div class="container" style="text-align:center;">
@@ -1608,12 +1800,14 @@
             <div class="arch-grid fade-in">
                 <div class="arch-card">
                     <h3>Desktop</h3>
-                    <div class="arch-subtitle">offline-first</div>
+                    <div class="arch-subtitle">offline-first &middot; free</div>
                     <ul>
-                        <li>Tauri 2.x framework</li>
+                        <li>Tauri 2.x (Rust + React)</li>
                         <li>SQLite local database</li>
-                        <li>~5MB installer size</li>
-                        <li>File watcher for live updates</li>
+                        <li>LLM API key management</li>
+                        <li>Audit logging</li>
+                        <li>Agent monitor (basic)</li>
+                        <li>Skills, automation, cron, MCP</li>
                     </ul>
                 </div>
                 <div class="arch-sync">
@@ -1621,13 +1815,15 @@
                     <div class="arch-sync-label">Sync</div>
                 </div>
                 <div class="arch-card">
-                    <h3>Pro Features</h3>
-                    <div class="arch-subtitle">opt-in</div>
+                    <h3>Cloud / Pro</h3>
+                    <div class="arch-subtitle">opt-in &middot; teams</div>
                     <ul>
-                        <li>Railway deployment</li>
-                        <li>PostgreSQL database</li>
-                        <li>Team features &amp; sharing</li>
-                        <li>Cross-device sync</li>
+                        <li>7 microservices on Railway</li>
+                        <li>PostgreSQL + SSO (OIDC)</li>
+                        <li>Real-time agent monitoring</li>
+                        <li>Smart alerts &amp; token charts</li>
+                        <li>Team workspaces &amp; roles</li>
+                        <li>Tiered rate limiting</li>
                     </ul>
                 </div>
             </div>
@@ -1679,7 +1875,21 @@
                     <div class="download-btn-sub">.deb package</div>
                 </a>
             </div>
-            <p class="download-alt fade-in">Or install just the MCP server: <code>npx ato-mcp</code></p>
+            <div class="terminal-block fade-in" style="max-width:520px;margin:32px auto 0 auto;">
+                <div class="terminal-header">
+                    <div class="feature-mockup-dot red"></div>
+                    <div class="feature-mockup-dot yellow"></div>
+                    <div class="feature-mockup-dot green"></div>
+                </div>
+                <div class="terminal-body" style="text-align:left;">
+<span class="comment"># Install via Homebrew (macOS)</span>
+<span class="prompt">$</span> brew tap WillNigri/ato
+<span class="prompt">$</span> brew install --cask ato
+
+<span class="comment"># Or install just the MCP server</span>
+<span class="prompt">$</span> npx ato-mcp
+                </div>
+            </div>
         </div>
     </section>
 
