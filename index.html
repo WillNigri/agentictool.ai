@@ -1291,7 +1291,7 @@
                         <div class="hero-stat-label">AI Runtimes</div>
                     </div>
                     <div class="hero-stat">
-                        <div class="hero-stat-value">8</div>
+                        <div class="hero-stat-value">16</div>
                         <div class="hero-stat-label">MCP Tools</div>
                     </div>
                     <div class="hero-stat">
@@ -1751,7 +1751,7 @@
     <section class="mcp-section" id="mcp-server">
         <div class="container" style="text-align:center;">
             <div class="section-label fade-in">MCP Server</div>
-            <h2 class="section-title fade-in">MCP Server with 8 tools</h2>
+            <h2 class="section-title fade-in">MCP Server with 16 tools</h2>
             <p class="section-subtitle fade-in" style="margin:0 auto 48px auto;">Connect ATO to any MCP-compatible agent. Query runtime health, manage skills, and read execution logs.</p>
             <div class="terminal-block fade-in">
                 <div class="terminal-header">
@@ -1762,15 +1762,7 @@
                 <div class="terminal-body" style="text-align:left;">
 <span class="prompt">$</span> npx ato-mcp
 
-<span class="comment"># 8 tools available:</span>
-<span class="check">&#10003;</span> get_context_usage
-<span class="check">&#10003;</span> list_skills / toggle_skill
-<span class="check">&#10003;</span> get_usage_stats
-<span class="check">&#10003;</span> get_mcp_status
-<span class="check">&#10003;</span> get_runtime_status  <span class="comment"># any runtime</span>
-<span class="check">&#10003;</span> get_all_runtime_statuses
-<span class="check">&#10003;</span> get_agent_logs
-
+<span class="comment"># 16 tools available:</span>
 <span class="comment"># Add to ~/.claude/settings.json:</span>
 {
   <span class="string">"mcpServers"</span>: {
@@ -1781,12 +1773,28 @@
   }
 }
 
-<span class="comment"># Available tools:</span>
-<span class="check">&#10003;</span> get_context_usage <span class="comment">&mdash; Context window breakdown</span>
-<span class="check">&#10003;</span> list_skills <span class="comment">&mdash; All skills with token counts</span>
-<span class="check">&#10003;</span> toggle_skill <span class="comment">&mdash; Enable/disable skills</span>
-<span class="check">&#10003;</span> get_usage_stats <span class="comment">&mdash; Token and cost analytics</span>
-<span class="check">&#10003;</span> get_mcp_status <span class="comment">&mdash; MCP server health</span>
+<span class="comment"># Context &amp; Usage</span>
+<span class="check">&#10003;</span> get_context_usage      <span class="comment">&mdash; Context window breakdown</span>
+<span class="check">&#10003;</span> get_usage_stats        <span class="comment">&mdash; Token and cost analytics</span>
+<span class="check">&#10003;</span> get_mcp_status         <span class="comment">&mdash; MCP server health</span>
+
+<span class="comment"># Skills Management</span>
+<span class="check">&#10003;</span> list_skills            <span class="comment">&mdash; All skills with token counts</span>
+<span class="check">&#10003;</span> toggle_skill           <span class="comment">&mdash; Enable/disable skills</span>
+<span class="check">&#10003;</span> get_skill_index_stats  <span class="comment">&mdash; Index &amp; watcher status</span>
+<span class="check">&#10003;</span> rescan_skills          <span class="comment">&mdash; Force full rescan</span>
+
+<span class="comment"># Runtime Health</span>
+<span class="check">&#10003;</span> get_runtime_status     <span class="comment">&mdash; Check any runtime</span>
+<span class="check">&#10003;</span> get_all_runtime_statuses <span class="comment">&mdash; All runtimes at once</span>
+<span class="check">&#10003;</span> get_agent_logs         <span class="comment">&mdash; Execution logs</span>
+<span class="check">&#10003;</span> get_runtime_path_cache <span class="comment">&mdash; Cached CLI paths</span>
+<span class="check">&#10003;</span> refresh_runtime_paths  <span class="comment">&mdash; Re-discover CLIs</span>
+<span class="check">&#10003;</span> set_runtime_path       <span class="comment">&mdash; Manual CLI path</span>
+
+<span class="comment"># Cache Management</span>
+<span class="check">&#10003;</span> get_cache_stats        <span class="comment">&mdash; Cache statistics</span>
+<span class="check">&#10003;</span> clear_cache            <span class="comment">&mdash; Flush cache</span>
                 </div>
             </div>
         </div>
