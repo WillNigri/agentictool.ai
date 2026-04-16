@@ -1284,7 +1284,7 @@
                     <span class="line"><span class="bracket">[</span><span class="highlight">TOOL</span><span class="bracket">]</span></span>
                     <span class="line">OPTIMIZATION<span class="underscore">_</span></span>
                 </h1>
-                <p class="hero-subtitle">The multi-LLM control panel for AI coding tools. Manage <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#06b6d4">OpenClaw</span>, and <span style="color:#a855f7">Hermes</span> &mdash; skills, automations, cron jobs, and context &mdash; all from one dashboard.</p>
+                <p class="hero-subtitle">The multi-runtime control panel for AI coding tools. Manage <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, <span style="color:#06b6d4">OpenClaw</span>, <span style="color:#a855f7">Hermes</span>, and <span style="color:#f59e0b">Ollama</span> &mdash; skills, configs, sandboxes, policies, and automations &mdash; all from one dashboard.</p>
                 <div class="hero-stats">
                     <div class="hero-stat">
                         <div class="hero-stat-value">4</div>
@@ -1324,12 +1324,12 @@
                 <div class="problem-card fade-in">
                     <div class="problem-card-icon">&#x1f500;</div>
                     <h3>Too many tools, no dashboard</h3>
-                    <p>Claude Code, Codex, OpenClaw, Hermes &mdash; each has its own skills, config, and CLI. No unified way to manage them all.</p>
+                    <p>Claude Code, Codex, OpenAI Agents SDK, Gemini CLI, OpenClaw, Hermes &mdash; each has its own skills, config, and CLI. No unified way to manage them all.</p>
                 </div>
                 <div class="problem-card fade-in">
                     <div class="problem-card-icon">&#x1f4c2;</div>
                     <h3>Skills across runtimes</h3>
-                    <p>Claude uses ~/.claude/skills/, Codex uses ~/.codex/skills/, OpenClaw has workspace files. No way to see or manage them together.</p>
+                    <p>Claude uses ~/.claude/skills/, Codex uses ~/.codex/skills/, Gemini uses root_agent.yaml, OpenClaw has SOUL.md + TOOLS.md. No way to see or manage them together.</p>
                 </div>
                 <div class="problem-card fade-in">
                     <div class="problem-card-icon">&#x23f0;</div>
@@ -1345,6 +1345,20 @@
         <div class="container">
             <div class="section-label fade-in">Features</div>
             <h2 class="section-title fade-in">One dashboard for all your AI coding agents</h2>
+
+            <!-- NEW IN v1.1.0 -->
+            <div class="feature-block fade-in" style="margin-bottom: 3rem;">
+                <div class="feature-info">
+                    <h3 style="color: var(--accent-cyan);">New in v1.1.0</h3>
+                    <p>Projects Dashboard &bull; 6 runtimes + Ollama &bull; CodeMirror editor &bull; Sandbox management &bull; Backup/restore &bull; File watcher &bull; Token charts &bull; i18n (EN/PT/ES)</p>
+                    <ul class="feature-bullets">
+                        <li><strong>Projects Dashboard</strong> &mdash; Click any project to see its full setup: CLAUDE.md hierarchy, skills, subagents, commands, hooks, permissions, MCP &mdash; all editable inline</li>
+                        <li><strong>6 Runtime Support</strong> &mdash; Claude Code, Codex/OpenAI Agents SDK (with sandbox + policies), Gemini CLI/ADK (with visual agent tree), OpenClaw (SOUL + TOOLS parsed), Hermes (full memories)</li>
+                        <li><strong>Ollama Provider</strong> &mdash; Auto-detect local server, model picker with sizes + quantization, copy OpenAI-compatible endpoint for any runtime</li>
+                        <li><strong>Company-grade Editor</strong> &mdash; CodeMirror 6 with syntax highlighting, inline JSON lint, SHA-256 conflict detection, auto-backup, diff preview, schema validation</li>
+                    </ul>
+                </div>
+            </div>
 
             <!-- Context Visualizer -->
             <div class="feature-block fade-in">
