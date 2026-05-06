@@ -1270,7 +1270,7 @@
                 <a href="#download">Download</a>
                 <a href="#mcp-server">MCP Server</a>
                 <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://agenticsearchoptimization.ai" target="_blank" rel="noopener" class="nav-cta">ASO Directory &rarr;</a>
+                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" target="_blank" rel="noopener" class="nav-cta">Download &rarr;</a>
             </div>
         </div>
     </nav>
@@ -1512,15 +1512,16 @@
                 </div>
             </div>
 
-            <!-- MCP Dashboard -->
+            <!-- Cron Monitor -->
             <div class="feature-block fade-in">
                 <div class="feature-info">
-                    <h3>Cron Monitor</h3>
-                    <p>Schedule agent jobs with any runtime. Google Calendar view shows execution status &mdash; click any day to see the output or error.</p>
+                    <h3>Scheduled jobs</h3>
+                    <p>Pick an agent (or a routed/sequential group) and a schedule. The agent&rsquo;s system prompt, variables, hooks, memory, and skills all fire on every run &mdash; not just a raw prompt.</p>
                     <ul class="feature-bullets">
-                        <li>Calendar view with green/red execution status</li>
-                        <li>Click to inspect: see output or error details</li>
-                        <li>Smart failure detection + alert banner</li>
+                        <li>Agent / Group / Raw dispatch &mdash; agent-based by default</li>
+                        <li>Friendly schedule presets (every weekday 9am, hourly, every 15 min&hellip;) or full cron expression</li>
+                        <li>Wake-from-sleep on macOS via launchd &mdash; jobs fire when ATO is closed (Linux <code class="mono">systemd</code> + Windows Task Scheduler in flight)</li>
+                        <li>Calendar view: click a day to see output or error; smart silent-failure detection</li>
                     </ul>
                 </div>
                 <div class="feature-mockup">
@@ -1926,34 +1927,6 @@
         </div>
     </section>
 
-    <!-- ECOSYSTEM -->
-    <section class="ecosystem" id="ecosystem">
-        <div class="container">
-            <div class="section-label fade-in" style="text-align:center;">Ecosystem</div>
-            <h2 class="section-title fade-in" style="text-align:center;">Part of the Agentic Tool ecosystem</h2>
-            <div class="ecosystem-grid">
-                <a href="https://agenticsearchoptimization.ai" target="_blank" rel="noopener" class="ecosystem-card fade-in">
-                    <div class="ecosystem-card-name">ASO_</div>
-                    <h3>Agentic Search Optimization</h3>
-                    <p>The directory for AI agent tools. Discover, compare, and integrate.</p>
-                    <div class="arrow">Visit site &rarr;</div>
-                </a>
-                <a href="https://agentictool.ai" class="ecosystem-card fade-in" style="border-color:var(--accent-cyan);">
-                    <div class="ecosystem-card-name">ATO_</div>
-                    <h3>Agentic Tool Optimization</h3>
-                    <p>The multi-runtime agentic workspace. Build pipelines, run agents, observe everything.</p>
-                    <div class="arrow">You are here &rarr;</div>
-                </a>
-                <a href="https://agenticsearchoptimization.ai/pixel-board/" target="_blank" rel="noopener" class="ecosystem-card fade-in">
-                    <div class="ecosystem-card-name">PIXEL_</div>
-                    <h3>Pixel Board</h3>
-                    <p>Agent-to-agent advertising network.</p>
-                    <div class="arrow">Visit site &rarr;</div>
-                </a>
-            </div>
-        </div>
-    </section>
-
     <!-- FOOTER -->
     <footer>
         <div class="container">
@@ -1972,14 +1945,6 @@
                     </ul>
                 </div>
                 <div class="footer-col">
-                    <h5>Ecosystem</h5>
-                    <ul>
-                        <li><a href="https://agenticsearchoptimization.ai" target="_blank" rel="noopener">ASO Directory</a></li>
-                        <li><a href="https://agenticsearchoptimization.ai/pixel-board/" target="_blank" rel="noopener">Pixel Board</a></li>
-                        <li><a href="https://agenticsearchoptimization.ai/api/" target="_blank" rel="noopener">API</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
                     <h5>Developers</h5>
                     <ul>
                         <li><a href="https://github.com/WillNigri/Agentic-Tool-Optimization#readme" target="_blank" rel="noopener">Documentation</a></li>
@@ -1990,7 +1955,7 @@
             </div>
             <div class="footer-bottom">
                 <span>&copy; 2026 Agentic Tool Optimization</span>
-                <span class="ecosystem-tag">Part of the Agentic Tool ecosystem_</span>
+                <span class="ecosystem-tag">MIT licensed &middot; built with Tauri_</span>
             </div>
         </div>
     </footer>
@@ -2069,7 +2034,7 @@
                     float n3 = snoise(vec2(uv.x * 2.0 + t * 0.3, uv.y * 3.0 - t * 0.2));
                     float n4 = snoise(vec2(uv.x * 4.0 + t * 0.7, uv.y * 4.0 + t * 0.5));
 
-                    // ASO-style shader: vertical waves + pleating + fbm
+                    // Aurora shader: vertical waves + pleating + fbm
                     vec3 c1 = vec3(0.0, 1.0, 0.835); // cyan
                     vec3 c2 = vec3(0.91, 0.35, 0.3);  // coral
                     vec3 c3 = vec3(0.231, 0.51, 0.965); // blue
