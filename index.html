@@ -1520,7 +1520,7 @@
                     <ul class="feature-bullets">
                         <li>Agent / Group / Raw dispatch &mdash; agent-based by default</li>
                         <li>Friendly schedule presets (every weekday 9am, hourly, every 15 min&hellip;) or full cron expression</li>
-                        <li>Wake-from-sleep on macOS via launchd &mdash; jobs fire when ATO is closed (Linux <code class="mono">systemd</code> + Windows Task Scheduler in flight)</li>
+                        <li>Wake-from-sleep on every desktop OS &mdash; launchd on macOS, <code class="mono">systemd --user</code> timers on Linux, Task Scheduler on Windows. Jobs fire even when ATO is closed.</li>
                         <li>Calendar view: click a day to see output or error; smart silent-failure detection</li>
                     </ul>
                 </div>
