@@ -534,6 +534,14 @@
             font-weight: 600;
         }
 
+        @keyframes cursor-blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
+        }
+        .cursor-blink {
+            animation: cursor-blink 1s steps(2) infinite;
+        }
+
         .feature-mockup {
             background: var(--bg-card);
             border: 1px solid var(--border);
@@ -1362,6 +1370,46 @@
                         <li><strong>14+ providers</strong> &mdash; 6 native runtimes (Claude Code, Codex/OpenAI, Gemini CLI/ADK, OpenClaw, Hermes, Ollama) + DeepSeek, Qwen, MiniMax, Kimi (Moonshot), GLM (Zhipu), Yi (01.AI) via API.</li>
                         <li><strong>Cross-runtime by protocol</strong> &mdash; <code class="mono">mcp__ato__run_agent</code> exposes every ATO agent as an MCP tool. Any MCP-aware runtime can call any ATO agent.</li>
                     </ul>
+                </div>
+                <div class="feature-mockup">
+                    <div class="feature-mockup-header">
+                        <div class="feature-mockup-dot red"></div>
+                        <div class="feature-mockup-dot yellow"></div>
+                        <div class="feature-mockup-dot green"></div>
+                        <span style="margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);">@write-and-review &middot; sequential pipeline</span>
+                    </div>
+                    <div style="padding:6px 4px 4px 4px;">
+                        <!-- User prompt -->
+                        <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
+                            <div style="max-width:78%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:0.78rem;color:var(--text-secondary);line-height:1.5;">Write a Python rate-limiter, then have it reviewed.</div>
+                        </div>
+                        <!-- Stage 1: Claude -->
+                        <div style="margin-bottom:12px;">
+                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                                <span style="background:#e8594c;color:#000;padding:1px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.05em;">CLAUDE</span>
+                                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">@code-writer &middot; stage 1/2</span>
+                            </div>
+                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:0.75rem;color:var(--text-secondary);line-height:1.5;font-family:'JetBrains Mono',monospace;">
+                                <div style="color:var(--accent-cyan);">def</div> <span style="color:#fff;">rate_limit</span>(max_calls, window):<br>
+                                &nbsp;&nbsp;<span style="color:var(--text-muted);"># token-bucket implementation</span><br>
+                                &nbsp;&nbsp;...
+                            </div>
+                        </div>
+                        <!-- Arrow -->
+                        <div style="text-align:center;color:var(--accent-cyan);font-size:14px;margin:-4px 0 8px 0;font-family:'JetBrains Mono',monospace;">&darr;</div>
+                        <!-- Stage 2: Codex -->
+                        <div>
+                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
+                                <span style="background:#22c55e;color:#000;padding:1px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.05em;">CODEX</span>
+                                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">@security-reviewer &middot; stage 2/2 &middot; streaming</span>
+                            </div>
+                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:0.75rem;color:var(--text-secondary);line-height:1.5;">
+                                Review &mdash; <span style="color:var(--accent-cyan);">2 issues</span>:<br>
+                                &nbsp;&middot; race condition under concurrent calls<br>
+                                &nbsp;&middot; missing TTL cleanup on stale buckets<span class="cursor-blink" style="color:var(--accent-cyan);">&#9608;</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
