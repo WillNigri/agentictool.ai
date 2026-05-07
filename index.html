@@ -39,7 +39,7 @@
             "priceCurrency": "USD"
         },
         "description": "Build automation pipelines where Claude writes, Codex reviews, and Gemini summarizes — all in one thread. Multi-runtime agentic workspace with routed groups, sequential pipelines, persistent threads, and production-grade agent authoring. Local-first, MIT licensed.",
-        "softwareVersion": "1.5.0",
+        "softwareVersion": "1.5.5",
         "downloadUrl": "https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest"
     }
     </script>
@@ -1288,24 +1288,24 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-content">
-                <div class="hero-badge">v1.5.0 &middot; Open Source &middot; MIT License</div>
+                <div class="hero-badge">v1.5.5 &middot; Open Source &middot; MIT License</div>
                 <h1 class="hero-title">
                     <span class="line">AGENTS THAT</span>
-                    <span class="line"><span class="bracket">[</span><span class="highlight">WORK</span><span class="bracket">]</span></span>
-                    <span class="line">TOGETHER<span class="underscore">_</span></span>
+                    <span class="line"><span class="bracket">[</span><span class="highlight">ADAPT</span><span class="bracket">]</span></span>
+                    <span class="line">NOT REPEAT<span class="underscore">_</span></span>
                 </h1>
-                <p class="hero-subtitle">Build automation pipelines where <span style="color:var(--accent-cyan)">Claude</span> writes, <span style="color:#22c55e">Codex</span> reviews, and <span style="color:#3b82f6">Gemini</span> summarizes &mdash; all in one thread. Multi-runtime agentic workspace with routed groups, sequential pipelines, persistent threads, and production-grade authoring. Local-first. MIT.</p>
+                <p class="hero-subtitle">Static system prompts are the floor, not the ceiling. Build agents whose prompts <strong style="color:var(--accent-cyan)">resolve from files, env vars, databases, or other LLMs</strong> at fire time. Multi-runtime — <span style="color:var(--accent-cyan)">Claude</span> writes, <span style="color:#22c55e">Codex</span> reviews, <span style="color:#3b82f6">Gemini</span> summarizes — all in one thread. Local-first. MIT.</p>
                 <div class="hero-stats">
                     <div class="hero-stat">
                         <div class="hero-stat-value">6</div>
                         <div class="hero-stat-label">Native Runtimes</div>
                     </div>
                     <div class="hero-stat">
-                        <div class="hero-stat-value">2</div>
-                        <div class="hero-stat-label">Group Types</div>
+                        <div class="hero-stat-value">7</div>
+                        <div class="hero-stat-label">Variable Resolvers</div>
                     </div>
                     <div class="hero-stat">
-                        <div class="hero-stat-value">14+</div>
+                        <div class="hero-stat-value">15+</div>
                         <div class="hero-stat-label">API Providers</div>
                     </div>
                     <div class="hero-stat">
@@ -1357,17 +1357,19 @@
             <div class="section-label fade-in">Features</div>
             <h2 class="section-title fade-in">The agentic workspace, not just a control panel</h2>
 
-            <!-- NEW IN v1.5.0 -->
+            <!-- NEW IN v1.5.5 -->
             <div class="feature-block fade-in" style="margin-bottom: 3rem;">
                 <div class="feature-info">
-                    <h3 style="color: var(--accent-cyan);">New in v1.5.0 &mdash; Daily Workspace</h3>
-                    <p>Persistent threads &bull; Cross-runtime mid-thread &bull; Streaming responses &bull; Markdown rendering &bull; File attachments &bull; Two group types &bull; Cron-scheduled workflows</p>
+                    <h3 style="color: var(--accent-cyan);">New in v1.5.5 &mdash; Production-Ready Agents</h3>
+                    <p>Dynamic prompts &bull; 7 variable resolvers &bull; Pre-call context hooks &bull; Conversation summarizers &bull; Persistent multi-runtime threads &bull; Sequential pipelines &bull; Routed groups &bull; Cron-scheduled workflows &bull; Wake-from-sleep</p>
                     <ul class="feature-bullets">
+                        <li><strong>Dynamic prompts that adapt at fire time</strong> &mdash; Reference variables like <code class="mono">{user_name}</code>, <code class="mono">{project_root}</code>, <code class="mono">{recent_orders}</code> in your system prompt. Resolvers: static, env var, project path, file, database query, MCP call, computed JS. Static prompts are the floor, not the ceiling.</li>
+                        <li><strong>Pre-call context hooks</strong> &mdash; Inject fresh data into a <code class="mono">&lt;context&gt;</code> block before every turn: a config file the agent re-reads, a CRM webhook, an MCP tool result. The agent always has what it needs.</li>
                         <li><strong>Sequential automation pipelines</strong> &mdash; One prompt fires the whole workflow. Children run in order; each agent&rsquo;s output flows into the next as input. <em>Each child runs on its own runtime</em>, so Claude &rarr; Codex &rarr; Gemini chains work natively.</li>
                         <li><strong>Routed groups</strong> &mdash; Single prompt &rarr; router picks the right specialist child via keyword rules + LLM-classifier fallback. Visual graph editor shows the routing.</li>
-                        <li><strong>Persistent multi-runtime threads</strong> &mdash; Conversations survive app restart. Switch runtime mid-thread; full history travels. Tokens stream live with syntax-highlighted markdown. Drag-drop file attachments.</li>
-                        <li><strong>Production-grade authoring</strong> &mdash; Variables (file/db/computed resolvers), pre-call context hooks, conversation summarizers, per-task model selection, observability dashboard, evaluators (heuristic + LLM-as-judge).</li>
-                        <li><strong>14+ providers</strong> &mdash; 6 native runtimes (Claude Code, Codex/OpenAI, Gemini CLI/ADK, OpenClaw, Hermes, Ollama) + DeepSeek, Qwen, MiniMax, Kimi (Moonshot), GLM (Zhipu), Yi (01.AI) via API.</li>
+                        <li><strong>Persistent multi-runtime threads</strong> &mdash; Conversations survive app restart. Switch runtime mid-thread; full history travels. Tokens stream live with syntax-highlighted markdown.</li>
+                        <li><strong>Production-grade Agent template</strong> &mdash; A 5th starter ships pre-wired with variables, hooks, and memory policy. New users see the dynamic pattern from minute one instead of having to discover it.</li>
+                        <li><strong>15+ providers</strong> &mdash; 6 native runtimes (Claude Code, Codex/OpenAI, Gemini CLI/ADK, OpenClaw, Hermes, Ollama) + Anthropic API, OpenAI API, Google AI, Mistral, Groq, xAI/Grok, Together, Fireworks, DeepSeek, Qwen, MiniMax, Kimi, GLM, Yi via API key.</li>
                         <li><strong>Cross-runtime by protocol</strong> &mdash; <code class="mono">mcp__ato__run_agent</code> exposes every ATO agent as an MCP tool. Any MCP-aware runtime can call any ATO agent.</li>
                     </ul>
                 </div>
