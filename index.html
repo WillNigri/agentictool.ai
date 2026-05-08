@@ -1279,7 +1279,7 @@
                 <a href="#download">Download</a>
                 <a href="#mcp-server">MCP Server</a>
                 <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" target="_blank" rel="noopener">GitHub</a>
-                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" target="_blank" rel="noopener" class="nav-cta">Download &rarr;</a>
+                <a href="#" data-ato-download="auto" class="nav-cta">Download &rarr;</a>
             </div>
         </div>
     </nav>
@@ -1314,7 +1314,7 @@
                     </div>
                 </div>
                 <div class="hero-ctas">
-                    <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" class="btn-primary" target="_blank" rel="noopener">Download for Mac / Win / Linux &rarr;</a>
+                    <a href="#" data-ato-download="auto" class="btn-primary">Download for Mac / Win / Linux &rarr;</a>
                     <a href="https://app.agentictool.ai" class="btn-outline" target="_blank" rel="noopener">Open Web Dashboard</a>
                     <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="btn-outline" target="_blank" rel="noopener">View on GitHub</a>
                 </div>
@@ -1934,27 +1934,27 @@
                 &gt; Early access: <strong style="color:var(--accent-cyan);">Pro features free with a cloud sign-up</strong> &mdash; cloud sync, trace retention, observability, evaluators.
             </p>
             <div class="download-grid fade-in">
-                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" target="_blank" rel="noopener" class="download-btn">
+                <a href="#" data-ato-download="mac-arm" class="download-btn">
                     <div class="download-btn-icon">&#63743;</div>
                     <div class="download-btn-label">macOS</div>
                     <div class="download-btn-sub">Apple Silicon</div>
                 </a>
-                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" target="_blank" rel="noopener" class="download-btn">
+                <a href="#" data-ato-download="mac-intel" class="download-btn">
                     <div class="download-btn-icon">&#63743;</div>
                     <div class="download-btn-label">macOS</div>
                     <div class="download-btn-sub">Intel</div>
                 </a>
-                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" target="_blank" rel="noopener" class="download-btn">
+                <a href="#" data-ato-download="windows" class="download-btn">
                     <div class="download-btn-icon">&#8862;</div>
                     <div class="download-btn-label">Windows</div>
                     <div class="download-btn-sub">.exe installer</div>
                 </a>
-                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" target="_blank" rel="noopener" class="download-btn">
+                <a href="#" data-ato-download="linux-appimage" class="download-btn">
                     <div class="download-btn-icon">&#9881;</div>
                     <div class="download-btn-label">Linux</div>
                     <div class="download-btn-sub">AppImage</div>
                 </a>
-                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" target="_blank" rel="noopener" class="download-btn">
+                <a href="#" data-ato-download="linux-deb" class="download-btn">
                     <div class="download-btn-icon">&#9881;</div>
                     <div class="download-btn-label">Linux</div>
                     <div class="download-btn-sub">.deb package</div>
@@ -2013,6 +2013,118 @@
             </div>
         </div>
     </footer>
+
+    <!-- ========== DOWNLOAD ROUTER ==========
+         All "Download" buttons on the site mark themselves with
+         data-ato-download="<platform>" instead of a hardcoded GitHub URL.
+         On click, this router fetches the latest GitHub release and
+         redirects to the correct asset for the requested platform —
+         user never sees a GitHub releases page.
+
+         Platforms:
+           "auto"           — detect from navigator.userAgent + platform
+           "mac-arm"        — ATO_*_aarch64.dmg
+           "mac-intel"      — ATO_*_x64.dmg (excluding -setup.exe)
+           "windows"        — ATO_*-setup.exe
+           "linux-appimage" — ATO_*.AppImage
+           "linux-deb"      — ATO_*.deb -->
+    <script>
+    (function () {
+      var API_URL = "https://api.github.com/repos/WillNigri/Agentic-Tool-Optimization/releases";
+      var FALLBACK_URL = "https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest";
+      var MATCHERS = {
+        "mac-arm":         /aarch64\.dmg$/,
+        "mac-intel":       /_x64\.dmg$/,
+        "windows":         /-setup\.exe$/,
+        "linux-appimage":  /\.AppImage$/,
+        "linux-deb":       /\.deb$/,
+      };
+      var cache = null;       // resolved release JSON
+      var pending = null;     // in-flight fetch promise
+
+      function fetchLatestRelease() {
+        if (cache) return Promise.resolve(cache);
+        if (pending) return pending;
+        // GitHub's `/releases/latest` excludes pre-release tags. We want
+        // alphas to be downloadable too, so fetch the full list and pick
+        // the most recent (sorted newest-first by GitHub).
+        pending = fetch(API_URL + "?per_page=10").then(function (r) {
+          if (!r.ok) throw new Error("GitHub API " + r.status);
+          return r.json();
+        }).then(function (releases) {
+          if (!Array.isArray(releases) || releases.length === 0) {
+            throw new Error("no releases found");
+          }
+          // Pick first release that has at least one .dmg/.exe/.deb/.AppImage
+          // asset uploaded — skips drafts or releases mid-build.
+          var release = releases.find(function (r) {
+            return r.assets && r.assets.some(function (a) {
+              return /\.(dmg|exe|deb|AppImage)$/.test(a.name);
+            });
+          });
+          if (!release) throw new Error("no shipped releases");
+          cache = release;
+          return release;
+        });
+        return pending;
+      }
+
+      function detectPlatform() {
+        var ua = navigator.userAgent || "";
+        var p = navigator.platform || "";
+        var uaPlatform = (navigator.userAgentData && navigator.userAgentData.platform) || "";
+        if (/Win/i.test(p) || /Windows/i.test(ua)) return "windows";
+        if (/Mac/i.test(p) || /Mac OS X/i.test(ua) || uaPlatform === "macOS") {
+          // Apple Silicon detection from JS is unreliable. Default to ARM
+          // since 2021+ Macs are ARM and an Intel Mac on the ARM build
+          // gets a clear error vs an ARM Mac on Intel which silently
+          // works under Rosetta but slow. Pick the modern path; users
+          // can pick Intel manually from the grid.
+          return "mac-arm";
+        }
+        if (/Linux/i.test(p) || /X11/i.test(ua)) return "linux-appimage";
+        return "mac-arm"; // sensible default
+      }
+
+      function findAsset(release, platform) {
+        var matcher = MATCHERS[platform];
+        if (!matcher) return null;
+        return release.assets.find(function (a) { return matcher.test(a.name); });
+      }
+
+      function go(href) { window.location.href = href; }
+
+      function handleClick(ev) {
+        var link = ev.currentTarget;
+        var requested = link.getAttribute("data-ato-download");
+        if (!requested) return; // not ours
+        ev.preventDefault();
+        var platform = requested === "auto" ? detectPlatform() : requested;
+        var label = link.textContent;
+        link.textContent = "Resolving…";
+        fetchLatestRelease().then(function (release) {
+          var asset = findAsset(release, platform);
+          if (!asset) {
+            // Fallback: open the release page so the user can pick manually.
+            link.textContent = label;
+            window.open(release.html_url || FALLBACK_URL, "_blank", "noopener");
+            return;
+          }
+          link.textContent = label;
+          go(asset.browser_download_url);
+        }).catch(function () {
+          // Network / API outage → fall back to the GitHub releases page.
+          link.textContent = label;
+          window.open(FALLBACK_URL, "_blank", "noopener");
+        });
+      }
+
+      // Wire up every download button on the page.
+      document.querySelectorAll("a[data-ato-download]").forEach(function (a) {
+        a.addEventListener("click", handleClick);
+      });
+    })();
+    </script>
 
     <!-- THREE.JS Aurora Shader -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
