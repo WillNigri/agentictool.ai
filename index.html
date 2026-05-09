@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATO — AI agents that work together. Across every runtime.</title>
-    <meta name="description" content="Build automation pipelines where Claude writes, Codex reviews, and Gemini summarizes — all in one thread. Multi-runtime agentic workspace. Local-first. MIT licensed.">
-    <meta name="keywords" content="agentic tool optimization, multi-runtime agents, automation pipelines, Claude Code, Codex, OpenAI Agents SDK, Gemini CLI, ADK, OpenClaw, Hermes, Ollama, DeepSeek, Qwen, MiniMax, agent groups, sequential automation, MCP, context engineering, observability">
+    <title>ATO — The ops layer for multi-agent runs. Across every runtime.</title>
+    <meta name="description" content="Desktop control panel for Claude Code, Codex, Gemini CLI, and more. Live runs registry, file attribution per dispatch, cross-runtime regression detection. See who touched which files when Claude → Codex → Gemini chains run. Local-first, MIT.">
+    <meta name="keywords" content="agentic tool optimization, multi-runtime agents, agent ops, Claude Code, Codex, OpenAI Agents SDK, Gemini CLI, ADK, OpenClaw, Hermes, Ollama, DeepSeek, agent groups, sequential automation, MCP, file attribution, regression detection, observability">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://agentictool.ai/">
-    <meta property="og:title" content="ATO — AI agents that work together. Across every runtime.">
-    <meta property="og:description" content="Routed groups + sequential automation pipelines. Claude → Codex → Gemini in one thread. Production-grade authoring, local-first, MIT.">
+    <meta property="og:title" content="ATO — The ops layer for multi-agent runs.">
+    <meta property="og:description" content="See which runtime owns which workspace. Kill stuck dispatches. Track which agent touched which files across multi-runtime pipelines. Local-first, MIT.">
     <meta property="og:site_name" content="Agentic Tool Optimization">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ATO — AI agents that work together. Across every runtime.">
-    <meta name="twitter:description" content="Multi-runtime agentic workspace with sequential automation pipelines. Each child runs on its own runtime. Local-first, MIT licensed.">
+    <meta name="twitter:title" content="ATO — The ops layer for multi-agent runs.">
+    <meta name="twitter:description" content="Live runs registry, file attribution, cross-runtime regression detection. The missing ops layer for Claude Code + Codex + Gemini. Local-first, MIT.">
 
     <link rel="canonical" href="https://agentictool.ai/">
 
@@ -1288,21 +1288,21 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-content">
-                <div class="hero-badge">v1.5.5 &middot; Open Source &middot; MIT License</div>
+                <div class="hero-badge">v2.1 &middot; Open Source &middot; MIT License</div>
                 <h1 class="hero-title">
-                    <span class="line">AGENTS THAT</span>
-                    <span class="line"><span class="bracket">[</span><span class="highlight">ADAPT</span><span class="bracket">]</span></span>
-                    <span class="line">NOT REPEAT<span class="underscore">_</span></span>
+                    <span class="line">THE OPS LAYER</span>
+                    <span class="line"><span class="bracket">[</span><span class="highlight">FOR</span><span class="bracket">]</span></span>
+                    <span class="line">MULTI-AGENT<span class="underscore">_</span></span>
                 </h1>
-                <p class="hero-subtitle">Static system prompts are the floor, not the ceiling. Build agents whose prompts <strong style="color:var(--accent-cyan)">resolve from files, env vars, databases, or other LLMs</strong> at fire time. Multi-runtime — <span style="color:var(--accent-cyan)">Claude</span> writes, <span style="color:#22c55e">Codex</span> reviews, <span style="color:#3b82f6">Gemini</span> summarizes — all in one thread. Local-first. MIT.</p>
+                <p class="hero-subtitle">Once you run 3+ agents, the hard part is knowing <strong style="color:var(--accent-cyan)">which runtime owns which workspace, what each touched, and how to stop the stuck ones</strong> &mdash; without reading every terminal buffer. ATO is the desktop control panel that gives you live runs, file attribution per dispatch, and cross-runtime regression detection across <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, OpenClaw, Hermes, Ollama. Local-first. MIT.</p>
                 <div class="hero-stats">
                     <div class="hero-stat">
                         <div class="hero-stat-value">6</div>
                         <div class="hero-stat-label">Native Runtimes</div>
                     </div>
                     <div class="hero-stat">
-                        <div class="hero-stat-value">7</div>
-                        <div class="hero-stat-label">Variable Resolvers</div>
+                        <div class="hero-stat-value">Live</div>
+                        <div class="hero-stat-label">Runs Registry</div>
                     </div>
                     <div class="hero-stat">
                         <div class="hero-stat-value">15+</div>
@@ -1360,17 +1360,17 @@
             <!-- NEW IN v1.5.5 -->
             <div class="feature-block fade-in" style="margin-bottom: 3rem;">
                 <div class="feature-info">
-                    <h3 style="color: var(--accent-cyan);">New in v1.5.5 &mdash; Production-Ready Agents</h3>
-                    <p>Dynamic prompts &bull; 7 variable resolvers &bull; Pre-call context hooks &bull; Conversation summarizers &bull; Persistent multi-runtime threads &bull; Sequential pipelines &bull; Routed groups &bull; Cron-scheduled workflows &bull; Wake-from-sleep</p>
+                    <h3 style="color: var(--accent-cyan);">New in v2.1 &mdash; The Multi-Agent Ops Layer</h3>
+                    <p>Live runs registry &bull; File attribution per dispatch &bull; Cross-runtime regression detection &bull; File history modal &bull; Honest concurrent attribution &bull; Configuration impact ledger</p>
                     <ul class="feature-bullets">
-                        <li><strong>Dynamic prompts that adapt at fire time</strong> &mdash; Reference variables like <code class="mono">{user_name}</code>, <code class="mono">{project_root}</code>, <code class="mono">{recent_orders}</code> in your system prompt. Resolvers: static, env var, project path, file, database query, MCP call, computed JS. Static prompts are the floor, not the ceiling.</li>
-                        <li><strong>Pre-call context hooks</strong> &mdash; Inject fresh data into a <code class="mono">&lt;context&gt;</code> block before every turn: a config file the agent re-reads, a CRM webhook, an MCP tool result. The agent always has what it needs.</li>
-                        <li><strong>Sequential automation pipelines</strong> &mdash; One prompt fires the whole workflow. Children run in order; each agent&rsquo;s output flows into the next as input. <em>Each child runs on its own runtime</em>, so Claude &rarr; Codex &rarr; Gemini chains work natively.</li>
-                        <li><strong>Routed groups</strong> &mdash; Single prompt &rarr; router picks the right specialist child via keyword rules + LLM-classifier fallback. Visual graph editor shows the routing.</li>
-                        <li><strong>Persistent multi-runtime threads</strong> &mdash; Conversations survive app restart. Switch runtime mid-thread; full history travels. Tokens stream live with syntax-highlighted markdown.</li>
-                        <li><strong>Production-grade Agent template</strong> &mdash; A 5th starter ships pre-wired with variables, hooks, and memory policy. New users see the dynamic pattern from minute one instead of having to discover it.</li>
-                        <li><strong>15+ providers</strong> &mdash; 6 native runtimes (Claude Code, Codex/OpenAI, Gemini CLI/ADK, OpenClaw, Hermes, Ollama) + Anthropic API, OpenAI API, Google AI, Mistral, Groq, xAI/Grok, Together, Fireworks, DeepSeek, Qwen, MiniMax, Kimi, GLM, Yi via API key.</li>
-                        <li><strong>Cross-runtime by protocol</strong> &mdash; <code class="mono">mcp__ato__run_agent</code> exposes every ATO agent as an MCP tool. Any MCP-aware runtime can call any ATO agent.</li>
+                        <li><strong>Live runs panel</strong> &mdash; See every in-flight dispatch with agent slug, runtime, workspace, and elapsed time. Kill stuck dispatches with one click &mdash; no more reading every terminal buffer to find the runaway. Shows up the moment you fire something via Quick Test, the chat pane, scheduled cron, or MCP <code class="mono">run_agent</code>.</li>
+                        <li><strong>File attribution per dispatch</strong> &mdash; Every run captures the list of files touched in the project root via mtime-snapshot diff. Works across <em>every</em> runtime since it&rsquo;s filesystem-level, not stream-parsing. Click any file in the dashboard to see every dispatch that ever touched it &mdash; agent, runtime, timestamp, prompt summary, sibling files.</li>
+                        <li><strong>Cross-runtime regression detection</strong> &mdash; Switch <code class="mono">@reviewer</code> from Sonnet 4.6 to Opus 4.7 and the dashboard flags &ldquo;success rate dropped 17pp across 412 conversations.&rdquo; Joins the configuration-change ledger with trace windows automatically. Severity-tagged: regressions first, improvements second, neutral hidden by default.</li>
+                        <li><strong>Honest concurrent attribution</strong> &mdash; When two agents dispatch into the same workspace, the OS gives us mtimes, not PIDs. Instead of pretending we can disambiguate, ATO tags the run as &ldquo;ambiguous &times; N&rdquo; with peer agent slugs. Truth over false confidence.</li>
+                        <li><strong>External agents</strong> &mdash; Build customer-facing chatbots in the same IDE you use for daily ops. Bundle generators for Cloudflare Worker, Vercel Edge, Docker, and standalone Node. 9 chat-LLM providers. Embed widget bundled with every deploy. Customer&rsquo;s API key, customer&rsquo;s infra &mdash; ATO never holds inference compute.</li>
+                        <li><strong>Dynamic prompts that adapt at fire time</strong> &mdash; Reference <code class="mono">{user_name}</code>, <code class="mono">{project_root}</code>, <code class="mono">{recent_orders}</code> in your system prompt. Resolvers: static, env, project path, file, database query, MCP call, computed JS.</li>
+                        <li><strong>Sequential automation pipelines</strong> &mdash; One prompt fires the whole workflow. Each child runs on its own runtime, so Claude &rarr; Codex &rarr; Gemini chains work natively. Routed groups + visual graph editor for specialist routing.</li>
+                        <li><strong>15+ providers, 6 native runtimes</strong> &mdash; Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama + Anthropic, OpenAI, Google AI, Mistral, Groq, xAI, Together, Fireworks, DeepSeek, Qwen, MiniMax, Kimi, GLM, Yi via API key.</li>
                     </ul>
                 </div>
                 <div class="feature-mockup">
@@ -1378,39 +1378,58 @@
                         <div class="feature-mockup-dot red"></div>
                         <div class="feature-mockup-dot yellow"></div>
                         <div class="feature-mockup-dot green"></div>
-                        <span style="margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);">@write-and-review &middot; sequential pipeline</span>
+                        <span style="margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);">Insights &middot; Live runs &middot; 3 in flight</span>
                     </div>
-                    <div style="padding:6px 4px 4px 4px;">
-                        <!-- User prompt -->
-                        <div style="display:flex;justify-content:flex-end;margin-bottom:14px;">
-                            <div style="max-width:78%;background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:0.78rem;color:var(--text-secondary);line-height:1.5;">Write a Python rate-limiter, then have it reviewed.</div>
+                    <div style="padding:10px 8px 8px 8px;">
+                        <!-- Live run row 1: Claude in repo-A -->
+                        <div style="display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+                            <span style="position:relative;display:inline-flex;width:8px;height:8px;flex-shrink:0;">
+                                <span style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);"></span>
+                                <span class="cursor-blink" style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);opacity:0.5;"></span>
+                            </span>
+                            <div style="flex:1;min-width:0;">
+                                <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                                    <span style="color:#fff;">@code-writer</span>
+                                    <span style="background:#e8594c;color:#000;padding:0 5px;border-radius:3px;font-size:9px;font-weight:700;">CLAUDE</span>
+                                    <span style="color:var(--text-muted);font-size:10px;">14s</span>
+                                </div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;">&#x1F4C1; ato/repo-a</div>
+                            </div>
+                            <button style="background:transparent;border:1px solid var(--accent-red);color:var(--accent-red);padding:3px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;flex-shrink:0;">&#9633; Kill</button>
                         </div>
-                        <!-- Stage 1: Claude -->
-                        <div style="margin-bottom:12px;">
-                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-                                <span style="background:#e8594c;color:#000;padding:1px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.05em;">CLAUDE</span>
-                                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">@code-writer &middot; stage 1/2</span>
+                        <!-- Live run row 2: Codex in repo-A (concurrent — would be flagged ambiguous) -->
+                        <div style="display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+                            <span style="position:relative;display:inline-flex;width:8px;height:8px;flex-shrink:0;">
+                                <span style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);"></span>
+                                <span class="cursor-blink" style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);opacity:0.5;"></span>
+                            </span>
+                            <div style="flex:1;min-width:0;">
+                                <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                                    <span style="color:#fff;">@security-reviewer</span>
+                                    <span style="background:#22c55e;color:#000;padding:0 5px;border-radius:3px;font-size:9px;font-weight:700;">CODEX</span>
+                                    <span style="color:var(--text-muted);font-size:10px;">8s</span>
+                                </div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;">&#x1F4C1; ato/repo-a &middot; <span style="color:#eab308;">&#9888; ambiguous &times;1</span></div>
                             </div>
-                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:0.75rem;color:var(--text-secondary);line-height:1.5;font-family:'JetBrains Mono',monospace;">
-                                <div style="color:var(--accent-cyan);">def</div> <span style="color:#fff;">rate_limit</span>(max_calls, window):<br>
-                                &nbsp;&nbsp;<span style="color:var(--text-muted);"># token-bucket implementation</span><br>
-                                &nbsp;&nbsp;...
-                            </div>
+                            <button style="background:transparent;border:1px solid var(--accent-red);color:var(--accent-red);padding:3px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;flex-shrink:0;">&#9633; Kill</button>
                         </div>
-                        <!-- Arrow -->
-                        <div style="text-align:center;color:var(--accent-cyan);font-size:14px;margin:-4px 0 8px 0;font-family:'JetBrains Mono',monospace;">&darr;</div>
-                        <!-- Stage 2: Codex -->
-                        <div>
-                            <div style="display:flex;align-items:center;gap:6px;margin-bottom:4px;">
-                                <span style="background:#22c55e;color:#000;padding:1px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:0.05em;">CODEX</span>
-                                <span style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);">@security-reviewer &middot; stage 2/2 &middot; streaming</span>
+                        <!-- Live run row 3: Gemini in different workspace -->
+                        <div style="display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;">
+                            <span style="position:relative;display:inline-flex;width:8px;height:8px;flex-shrink:0;">
+                                <span style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);"></span>
+                                <span class="cursor-blink" style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);opacity:0.5;"></span>
+                            </span>
+                            <div style="flex:1;min-width:0;">
+                                <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                                    <span style="color:#fff;">@docs-summarizer</span>
+                                    <span style="background:#3b82f6;color:#fff;padding:0 5px;border-radius:3px;font-size:9px;font-weight:700;">GEMINI</span>
+                                    <span style="color:var(--text-muted);font-size:10px;">2m 04s</span>
+                                </div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;">&#x1F4C1; ato/docs-site</div>
                             </div>
-                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:10px;padding:8px 12px;font-size:0.75rem;color:var(--text-secondary);line-height:1.5;">
-                                Review &mdash; <span style="color:var(--accent-cyan);">2 issues</span>:<br>
-                                &nbsp;&middot; race condition under concurrent calls<br>
-                                &nbsp;&middot; missing TTL cleanup on stale buckets<span class="cursor-blink" style="color:var(--accent-cyan);">&#9608;</span>
-                            </div>
+                            <button style="background:transparent;border:1px solid var(--accent-red);color:var(--accent-red);padding:3px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;flex-shrink:0;">&#9633; Kill</button>
                         </div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:10px;text-align:center;">3 dispatches across 3 runtimes &middot; 2 sharing repo-a &middot; click any file in trace history for cross-run lineage</div>
                     </div>
                 </div>
             </div>
