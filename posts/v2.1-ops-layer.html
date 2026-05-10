@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Primary SEO -->
+    <title>What we shipped: ATO becomes the ops layer for multi-runtime agents (v2.1) — ATO</title>
+    <meta name="description" content="Twelve releases in two days. Replay any prompt against a different runtime, catch regressions before users do, cut cost without losing quality. ATO v2.1 multi-runtime observability is live.">
+    <meta name="keywords" content="ATO, agentictool, multi-runtime agents, AI agent ops, replay, cross-runtime observability, regression detection, cost optimization, Claude Code, Codex, Gemini CLI, agent GUI">
+    <meta name="author" content="Beatriz Nigri">
+    <link rel="canonical" href="https://agentictool.ai/posts/v2.1-ops-layer.html">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="What we shipped: ATO becomes the ops layer for multi-runtime agents">
+    <meta property="og:description" content="Twelve releases in two days. Replay any prompt against a different runtime, catch regressions before users do, cut cost without losing quality.">
+    <meta property="og:url" content="https://agentictool.ai/posts/v2.1-ops-layer.html">
+    <meta property="og:site_name" content="ATO">
+    <meta property="article:published_time" content="2026-05-10T00:00:00Z">
+    <meta property="article:author" content="Beatriz Nigri">
+    <meta property="article:section" content="Product">
+    <meta property="article:tag" content="multi-runtime agents">
+    <meta property="article:tag" content="replay">
+    <meta property="article:tag" content="observability">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="What we shipped: ATO becomes the ops layer for multi-runtime agents">
+    <meta name="twitter:description" content="Twelve releases in two days. Replay any prompt against a different runtime, catch regressions before users do, cut cost without losing quality.">
+
+    <!-- JSON-LD: Article structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": "What we shipped: ATO becomes the ops layer for multi-runtime agents",
+      "description": "Twelve releases in two days. Replay any prompt against a different runtime, catch regressions before users do, cut cost without losing quality.",
+      "datePublished": "2026-05-10",
+      "author": {
+        "@type": "Person",
+        "name": "Beatriz Nigri"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "ATO",
+        "url": "https://agentictool.ai"
+      },
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://agentictool.ai/posts/v2.1-ops-layer.html"
+      }
+    }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-dark: #0a0a0a;
+            --bg: #0f0f0f;
+            --bg-elev: #1a1a1a;
+            --text-primary: #f0f0f0;
+            --text-secondary: #c0c0c0;
+            --text-muted: #888;
+            --accent-cyan: #00ffd5;
+            --accent-red: #ff4d4d;
+            --border: rgba(255, 255, 255, 0.08);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            background: var(--bg-dark);
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        a { color: var(--accent-cyan); text-decoration: none; }
+        a:hover { text-decoration: underline; }
+
+        code, .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.92em; }
+        code {
+            background: var(--bg-elev);
+            padding: 1px 6px;
+            border-radius: 3px;
+            color: var(--accent-cyan);
+        }
+
+        /* ========== HEADER ========== */
+        .post-header {
+            border-bottom: 1px solid var(--border);
+            padding: 18px 24px;
+            position: sticky;
+            top: 0;
+            background: rgba(10, 10, 10, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            z-index: 10;
+        }
+
+        .post-header-inner {
+            max-width: 760px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .post-back {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .post-back:hover { color: var(--accent-cyan); text-decoration: none; }
+
+        .post-cta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--accent-cyan);
+            border: 1px solid var(--accent-cyan);
+            padding: 6px 14px;
+        }
+
+        .post-cta:hover { background: rgba(0, 255, 213, 0.08); text-decoration: none; }
+
+        /* ========== ARTICLE ========== */
+        article {
+            max-width: 760px;
+            margin: 0 auto;
+            padding: 64px 24px 96px;
+        }
+
+        .post-meta {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 24px;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+        }
+
+        h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2rem, 4.5vw, 3.2rem);
+            line-height: 1.1;
+            letter-spacing: -1px;
+            margin-bottom: 28px;
+            color: var(--text-primary);
+        }
+
+        h2 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+            line-height: 1.2;
+            letter-spacing: -0.5px;
+            margin: 56px 0 16px;
+            color: var(--text-primary);
+        }
+
+        h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.15rem;
+            margin: 32px 0 12px;
+            color: var(--text-primary);
+        }
+
+        p {
+            margin-bottom: 18px;
+            color: var(--text-secondary);
+            font-size: 1.05rem;
+        }
+
+        strong { color: var(--text-primary); }
+
+        ul, ol {
+            margin: 0 0 24px 24px;
+            color: var(--text-secondary);
+        }
+
+        ul li, ol li {
+            margin-bottom: 10px;
+            font-size: 1.02rem;
+        }
+
+        blockquote {
+            border-left: 3px solid var(--accent-cyan);
+            padding: 8px 20px;
+            margin: 24px 0;
+            background: var(--bg-elev);
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.95rem;
+            color: var(--text-primary);
+        }
+
+        hr {
+            border: 0;
+            border-top: 1px solid var(--border);
+            margin: 56px 0;
+        }
+
+        /* Release map table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 24px 0;
+            font-size: 0.92rem;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 10px 12px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        th {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        td:first-child {
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--accent-cyan);
+            white-space: nowrap;
+            font-size: 0.88rem;
+        }
+
+        td { color: var(--text-secondary); }
+
+        /* Footer CTA */
+        .post-footer-cta {
+            margin-top: 64px;
+            padding: 32px;
+            border: 1px solid var(--accent-cyan);
+            background: linear-gradient(180deg, rgba(0, 255, 213, 0.04), transparent);
+            text-align: center;
+        }
+
+        .post-footer-cta h3 {
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+
+        .post-footer-cta .btn {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 12px 24px;
+            background: var(--accent-cyan);
+            color: var(--bg-dark);
+            font-weight: 600;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .post-footer-cta .btn:hover { text-decoration: none; transform: translateY(-1px); }
+
+        @media (max-width: 600px) {
+            article { padding: 40px 18px 64px; }
+            h1 { font-size: 1.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="post-header">
+    <div class="post-header-inner">
+        <a href="/" class="post-back">&larr; agentictool.ai</a>
+        <a href="/#download" class="post-cta">Download &rarr;</a>
+    </div>
+</header>
+
+<article>
+    <div class="post-meta">2026-05-10 &middot; Product &middot; v2.1</div>
+
+    <h1>What we shipped: ATO becomes the ops layer for multi-runtime agents</h1>
+
+    <p><strong>TL;DR.</strong> Two days. Twelve releases (v2.0.1 &rarr; v2.1.11). The v2.1 story we&rsquo;d been promising &mdash; &ldquo;multi-runtime differentiated observability&rdquo; &mdash; became something you can actually use. Replay any prompt against a different runtime. Catch regressions before users do. Cut cost without losing quality. Find any conversation, agent, group, or schedule with one keystroke.</p>
+
+    <hr>
+
+    <h2>The headline: Replay</h2>
+
+    <p>You shipped a Claude agent on production. Last week your eval score dropped from 0.91 to 0.74. You suspect the model swap. You want to know: <strong>would Codex have answered correctly on those failing prompts?</strong></p>
+
+    <p>ATO can now answer that. From any cloud trace, click <strong>Replay</strong> &rarr; pick a target runtime &rarr; ATO re-dispatches the original prompt against your chosen model, captures the response, and shows source vs replay side-by-side with duration + estimated cost delta.</p>
+
+    <p>No prompt re-typing. No &ldquo;guess what I asked.&rdquo; Just a real A/B against the actual conversation.</p>
+
+    <p><em>Caveat we&rsquo;re being honest about: replay reads prompts from your local execution log, so it works for traces dispatched on this machine. Cross-device replay needs server-side credential vault + PII review &mdash; that&rsquo;s the next release, not this one.</em></p>
+
+    <h2>Regression detection that earns the word &ldquo;detection&rdquo;</h2>
+
+    <p>Every config change to your agent &mdash; model swap, role-models edit, system prompt rewrite &mdash; gets recorded automatically. The Insights &rarr; Regressions panel joins those changes against trace stats and surfaces the ones with meaningful deltas:</p>
+
+    <ul>
+        <li>success rate drop &ge;10pp</li>
+        <li>p95 latency spike &ge;50%</li>
+        <li>cost per call up &ge;25%</li>
+        <li><strong>eval score drop &ge;15pp (new)</strong> &mdash; catches the case where the model still runs but the answers got worse, which a pure ok-rate diff misses entirely</li>
+    </ul>
+
+    <p>Each row drills into the actual failing examples (post-change traces with their prompts and errors). And every agent&rsquo;s detail page now carries a banner above the tab nav when it has an active regression &mdash; you don&rsquo;t have to remember to check.</p>
+
+    <h2>Cost recommendations that show their work</h2>
+
+    <p>We&rsquo;re not going to claim &ldquo;Haiku is cheaper&rdquo; if you&rsquo;ve never run on Haiku. That&rsquo;s just guessing.</p>
+
+    <p>What ATO will do: when you have actual historical data on the same agent across multiple runtimes, the new cost recommendations panel surfaces concrete swaps where the alternative is meaningfully cheaper at preserved quality. Quality guards: &ge;30% cheaper, ok-rate within 10pp, eval-score within 5pp.</p>
+
+    <blockquote>@code-writer &middot; claude &rarr; codex &middot; &minus;59% per call &middot; projected $1.01/mo at this volume</blockquote>
+
+    <p>Sorted by absolute monthly impact. Renders nothing if no rec qualifies &mdash; better to show you nothing than fake confidence.</p>
+
+    <p>And every estimate now has a real number behind it. Desktop dispatches estimate cost at trace time (token count &times; per-million pricing for known models, with an explicit &ldquo;est.&rdquo; badge so you know it&rsquo;s not from a billing receipt). The &ldquo;&mdash;&rdquo; we used to show in Compare and Replay is gone.</p>
+
+    <h2>Pipelines + Compare get their own homes</h2>
+
+    <p>Multi-stage dispatches (sequential groups, routed groups, anything that fans out across runtimes) now have a dedicated <strong>Pipelines</strong> sub-tab. One row per pipeline, click into the per-stage flow with handoff arrows + per-stage timing + files touched.</p>
+
+    <p>Trace comparison gets the same treatment: a kind-agnostic <strong>Compare</strong> sub-tab. We had to extract this from the External tab&rsquo;s drill-down because it didn&rsquo;t make sense to require an agent be deployed-as-bundle to compare its runs. Now any agent with &ge;2 cloud traces is comparable.</p>
+
+    <h2>Automations becomes the canonical canvas</h2>
+
+    <p>Runs &rarr; Automations used to be a flow chart for skills with <code>## Step</code> headers. We turned it into the canvas for <strong>everything that runs without you in the loop</strong>: routed groups, sequential pipelines, scheduled cron jobs, agent hooks, skill flows. All on one canvas, color-coded by source, with live status decorated from your trace history. Click any node &rarr; &ldquo;View runs&rdquo; &rarr; jumps straight to that agent&rsquo;s trace explorer.</p>
+
+    <p>This is what &ldquo;ops layer for multi-runtime agents&rdquo; looks like from a single view.</p>
+
+    <h2>&#x2318;K spans the workspace</h2>
+
+    <p>Hit &#x2318;K from anywhere. Search agents, groups, schedules, secrets, MCPs, projects &mdash; and now your <strong>chat history</strong> too (matches against thread titles AND message bodies, with snippets). Plus a Quick Actions list that jumps directly to any Insights sub-tab in one keystroke.</p>
+
+    <p>Found yourself wondering &ldquo;where did I ask about that thing last week&rdquo;? Type two characters of it. Done.</p>
+
+    <h2>Smaller wins worth mentioning</h2>
+
+    <ul>
+        <li><strong>Bulk kill</strong> on Live runs &mdash; N stuck dispatches gone in one click.</li>
+        <li><strong>Auto-logout on stale auth</strong> &mdash; when your token dies, you see &ldquo;Sign in for Pro&rdquo; instead of every Pro panel mysteriously empty. Visible signal, recoverable. (We also fixed the cloud-side <code>auth/refresh</code> 500 that was the real cause &mdash; bcrypt was throwing on a malformed legacy hash row, now wrapped per-row.)</li>
+        <li><strong>History tab finally populates</strong> &mdash; every dispatch lands in Runs &rarr; History. It had been silently broken since v1.5; now wired through <code>prompt_agent_inner</code> so cron / MCP / UI dispatches all converge.</li>
+        <li><strong>Compare modal stops crashing on cost values</strong> &mdash; PostgreSQL <code>DECIMAL(10,6)</code> columns serialize as strings (<code>"0.014200"</code>) through node-postgres, and <code>.toFixed()</code> on a string crashes. Latent bug; only fired now that v2.1.4 actually populates cost. Fixed with a defensive <code>asNumber()</code> coerce at every render path.</li>
+        <li><strong>Replay link window widened</strong> &mdash; group stages that take longer than 10 seconds (Codex pipelines especially) used to silent-fail their replay link. Window is now <code>[-30s, +5min]</code> from started_at; slow stages get linked correctly.</li>
+    </ul>
+
+    <h2>What&rsquo;s next</h2>
+
+    <p>Two big chunks on the roadmap:</p>
+
+    <ol>
+        <li><strong>Cloud-scheduled batch replay</strong> &mdash; replay your last 14 regression failures against an alternative model overnight, see which ones recover. Needs a data-residency review pass before any prompts live server-side; planning that next.</li>
+        <li><strong>Embed-side analytics</strong> &mdash; for users who deploy bundles, page-where-the-chat-lives metrics. Time to first message, drop-off rate per turn, escalation keyword clusters. Held until we have enough customer-deployed bundles to give the panel real signal.</li>
+    </ol>
+
+    <p>Plus the polish bucket: HALO integration, real-time team collaboration, mobile companion (read-only), retroactive cloud-trace &harr; local-prompt back-fill so older traces become replayable.</p>
+
+    <hr>
+
+    <h2>Release map</h2>
+
+    <table>
+        <thead>
+            <tr><th>Tag</th><th>What</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>v2.0.1</td><td>Pipelines + Compare sub-tabs, auth-mirror, RFC3339 datetime fix, History persistence wired</td></tr>
+            <tr><td>v2.0.2</td><td>Deep regression detection (eval-score deltas + failing-example drill-down + AgentDetail banner)</td></tr>
+            <tr><td>v2.0.3</td><td>Cost recommendations</td></tr>
+            <tr><td>v2.0.4</td><td>Build fix</td></tr>
+            <tr><td>v2.1.0</td><td>Replay infrastructure (interactive)</td></tr>
+            <tr><td>v2.1.1</td><td>Wired trace upload for chat-pane single-agent + no-agent paths</td></tr>
+            <tr><td>v2.1.2</td><td>Persisted streaming dispatches into execution_logs</td></tr>
+            <tr><td>v2.1.3</td><td>Replay source response from local fallback</td></tr>
+            <tr><td>v2.1.4</td><td>Estimated cost capture for desktop dispatches + replay panel</td></tr>
+            <tr><td>v2.1.5</td><td>Automations canvas polish (multi-source canvas + click-through to Insights)</td></tr>
+            <tr><td>v2.1.6</td><td>&#x2318;K palette spans full workspace (groups, schedules, secrets, quick actions)</td></tr>
+            <tr><td>v2.1.7</td><td>Chat thread search corpus in &#x2318;K</td></tr>
+            <tr><td>v2.1.8</td><td>Bulk kill on Live runs</td></tr>
+            <tr><td>v2.1.9</td><td>Coerce PG numeric strings (Compare crash fix)</td></tr>
+            <tr><td>v2.1.10</td><td>Auto-logout on stale auth + cloud /auth/refresh 500&rarr;401 hardening</td></tr>
+            <tr><td>v2.1.11</td><td>Widen replay link window so slow group stages link correctly</td></tr>
+        </tbody>
+    </table>
+
+    <div class="post-footer-cta">
+        <h3>Try ATO v2.1</h3>
+        <p>Every feature free with a sign-up &mdash; no payment, no credit card, just an email.</p>
+        <a href="/#download" class="btn">Download for Mac / Win / Linux &rarr;</a>
+    </div>
+
+    <p style="margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">&mdash; Beatriz Nigri</p>
+</article>
+
+</body>
+</html>
