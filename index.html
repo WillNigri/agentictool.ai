@@ -40,7 +40,7 @@
             "priceCurrency": "USD"
         },
         "description": "Free, open-source desktop GUI for multi-runtime AI agents. Replay any past prompt against a different runtime, detect quality regressions before users do, surface concrete cost-saving model swaps. Live runs registry, file attribution per dispatch, configuration ledger. Six native runtimes (Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama) plus 16 API providers. Local-first, MIT licensed.",
-        "softwareVersion": "2.1.11",
+        "softwareVersion": "2.2.1",
         "downloadUrl": "https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest",
         "featureList": [
             "Cross-runtime replay (re-dispatch past prompts against a different model)",
@@ -1376,7 +1376,7 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-top">
-                <a href="/posts/v2.1-ops-layer.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.1 &middot; Replay across runtimes &middot; Read what&rsquo;s new &rarr;</a>
+                <a href="/posts/v2.1-ops-layer.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.2 &middot; One-click replay from any regression &middot; Read what&rsquo;s new &rarr;</a>
                 <h1 class="hero-title">
                     <span class="line">THE GUI</span>
                     <span class="line"><span class="bracket">[</span><span class="highlight">FOR</span><span class="bracket">]</span></span>
@@ -2138,13 +2138,16 @@
 <span class="prompt">$</span> brew tap WillNigri/ato
 <span class="prompt">$</span> brew install --cask ato
 
-<span class="comment"># Or install the SDK for auto-tracing</span>
+<span class="comment"># SDK — only for ATO-authored agents deployed externally</span>
 <span class="prompt">$</span> npm install @ato-sdk/js
 
 <span class="comment"># Or install just the MCP server</span>
 <span class="prompt">$</span> npx ato-mcp
                 </div>
             </div>
+            <p style="max-width:680px;margin:32px auto 0 auto;font-size:13px;line-height:1.6;color:var(--text-secondary);text-align:center;">
+                <strong style="color:var(--text-primary);">Complementary, not competing.</strong> ATO is the <em>developer-workflow</em> operations layer. For SDK-based production observability across your existing app stack, use <a href="https://langfuse.com" target="_blank" rel="noopener" style="color:var(--accent-cyan);text-decoration:underline;">Langfuse</a>, <a href="https://www.helicone.ai" target="_blank" rel="noopener" style="color:var(--accent-cyan);text-decoration:underline;">Helicone</a>, or <a href="https://smith.langchain.com" target="_blank" rel="noopener" style="color:var(--accent-cyan);text-decoration:underline;">LangSmith</a>. Most production teams run one from each camp &mdash; they cover different sides of the same agent. <a href="/posts/ai-agent-observability.html" style="color:var(--accent-cyan);text-decoration:underline;">More on how they fit together &rarr;</a>
+            </p>
         </div>
     </section>
 
