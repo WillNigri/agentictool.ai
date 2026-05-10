@@ -1327,7 +1327,7 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-content">
-                <div class="hero-badge">v2.1 &middot; Replay across runtimes &middot; MIT License</div>
+                <div class="hero-badge">v2.1 &middot; Replay across runtimes &middot; Every feature free with sign-up</div>
                 <h1 class="hero-title">
                     <span class="line">THE GUI</span>
                     <span class="line"><span class="bracket">[</span><span class="highlight">FOR</span><span class="bracket">]</span></span>
@@ -1356,7 +1356,7 @@
                 </div>
                 <div class="hero-ctas">
                     <a href="#" data-ato-download="auto" class="btn-primary">Download for Mac / Win / Linux &rarr;</a>
-                    <a href="https://app.agentictool.ai" class="btn-outline" target="_blank" rel="noopener">Open Web Dashboard</a>
+                    <a href="https://app.agentictool.ai" class="btn-outline" target="_blank" rel="noopener">Sign up free &rarr;</a>
                     <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="btn-outline" target="_blank" rel="noopener">View on GitHub</a>
                 </div>
                 <p style="margin-top:24px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.05em;">Claude Code &middot; Codex &middot; Gemini CLI &middot; OpenClaw &middot; Hermes &middot; Ollama &middot;<br>+ DeepSeek, Qwen, MiniMax, Kimi, GLM, Yi via API</p>
@@ -1471,6 +1471,61 @@
                             <button style="background:transparent;border:1px solid var(--accent-red);color:var(--accent-red);padding:3px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;flex-shrink:0;">&#9633; Kill</button>
                         </div>
                         <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:10px;text-align:center;">3 dispatches across 3 runtimes &middot; 2 sharing repo-a &middot; click any file in trace history for cross-run lineage</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- v2.1 Replay + Compare + Cost recs -->
+            <div class="feature-block fade-in" style="margin-bottom: 3rem;">
+                <div class="feature-info">
+                    <h3 style="color: var(--accent-cyan);">Cross-runtime A/B &mdash; replay any prompt</h3>
+                    <p>Pick any past trace. Click <strong>Replay</strong>. Re-run the original prompt against a different runtime. See source vs replay side-by-side with duration + estimated cost delta. <strong style="color:var(--accent-cyan);">Would Codex have answered correctly on those failing prompts?</strong> Now you can find out.</p>
+                    <ul class="feature-bullets">
+                        <li><strong>Replay</strong> &mdash; from any cloud trace, pick a target runtime and model. Re-dispatch happens via <code class="mono">prompt_agent_inner</code> so the replay is itself killable + appears in Live runs. Status pill ticks <code class="mono">pending &rarr; running &rarr; done</code>; result panel renders both responses + duration delta. Source prompts come from your local execution log &mdash; ATO never sends prompt content to a server you don&rsquo;t already use.</li>
+                        <li><strong>Compare workbench</strong> &mdash; Insights &rarr; Compare. Diff any two cloud traces of the same agent: duration, cost (estimated, with an &ldquo;est.&rdquo; badge so the precision is honest), files only-in-baseline / only-in-comparison, ok-status change. Kind-agnostic &mdash; works for chat dispatches, deployed bundles, group stages, anything.</li>
+                        <li><strong>Cost recommendations</strong> &mdash; <code class="mono">@code-writer &middot; claude &rarr; codex &middot; &minus;59% per call &middot; projected $1.01/mo at this volume</code>. Surfaces concrete swaps when you have multi-runtime history on the same agent and the alternative is meaningfully cheaper at preserved quality. Quality guards: &ge;30% cheaper, ok-rate within 10pp, eval-score within 5pp. Renders nothing if no rec qualifies &mdash; better than fake confidence.</li>
+                        <li><strong>Pipelines sub-tab</strong> &mdash; multi-stage dispatches (sequential groups, routed groups, anything that fans out across runtimes) grouped by <code class="mono">parent_run_id</code>. One row per pipeline; click into the per-stage flow with handoff arrows + per-stage timing + files touched per stage.</li>
+                        <li><strong>Workspace-wide ⌘K</strong> &mdash; one keystroke search agents, groups, schedules, secrets, MCPs, projects, plus your <strong>chat history</strong> (matches against thread titles AND message bodies, with snippets). Quick Actions list jumps to any Insights sub-tab in one keystroke.</li>
+                    </ul>
+                </div>
+                <div class="feature-mockup">
+                    <div class="feature-mockup-header">
+                        <div class="feature-mockup-dot red"></div>
+                        <div class="feature-mockup-dot yellow"></div>
+                        <div class="feature-mockup-dot green"></div>
+                        <span style="margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);">Insights &middot; Compare &middot; Replay claude &rarr; codex</span>
+                    </div>
+                    <div style="padding:14px 12px;">
+                        <!-- Source / Replay headers -->
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px;">
+                            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;">Source &middot; <span style="background:#e8594c;color:#000;padding:0 4px;border-radius:3px;font-size:9px;font-weight:700;">CLAUDE</span></div>
+                            <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--accent-cyan);text-transform:uppercase;letter-spacing:0.05em;">Replay &middot; <span style="background:#22c55e;color:#000;padding:0 4px;border-radius:3px;font-size:9px;font-weight:700;">CODEX</span></div>
+                        </div>
+                        <!-- Side-by-side responses -->
+                        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:10px;font-size:11px;color:var(--text-secondary);line-height:1.5;height:120px;overflow:hidden;">
+                                Binary search finds a target by repeatedly halving a sorted range. O(log n) instead of O(n).
+                            </div>
+                            <div style="background:var(--bg);border:1px solid rgba(0,255,213,0.3);border-radius:6px;padding:10px;font-size:11px;color:var(--text-secondary);line-height:1.5;height:120px;overflow:hidden;">
+                                Repeatedly compare with the middle, discard the half that can&rsquo;t contain the target. Halving the search space cuts complexity to O(log n).
+                            </div>
+                        </div>
+                        <!-- Diff stats -->
+                        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px;">
+                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center;">
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);text-transform:uppercase;">Duration</div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent-cyan);font-weight:600;margin-top:2px;">&minus;1842ms</div>
+                            </div>
+                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center;">
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);text-transform:uppercase;">Cost (est.)</div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--accent-cyan);font-weight:600;margin-top:2px;">&minus;$0.0084</div>
+                            </div>
+                            <div style="background:var(--bg);border:1px solid var(--border);border-radius:5px;padding:8px;text-align:center;">
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--text-muted);text-transform:uppercase;">Runtime</div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-primary);margin-top:4px;">claude &rarr; codex</div>
+                            </div>
+                        </div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);text-align:center;">Source prompts read from local execution log &middot; never leave the device unless you click replay</div>
                     </div>
                 </div>
             </div>
@@ -1838,7 +1893,7 @@
             <!-- SSO / Enterprise -->
             <div class="feature-block fade-in">
                 <div class="feature-info">
-                    <h3>SSO &amp; Enterprise Auth <span style="font-size:0.7rem;padding:2px 8px;background:rgba(0,255,213,0.1);color:var(--accent-cyan);border-radius:2px;margin-left:8px;">PRO</span></h3>
+                    <h3>SSO &amp; Enterprise Auth <span style="font-size:0.7rem;padding:2px 8px;background:rgba(0,255,213,0.1);color:var(--accent-cyan);border-radius:2px;margin-left:8px;">FREE WITH SIGN-UP</span></h3>
                     <p>Connect your company's identity provider. Google Workspace, Okta, Microsoft Entra, or any OIDC provider &mdash; with domain restriction and auto-provisioning.</p>
                     <ul class="feature-bullets">
                         <li>Google Workspace, Okta, Microsoft Entra built-in</li>
@@ -1957,7 +2012,7 @@
                     <div class="arch-sync-label">Sync</div>
                 </div>
                 <div class="arch-card">
-                    <h3>Cloud (Pro features)</h3>
+                    <h3>Cloud (free with sign-up)</h3>
                     <div class="arch-subtitle">free with sign-up &middot; early access</div>
                     <ul>
                         <li>7 microservices on Railway</li>
@@ -1991,7 +2046,7 @@
             <h2 class="section-title fade-in">Download ATO</h2>
             <p class="section-subtitle fade-in" style="margin:0 auto 16px auto;">Free, open source, and ready for your platform.</p>
             <p class="fade-in" style="margin:0 auto 48px auto;text-align:center;font-size:0.95rem;color:var(--accent-cyan);font-family:'JetBrains Mono',monospace;">
-                &gt; Early access: <strong style="color:var(--accent-cyan);">Pro features free with a cloud sign-up</strong> &mdash; cloud sync, trace retention, observability, evaluators.
+                &gt; Early access: <strong style="color:var(--accent-cyan);">every feature free with a cloud sign-up</strong> &mdash; replay, compare, regression detection, cost recommendations, cloud sync, trace retention, evaluators. No payment, no credit card &mdash; just an email.
             </p>
             <div class="download-grid fade-in">
                 <a href="#" data-ato-download="mac-arm" class="download-btn">
