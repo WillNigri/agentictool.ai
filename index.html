@@ -198,43 +198,29 @@
         }
 
         /* ========== HERO ========== */
-        /* v2.1 hero rework: oversized title on the left covers the
-         * room previously taken by the aurora visual, and the body
-         * (subtitle, stats, CTAs) lives in a sticky right rail that
-         * stays pinned as the user scrolls. The section is taller
-         * (160vh) so the sticky rail has runway — without it the
-         * sticky has nothing to "stick" against. */
         .hero {
             position: relative;
-            min-height: 160vh;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
             padding-top: 64px;
-            overflow: visible;
+            overflow: hidden;
         }
 
         .hero-inner {
             display: grid;
-            grid-template-columns: 1.45fr 1fr;
-            column-gap: 48px;
-            align-items: start;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
-            min-height: calc(100vh - 64px);
         }
 
         .hero-content {
             position: relative;
             z-index: 2;
-            padding-top: clamp(40px, 8vh, 120px);
-        }
-
-        .hero-aside {
-            position: sticky;
-            top: 96px;
-            z-index: 2;
-            padding-top: clamp(40px, 8vh, 120px);
-            align-self: start;
         }
 
         .hero-badge {
@@ -261,12 +247,12 @@
 
         .hero-title {
             font-family: 'Space Grotesk', sans-serif;
-            /* Allow the title to grow wider into the space the aurora
-             * used to occupy. Caps at ~7.5rem so it doesn't bleed past
-             * the column on tall viewports. */
-            font-size: clamp(3rem, 8vw, 7.5rem);
+            /* Slightly larger than original 5.5rem cap so the brand
+             * promise has more visual weight without breaking the
+             * single-column flow. */
+            font-size: clamp(3rem, 7vw, 6.5rem);
             font-weight: 700;
-            line-height: 0.92;
+            line-height: 0.95;
             letter-spacing: -2px;
             text-transform: uppercase;
             margin-bottom: 28px;
@@ -369,15 +355,12 @@
         }
 
         .hero-visual {
-            /* Capped at 100vh so the aurora doesn't extend with the
-             * 160vh hero into the next section. Lower z-index so the
-             * sticky description rail sits cleanly above it. */
             position: absolute;
             top: 0;
             right: 0;
             width: 55%;
-            height: 100vh;
-            z-index: 0;
+            height: 100%;
+            z-index: 1;
             pointer-events: none;
             mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0) 100%);
             -webkit-mask-image: linear-gradient(to left, rgba(0,0,0,1) 0%, rgba(0,0,0,0.8) 60%, rgba(0,0,0,0) 100%);
@@ -1172,27 +1155,8 @@
 
         /* ========== RESPONSIVE ========== */
         @media (max-width: 900px) {
-            /* Hero collapses to single column; sticky behavior is
-             * disabled (sticky on mobile = annoying overlap with
-             * fixed nav + small viewports). */
-            .hero {
-                min-height: auto;
-                padding-bottom: 64px;
-            }
-
             .hero-inner {
                 grid-template-columns: 1fr;
-                min-height: auto;
-                row-gap: 24px;
-            }
-
-            .hero-content,
-            .hero-aside {
-                padding-top: 0;
-            }
-
-            .hero-aside {
-                position: static;
             }
 
             .hero-visual {
@@ -1333,8 +1297,6 @@
                     <span class="line"><span class="bracket">[</span><span class="highlight">FOR</span><span class="bracket">]</span></span>
                     <span class="line">MULTI-AGENT<span class="underscore">_</span></span>
                 </h1>
-            </div>
-            <aside class="hero-aside">
                 <p class="hero-subtitle">Once you run 3+ agents, the hard part is knowing <strong style="color:var(--accent-cyan)">which runtime owns which workspace, what each touched, and how to stop the stuck ones</strong> &mdash; without reading every terminal buffer. ATO is the GUI &mdash; the ops layer for <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, OpenClaw, Hermes, and Ollama. Live runs panel. File attribution per dispatch. Cross-runtime regression detection. Local-first. MIT.</p>
                 <div class="hero-stats">
                     <div class="hero-stat">
@@ -1360,10 +1322,10 @@
                     <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="btn-outline" target="_blank" rel="noopener">View on GitHub</a>
                 </div>
                 <p style="margin-top:24px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.05em;">Claude Code &middot; Codex &middot; Gemini CLI &middot; OpenClaw &middot; Hermes &middot; Ollama &middot;<br>+ DeepSeek, Qwen, MiniMax, Kimi, GLM, Yi via API</p>
-            </aside>
-        </div>
-        <div class="hero-visual">
-            <canvas id="aurora-canvas"></canvas>
+            </div>
+            <div class="hero-visual">
+                <canvas id="aurora-canvas"></canvas>
+            </div>
         </div>
     </section>
 
