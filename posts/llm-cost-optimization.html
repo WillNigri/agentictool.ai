@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why does my AI agent bill keep growing? — ATO</title>
+<meta name="description" content="LLM costs feel arbitrary because most teams don't actually instrument them. A walk through the published per-million pricing, why the bill grows faster than usage, and what to monitor before the CFO asks.">
+<meta name="keywords" content="LLM cost optimization, reduce AI agent costs, OpenAI pricing, Anthropic pricing, cost per token, AI cost monitoring, LLM cost analysis">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/llm-cost-optimization.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why does my AI agent bill keep growing?">
+<meta property="og:description" content="LLM costs feel arbitrary because most teams don't actually instrument them. Here's what to monitor.">
+<meta property="og:url" content="https://agentictool.ai/posts/llm-cost-optimization.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-10T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why does my AI agent bill keep growing?">
+<meta name="twitter:description" content="LLM costs feel arbitrary because most teams don't actually instrument them.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Why does my AI agent bill keep growing?","description":"LLM costs feel arbitrary because most teams don't actually instrument them. Here's what to monitor.","datePublished":"2026-05-10","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/llm-cost-optimization.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-10 &middot; LLM Cost &middot; 8 min read</div>
+
+  <h1>Why does my AI agent bill keep growing?</h1>
+
+  <p>Every team building on top of LLMs eventually has the same Slack message from their CFO: <em>&ldquo;Our AI bill went up 40% this month and I don&rsquo;t understand why.&rdquo;</em> The honest answer is that nobody on the team understands either. The dashboards are usage counts. The bill is tokens times price. Tokens, prices, and usage all moved &mdash; you can&rsquo;t cleanly attribute the growth to any one of them.</p>
+
+  <p>This is the cost-attribution problem in production AI. The information needed to answer it is technically present in your traces, but most teams don&rsquo;t collect it and most platforms don&rsquo;t aggregate it the way a finance team would.</p>
+
+  <h2>What LLM pricing actually looks like</h2>
+
+  <p>Frontier-model pricing is published per million tokens. As of early 2025 (these change every few months &mdash; check vendor pages for current numbers):</p>
+
+  <ul>
+    <li><strong>Anthropic Claude</strong>: Sonnet 4.x ~$3 input / $15 output per 1M tokens. Opus 4.x ~$15 / $75. Haiku ~$1 / $5.</li>
+    <li><strong>OpenAI GPT</strong>: GPT-4o ~$2.50 / $10. GPT-4o-mini ~$0.15 / $0.60. GPT-4.1 ~$2 / $8.</li>
+    <li><strong>Google Gemini</strong>: 2.0-flash ~$0.10 / $0.40. 1.5-pro ~$1.25 / $5. 1.5-flash ~$0.075 / $0.30.</li>
+    <li><strong>Open weights / fast inference</strong> (Groq, Together, Fireworks): generally 5&ndash;20&times; cheaper than equivalent frontier models, depending on the model class.</li>
+  </ul>
+
+  <p>Two things to notice: <strong>output tokens are 4&ndash;5&times; the price of input tokens</strong> across nearly every provider, and <strong>the spread between the cheapest and most-capable model in a single vendor&rsquo;s lineup is 50&ndash;100&times;</strong>. That spread is where cost optimization actually lives.</p>
+
+  <h2>Why the bill grows faster than usage</h2>
+
+  <p>Five reasons, in roughly the order they bite teams:</p>
+
+  <p><strong>1. Context windows grow without anyone noticing.</strong> You add a new system-prompt section. You add a new variable. You inject a longer file. Each turn now sends 3,000 more input tokens than last month. The user sends the same volume; you pay more.</p>
+
+  <p><strong>2. Conversations grow longer.</strong> Multi-turn agents accumulate history. By turn 8 you might be re-sending 15,000 tokens of prior conversation as the prompt. The model is doing the same work; the input is much bigger.</p>
+
+  <p><strong>3. Output tokens explode when prompts encourage them.</strong> A prompt that ends &ldquo;explain in detail&rdquo; or &ldquo;walk me through your reasoning&rdquo; can 3&times; the response length. Output is 4&ndash;5&times; more expensive than input. Subtle prompt edits become large bill changes.</p>
+
+  <p><strong>4. Tool calls fan out invisibly.</strong> An agent calls a tool, gets a response, calls another tool. Each round trip is a full prompt with conversation history. A single user message can trigger five model calls under the hood.</p>
+
+  <p><strong>5. You upgraded the model.</strong> The new release blog said &ldquo;same price.&rdquo; But the new model writes longer responses on average, or uses more reasoning tokens, or burns more context interpreting your system prompt. Same per-token price, more tokens per call.</p>
+
+  <p>None of these are obvious from a usage chart. Usage went up 30%. Bill went up 60%. The gap is the part nobody&rsquo;s instrumenting.</p>
+
+  <h2>What to actually monitor</h2>
+
+  <h3>Cost per call, not just total spend</h3>
+
+  <p>Total spend tells you you have a problem. Cost-per-call tells you where it is. Track average cost per dispatch per agent per model. When that line goes up without traffic going up, you have prompt drift, context drift, or output-bloat &mdash; and you can find which one by reading three traces.</p>
+
+  <h3>Cost per OK call, not just cost per call</h3>
+
+  <p>An agent that costs $0.03 per call but only succeeds 60% of the time is really costing $0.05 per useful answer. An agent that costs $0.04 per call and succeeds 95% of the time is costing $0.042. The cheaper-per-call agent is more expensive in practice. Cost-per-OK is the metric that matters.</p>
+
+  <h3>Input vs output token split</h3>
+
+  <p>If output is 4&times; the cost of input, doubling output doubles your bill way faster than doubling input. Track input tokens and output tokens separately. When the output ratio jumps after a prompt change, that&rsquo;s the change that&rsquo;s expensive.</p>
+
+  <h3>Per-task model selection</h3>
+
+  <p>Inside a single agent, different sub-tasks have different cost profiles:</p>
+  <ul>
+    <li>Routing classification &mdash; cheap and fast (Haiku, GPT-4o-mini, Gemini Flash)</li>
+    <li>Summarizing conversation history &mdash; cheap and fast</li>
+    <li>Final user-facing response &mdash; the capable model</li>
+    <li>LLM-as-judge evaluator &mdash; intermediate</li>
+  </ul>
+  <p>Most teams use one model for all four because that&rsquo;s the default. Splitting these into role-specific slots typically cuts bills 30&ndash;60% with no measurable quality drop on the parts that matter.</p>
+
+  <h3>Per-conversation cost tail</h3>
+
+  <p>p95 conversation cost is more useful than average. The 5% of conversations that turn into 30-message epics are eating disproportionate budget. Find them; fix the prompt loop or the conversation summarizer that should have compacted them.</p>
+
+  <h2>How people optimize today</h2>
+
+  <p>Three approaches, in increasing automation:</p>
+
+  <p><strong>Spreadsheet attribution.</strong> Pull token counts from vendor invoices. Multiply by per-model rate. Slice by agent. Tedious, monthly, retrospective. Better than nothing.</p>
+
+  <p><strong>Custom telemetry.</strong> Most production teams write a logging wrapper around their LLM calls that captures prompt tokens, response tokens, model, agent slug. Pipe to a dashboard. Now you have per-call cost. The wrapper grows organically; eventually you reinvent observability.</p>
+
+  <p><strong>Off-the-shelf platforms with cost tracking.</strong> The ecosystem has a handful:</p>
+
+  <ul>
+    <li><strong>Helicone</strong> &mdash; logging proxy that attributes cost per request out of the box. Drop-in.</li>
+    <li><strong>Langfuse</strong> &mdash; open-source observability with cost tracking; self-hostable.</li>
+    <li><strong>OpenMeter / Vellum</strong> &mdash; usage metering platforms with LLM-aware aggregations.</li>
+    <li><strong>Vendor consoles</strong> &mdash; OpenAI, Anthropic, and Google all have their own usage dashboards. Single-vendor, no agent-level slicing.</li>
+    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; estimates cost per dispatch (token count &times; published per-million pricing for known models, with an &ldquo;est.&rdquo; badge), surfaces cost recommendations when you have multi-runtime data on the same agent. Multi-runtime native.</li>
+  </ul>
+
+  <p>The thing all of these share: cost becomes <em>visible per call</em> instead of <em>summed at month-end</em>. Visibility per call is the only way to catch the four-line prompt edit that doubled your output tokens.</p>
+
+  <h2>The summary, plainly</h2>
+
+  <p>LLM bills feel arbitrary because most teams measure them only at the end. They&rsquo;re not arbitrary; they&rsquo;re input-tokens times price plus output-tokens times price, multiplied by call volume. Each of those four factors moves independently. If you instrument them, the bill becomes legible. If you don&rsquo;t, you&rsquo;re going to keep being surprised every month.</p>
+
+  <p>The first cost optimization isn&rsquo;t switching models. It&rsquo;s instrumenting cost per call so you can see what&rsquo;s actually happening. Once that&rsquo;s in place, the optimizations are usually obvious: split per-task model slots, compact long conversation histories, tighten prompts that encourage long output, audit context-injection variables for size creep.</p>
+
+  <hr>
+
+  <div class="related-posts">
+    <h3>More on this</h3>
+    <ul>
+      <li><a href="/posts/ai-agent-observability.html">What&rsquo;s missing when traditional monitoring meets AI agents</a></li>
+      <li><a href="/posts/ai-agent-regression-detection.html">Why does my AI agent get worse without anyone changing it</a></li>
+      <li><a href="/posts/multi-llm-workflows.html">Why is multi-LLM development still so painful in 2026</a></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">&mdash; Beatriz Nigri</p>
+</article>
+
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What separates production AI agents from demos? — ATO</title>
+<meta name="description" content="A demo agent has one prompt. A production agent has variables, context hooks, memory policies, evaluators, and per-task models. The shift from prompt engineering to context engineering, with the literature behind it.">
+<meta name="keywords" content="context engineering, prompt engineering vs context engineering, dynamic prompts AI, production AI agents, AI agent variables, AI agent hooks, RAG vs context">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/context-engineering.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="What separates production AI agents from demos?">
+<meta property="og:description" content="A demo agent has one prompt. A production agent has variables, context hooks, memory policies, evaluators, and per-task models.">
+<meta property="og:url" content="https://agentictool.ai/posts/context-engineering.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-10T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="What separates production AI agents from demos?">
+<meta name="twitter:description" content="A demo agent has one prompt. A production agent has variables, context hooks, memory policies, evaluators.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"What separates production AI agents from demos?","description":"A demo agent has one prompt. A production agent has variables, context hooks, memory policies, evaluators, and per-task models.","datePublished":"2026-05-10","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/context-engineering.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-10 &middot; AI Architecture &middot; 9 min read</div>
+
+  <h1>What separates production AI agents from demos?</h1>
+
+  <p>Demo agents are fluent. They sound smart in three-prompt walkthroughs. They get a starring role in pitch decks. And then they hit production traffic and fall apart in a way the team can&rsquo;t debug, because there&rsquo;s only one knob to turn: the system prompt.</p>
+
+  <p>The reason production agents survive and demo agents don&rsquo;t isn&rsquo;t cleverness in the prompt. It&rsquo;s a different category of work. The industry has started calling it <em>context engineering</em>, and it&rsquo;s the missing layer between &ldquo;a prompt&rdquo; and &ldquo;an agent that handles real users.&rdquo;</p>
+
+  <h2>The literature behind it</h2>
+
+  <p>Three threads worth following:</p>
+
+  <ul>
+    <li><strong>&ldquo;The Rise and Potential of Large Language Model Based Agents: A Survey&rdquo;</strong> &mdash; Xi et al., 2023. The reference survey paper. Frames the agent as <em>brain (LLM) + perception (context) + action (tools)</em>. Most production breakdowns are perception failures, not brain failures.</li>
+    <li><strong>&ldquo;Lost in the Middle: How Language Models Use Long Contexts&rdquo;</strong> &mdash; Liu et al., Stanford, 2023. Showed empirically that models pay less attention to information in the middle of long contexts than at the start or end. Practical consequence: where you put a fact in the prompt matters as much as whether you put it in.</li>
+    <li><strong>Anthropic&rsquo;s &ldquo;Building Effective Agents&rdquo;</strong> &mdash; December 2024 engineering essay. Distinguishes <em>workflows</em> (deterministic chains) from <em>agents</em> (LLM-driven loops) and argues most production deployments should be the former. The simpler-than-it-sounds insight: most &ldquo;agents&rdquo; in production are actually workflows with one LLM call.</li>
+    <li><strong>The &ldquo;context engineering&rdquo; coinage</strong> &mdash; popularized in 2024 across multiple practitioner essays (Cognition&rsquo;s &ldquo;Don&rsquo;t Build Multi-Agents&rdquo;, Andrej Karpathy&rsquo;s social posts, the LangChain team&rsquo;s blog). The rough thesis: <em>prompt engineering optimizes the static instructions; context engineering optimizes what the model sees on each turn.</em></li>
+  </ul>
+
+  <p>The shift is from &ldquo;a great prompt&rdquo; to &ldquo;the right information delivered at the right moment.&rdquo;</p>
+
+  <h2>The seven pieces of production agent context</h2>
+
+  <p>From running this in practice, the production agent has roughly seven layers the demo agent doesn&rsquo;t:</p>
+
+  <h3>1. Dynamic variables</h3>
+
+  <p>The system prompt has <code>{user_name}</code>, <code>{project_root}</code>, <code>{recent_orders}</code>, <code>{today}</code>. Each variable has a resolver that fires before each turn: pull from environment, read from file, query the database, call an MCP tool. The model gets a fresh, context-specific prompt every dispatch.</p>
+
+  <p>This is the &ldquo;production agent&rdquo; pattern most often. A static system prompt that says &ldquo;you are a helpful assistant&rdquo; can&rsquo;t scale to 10,000 users; a templated prompt with per-user variables can.</p>
+
+  <h3>2. Pre-call context hooks</h3>
+
+  <p>Before each user message reaches the model, run a small set of hooks that inject relevant context. Read the project&rsquo;s <code>CHANGELOG.md</code>, query the user&rsquo;s open tickets, check whether they&rsquo;re on a paid plan. The hooks output context that&rsquo;s prepended to the user message in a <code>&lt;context&gt;</code> block.</p>
+
+  <p>This is what most teams reinvent as their &ldquo;RAG layer.&rdquo; RAG (retrieval-augmented generation) is one specific kind of context hook (vector search over a corpus). Context hooks generalize the pattern: pull anything, format anything, prepend.</p>
+
+  <h3>3. Memory / conversation summarization</h3>
+
+  <p>Long conversations exceed token budgets and degrade quality. Production agents define a memory policy: at message <em>N</em>, summarize the older portion of the thread, keep the last <em>K</em> turns verbatim. The summarizer is usually a smaller, cheaper model.</p>
+
+  <p>Without this, a 30-turn conversation is either truncated arbitrarily (losing context) or shoved into an absurdly large prompt (expensive and slow). The Stanford <em>Lost in the Middle</em> finding above is why this matters: even when the model technically has the tokens to read the whole history, it doesn&rsquo;t pay attention evenly.</p>
+
+  <h3>4. Per-task model selection</h3>
+
+  <p>Inside one agent, different sub-tasks need different models. Router (cheap, fast). Summarizer (cheap, fast). Response (capable). Evaluator (intermediate). Treating &ldquo;the model&rdquo; as a single setting conflates these and either burns money on tasks that don&rsquo;t need it or sacrifices quality on tasks that do.</p>
+
+  <h3>5. Evaluators</h3>
+
+  <p>An automated way to score &ldquo;was this answer good?&rdquo; Heuristic (substring contains, regex, response-length, tool-was-called) or LLM-as-judge (smaller model rates 0&ndash;1 with reasoning). Run on every dispatch or in a scheduled batch. Without this, &ldquo;agent quality&rdquo; is a vibe.</p>
+
+  <h3>6. Specialization (multi-agent)</h3>
+
+  <p>One mega-agent with thirty tools is brittle. Three specialist agents with eight tools each, plus a router that picks between them, is robust. The literature supports this; the Anthropic essay above explicitly argues for it.</p>
+
+  <p>The cost of specialization is more moving parts. The benefit is each specialist gets a focused system prompt, a focused tool set, and an evaluator tuned to its specific job. Quality is dramatically easier to reason about per-specialist than per-mega-agent.</p>
+
+  <h3>7. Observability</h3>
+
+  <p>Every layer above produces emergent behavior; you cannot reason about an agent in production without traces. The trace has to capture the resolved variables, the hooks fired, the routing decision, the model called, the tools invoked, the response, the evaluator score. That&rsquo;s the unit of debugging.</p>
+
+  <h2>How people build this today</h2>
+
+  <p>Three patterns, in roughly increasing structure:</p>
+
+  <p><strong>Hand-rolled in code.</strong> Most teams start here. The agent lives in a Python file. Variables are f-strings. Hooks are function calls. Memory is a list slice. It works for one agent. It becomes a maintenance burden when the team has six.</p>
+
+  <p><strong>Framework-based.</strong> LangChain, LlamaIndex, Pydantic-AI, Agno, Letta, OpenAI Agents SDK. Each provides primitives for variables, tools, memory, and orchestration. Each has its own opinions and its own learning curve. Useful at the cost of vendor lock-in to that framework&rsquo;s abstractions.</p>
+
+  <p><strong>Configuration-driven.</strong> Agents defined declaratively (YAML or a UI), with each layer expressed separately: variables here, hooks there, memory policy in another section, role-models in another. The benefit is that non-engineers can edit prompts without touching code, and the agent definition becomes diffable infrastructure.</p>
+
+  <p>Tools that lean into context engineering as a first-class concept:</p>
+
+  <ul>
+    <li><strong>LangChain / LangGraph</strong> &mdash; the established framework. Strong on chain abstractions; opinionated.</li>
+    <li><strong>Pydantic-AI</strong> &mdash; type-safe agent framework with structured outputs.</li>
+    <li><strong>Letta (formerly MemGPT)</strong> &mdash; specifically about long-running agent memory.</li>
+    <li><strong>Cognition&rsquo;s Devin / Cursor agents</strong> &mdash; closed source, but their public posts describe the architecture.</li>
+    <li><strong>OpenAI Agents SDK</strong> &mdash; vendor-specific, structured.</li>
+    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; variables, hooks, memory policies, per-task model slots, and evaluators are first-class tabs on every agent. Multi-runtime native.</li>
+  </ul>
+
+  <h2>The summary, plainly</h2>
+
+  <p>The system prompt is one input to a production agent. The other inputs &mdash; resolved variables, hook outputs, summarized conversation history, the right model for the sub-task &mdash; are at least as important and far more likely to be the cause of production failures.</p>
+
+  <p>Teams that ship demos optimize the prompt. Teams that ship production-grade agents optimize the entire context the model sees on each turn. That&rsquo;s the practical meaning of &ldquo;context engineering,&rdquo; and it&rsquo;s the layer most current tooling treats as an afterthought.</p>
+
+  <hr>
+
+  <div class="related-posts">
+    <h3>More on this</h3>
+    <ul>
+      <li><a href="/posts/multi-llm-workflows.html">Why is multi-LLM development still so painful in 2026</a></li>
+      <li><a href="/posts/ai-agent-observability.html">What&rsquo;s missing when traditional monitoring meets AI agents</a></li>
+      <li><a href="/posts/ai-agent-regression-detection.html">Why does my AI agent get worse without anyone changing it</a></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">&mdash; Beatriz Nigri</p>
+</article>
+
+</body>
+</html>

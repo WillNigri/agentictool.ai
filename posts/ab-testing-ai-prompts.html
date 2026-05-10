@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>How can we actually understand whether a new LLM is better — ATO</title>
+<meta name="description" content="Vendors publish benchmark scores. Those scores tell you something, but not everything you need. A walk through MMLU, HumanEval, your own intuition while developing, and what to do once you have real users in front of your agent.">
+<meta name="keywords" content="LLM benchmarks, MMLU HumanEval GSM8K, evaluate LLM, AI A/B testing, compare LLM models, LLM evaluation tools, AI agent quality">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/ab-testing-ai-prompts.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="How can we actually understand whether a new LLM is better">
+<meta property="og:description" content="Vendors publish benchmark scores. Those scores tell you something, but not everything. Here's what does.">
+<meta property="og:url" content="https://agentictool.ai/posts/ab-testing-ai-prompts.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-10T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How can we actually understand whether a new LLM is better">
+<meta name="twitter:description" content="Vendors publish benchmark scores. Those scores tell you something, but not everything.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"How can we actually understand whether a new LLM is better","description":"Vendors publish benchmark scores. Those scores tell you something, but not everything you need.","datePublished":"2026-05-10","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/ab-testing-ai-prompts.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-10 &middot; LLM Evaluation &middot; 9 min read</div>
+
+  <h1>How can we actually understand whether a new LLM is better</h1>
+
+  <p>Anthropic ships a new Claude. OpenAI ships a new GPT. Google ships a new Gemini. The release post has charts. The leaderboard updates. Twitter argues about whether it&rsquo;s a real jump or a benchmark game.</p>
+
+  <p>If you&rsquo;re shipping an agent on top of one of these models, the practical question is more specific: <em>does the new version make my agent better or worse?</em> Aggregate benchmarks won&rsquo;t answer that, but they&rsquo;re where most of the public conversation lives. Here&rsquo;s how to read them, and what you actually have to do beyond them.</p>
+
+  <h2>What vendors actually publish</h2>
+
+  <p>When a frontier lab releases a new model, the release page typically includes scores on a roughly stable set of benchmarks. Most of them have been around long enough that the names get used as shorthand:</p>
+
+  <ul>
+    <li><strong>MMLU</strong> &mdash; Massive Multitask Language Understanding. Multiple-choice across 57 academic subjects (history, biology, law, mathematics, etc.). Tests broad knowledge and reasoning. A score of 90 on MMLU is &ldquo;college-educated generalist&rdquo; territory.</li>
+    <li><strong>HumanEval / MBPP</strong> &mdash; Function-completion benchmarks. Given a docstring, write the function. Pass-at-1 means &ldquo;solved on the first try.&rdquo; HumanEval&rsquo;s 164 problems are well-known enough to be partially memorized by every modern model, so the absolute number means less than the trend.</li>
+    <li><strong>GSM8K / MATH</strong> &mdash; Grade-school and competition-math word problems. Tests step-by-step reasoning, not just pattern-matching. GSM8K is mostly saturated now; MATH is harder.</li>
+    <li><strong>SWE-bench / SWE-bench Verified</strong> &mdash; Real GitHub issues from open-source repos; the model has to produce a patch that passes the project&rsquo;s test suite. The closest benchmark to &ldquo;does this model do real software engineering.&rdquo;</li>
+    <li><strong>GPQA / MMLU-Pro</strong> &mdash; The harder successors. PhD-level science questions, less benchmark-leakage.</li>
+    <li><strong>BFCL / Tool-use benchmarks</strong> &mdash; Whether the model picks the right tool, with the right arguments, in the right order. Critical for agents that use MCP or function-calling.</li>
+    <li><strong>Vendor-specific evals</strong> &mdash; Anthropic&rsquo;s &ldquo;agentic coding&rdquo; eval, OpenAI&rsquo;s &ldquo;PaperBench,&rdquo; Google&rsquo;s &ldquo;Live Code Bench.&rdquo; Each lab has internal evals they consider load-bearing for the next release.</li>
+  </ul>
+
+  <p>These numbers are real. They&rsquo;re comparing on a fixed test set, with consistent prompting, and the differences track with capability gains in a way you can&rsquo;t fake forever.</p>
+
+  <p>But every benchmark has known limitations: contamination (the test set leaked into training), narrow scope (HumanEval is one specific kind of code), and prompt sensitivity (small changes to system prompts move scores meaningfully). A model that scores 92 on HumanEval and 88 on MMLU might still be worse <em>for your specific agent</em> than one that scores 89 and 91. The benchmarks measure capability classes; you measure the intersection of those classes with your prompt, your tools, and your users.</p>
+
+  <p>So benchmarks are necessary context, not a final answer.</p>
+
+  <h2>The personal phase: you&rsquo;ll feel the difference</h2>
+
+  <p>While you&rsquo;re developing an agent for your own use, evaluation is mostly intuitive. You ask the agent to do something. The output is good or it isn&rsquo;t. You re-prompt or you don&rsquo;t. Over a week of dogfood, you build a felt sense of what the model does well and where it breaks.</p>
+
+  <p>This is genuinely informative. The team building the agent knows the use cases more deeply than any benchmark, and a sharp engineer running 30 prompts a day across two models will form an accurate gut judgment about which one is better for their workload.</p>
+
+  <p>The trap: this only scales to the prompts you happen to think of. The prompts you forget to test &mdash; weird inputs, sequential turns where context drifted, edge cases &mdash; are exactly where production agents fail. So &ldquo;it feels good&rdquo; is a strong signal for personal-use tools and a weak signal for anything else.</p>
+
+  <h2>The user-facing phase: you have to test</h2>
+
+  <p>Once your agent talks to people who aren&rsquo;t you, the calculus changes.</p>
+
+  <p>Real users send prompts you didn&rsquo;t plan for. A customer-support agent that handles &ldquo;reset my password&rdquo; will eventually get &ldquo;my dog ate my password reset email,&rdquo; and the model&rsquo;s response to that prompt matters even though no one wrote a test for it. The long tail of real traffic is where silent regressions live, and you don&rsquo;t see them by intuition because you&rsquo;re not the one reading the responses anymore.</p>
+
+  <p>So you need explicit evaluation. The basic loop:</p>
+
+  <ol>
+    <li><strong>Sample real production traces.</strong> The last 100 conversations, or the last 14 conversations that <em>failed</em>. Both are useful samples for different reasons &mdash; the failures show you the regression surface, the random sample shows you whether quality drifted on the median.</li>
+    <li><strong>Read them.</strong> Yes, by hand, at least the first time. Reading 30 of your agent&rsquo;s actual responses is the single highest-leverage thing you can do for product quality. Every time you do it you find something the metrics didn&rsquo;t catch.</li>
+    <li><strong>Define an evaluator.</strong> Once you know what &ldquo;good&rdquo; looks like, encode it. Two flavors:
+      <ul>
+        <li><em>Heuristic</em> &mdash; substring contains, regex matches, response length within range, expected tool was called. Cheap, deterministic, narrow.</li>
+        <li><em>LLM-as-judge</em> &mdash; a smaller model reads the prompt and the response and scores it 0&ndash;1 with reasoning. More expensive, more flexible. The judge can be a different vendor than the agent &mdash; that&rsquo;s good, it reduces self-grading bias.</li>
+      </ul>
+    </li>
+    <li><strong>Run the evaluator on the before-set and the after-set.</strong> Same prompts, two models. The difference in average score is your real signal. If both sides have a confidence interval that overlaps, you don&rsquo;t have enough samples yet.</li>
+    <li><strong>Drill into the deltas.</strong> Aggregate scores tell you something moved. The actionable artifact is the list of prompts where the new model did worse. Read those. Often the regression isn&rsquo;t random &mdash; the new model is biased toward longer responses, or it stopped using a particular tool, or it&rsquo;s misinterpreting a piece of system-prompt instruction.</li>
+  </ol>
+
+  <p>The whole loop should take an hour the first time and ten minutes every subsequent time. That&rsquo;s the bar to make this a habit instead of a project.</p>
+
+  <h2>Tools that exist for this</h2>
+
+  <p>You don&rsquo;t have to build it from scratch. The ecosystem in 2026 has reasonable options at different scopes:</p>
+
+  <ul>
+    <li><strong>Langfuse</strong> &mdash; open-source LLM observability and prompt evals. Self-hostable. Strong on trace storage and dashboards.</li>
+    <li><strong>Helicone</strong> &mdash; logging proxy + evals. Drop-in for OpenAI-shaped APIs.</li>
+    <li><strong>Arize Phoenix</strong> &mdash; open-source observability + eval framework. Stronger on the eval-tooling side.</li>
+    <li><strong>Braintrust</strong> &mdash; eval-first platform. Built around &ldquo;datasets &times; experiments&rdquo; as the primitive.</li>
+    <li><strong>OpenAI Evals</strong> &mdash; OpenAI&rsquo;s own framework. Good if you&rsquo;re single-vendor.</li>
+    <li><strong>Promptfoo</strong> &mdash; CLI-first, declarative YAML evals. Lightweight, runs locally.</li>
+    <li><strong>Inspect AI</strong> &mdash; from the UK AISI; rigorous, used for capability evals.</li>
+    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; replay any past trace against a different runtime/model and diff source vs replay side-by-side. Local-first, multi-runtime native.</li>
+  </ul>
+
+  <p>None of them solve the whole problem. The pattern they share: trace every dispatch, define evaluators, run them against the trace store, surface the deltas. That pattern is the right one. The differences are mostly about vendor lock-in, self-hosting, and how nicely they handle multi-runtime workflows where the agent uses Claude for one stage and Codex for another.</p>
+
+  <h2>The summary, plainly</h2>
+
+  <p>Vendor benchmarks tell you a model is broadly more capable. Your intuition while developing tells you it&rsquo;s good for the work you do day-to-day. Neither tells you whether it&rsquo;s better for the actual prompts your actual users send. For that, you have to instrument: capture traces, define evaluators, replay before-and-after on real samples, and read enough responses by hand to keep your evaluators honest.</p>
+
+  <p>This is more work than reading a release blog post. It&rsquo;s also the difference between knowing your agent improved and hoping your agent improved. The teams that do it consistently catch silent regressions in days; the teams that don&rsquo;t catch them when users complain.</p>
+
+  <hr>
+
+  <div class="related-posts">
+    <h3>More on this</h3>
+    <ul>
+      <li><a href="/posts/ai-agent-regression-detection.html">Why your AI agents silently regress after model upgrades</a></li>
+      <li><a href="/posts/ai-agent-observability.html">Beyond &ldquo;200 OK&rdquo;: observability for AI agents in production</a></li>
+      <li><a href="/posts/multi-llm-workflows.html">Stop copy-pasting between Claude, Codex, and Gemini</a></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">&mdash; Beatriz Nigri</p>
+</article>
+
+</body>
+</html>

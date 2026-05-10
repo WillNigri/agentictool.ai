@@ -31,6 +31,7 @@
         "alternateName": "ATO",
         "url": "https://agentictool.ai",
         "applicationCategory": "DeveloperApplication",
+        "applicationSubCategory": "AIAgentOperations",
         "operatingSystem": "macOS, Windows, Linux",
         "license": "https://opensource.org/licenses/MIT",
         "offers": {
@@ -38,9 +39,62 @@
             "price": "0",
             "priceCurrency": "USD"
         },
-        "description": "Build automation pipelines where Claude writes, Codex reviews, and Gemini summarizes — all in one thread. Multi-runtime agentic workspace with routed groups, sequential pipelines, persistent threads, and production-grade agent authoring. Local-first, MIT licensed.",
-        "softwareVersion": "1.5.5",
-        "downloadUrl": "https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest"
+        "description": "Free, open-source desktop GUI for multi-runtime AI agents. Replay any past prompt against a different runtime, detect quality regressions before users do, surface concrete cost-saving model swaps. Live runs registry, file attribution per dispatch, configuration ledger. Six native runtimes (Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama) plus 16 API providers. Local-first, MIT licensed.",
+        "softwareVersion": "2.1.11",
+        "downloadUrl": "https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest",
+        "featureList": [
+            "Cross-runtime replay (re-dispatch past prompts against a different model)",
+            "Compare workbench (side-by-side diff of any two cloud traces)",
+            "Regression detection (eval-score deltas + failing-example drill-down)",
+            "Cost recommendations (prescriptive model swaps with quality guards)",
+            "Live runs registry with kill button",
+            "File attribution per dispatch (mtime-snapshot diff)",
+            "Configuration impact ledger (auto-logged config changes)",
+            "Sequential and routed multi-agent groups",
+            "Dynamic prompts: variables, hooks, memory policies",
+            "Per-task model selection (router / summarizer / response / evaluator)",
+            "Workspace-wide ⌘K palette",
+            "External agent deploy bundles (Cloudflare Worker, Vercel Edge, Docker, Node)"
+        ],
+        "author": {
+            "@type": "Person",
+            "name": "Beatriz Nigri"
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": "ATO",
+            "url": "https://agentictool.ai"
+        }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "ATO",
+        "alternateName": "Agentic Tool Optimization",
+        "url": "https://agentictool.ai",
+        "logo": "https://agentictool.ai/favicon.ico",
+        "sameAs": [
+            "https://github.com/WillNigri/Agentic-Tool-Optimization"
+        ]
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "url": "https://agentictool.ai/posts/",
+        "name": "ATO Blog",
+        "description": "Essays on multi-LLM development, AI agent observability, regression detection, cost optimization, and context engineering.",
+        "blogPost": [
+            {"@type": "BlogPosting", "headline": "Why is multi-LLM development still so painful in 2026?", "url": "https://agentictool.ai/posts/multi-llm-workflows.html"},
+            {"@type": "BlogPosting", "headline": "How can we actually understand whether a new LLM is better", "url": "https://agentictool.ai/posts/ab-testing-ai-prompts.html"},
+            {"@type": "BlogPosting", "headline": "Why does my AI agent get worse without anyone changing it", "url": "https://agentictool.ai/posts/ai-agent-regression-detection.html"},
+            {"@type": "BlogPosting", "headline": "What's missing when traditional monitoring meets AI agents", "url": "https://agentictool.ai/posts/ai-agent-observability.html"},
+            {"@type": "BlogPosting", "headline": "Why does my AI agent bill keep growing", "url": "https://agentictool.ai/posts/llm-cost-optimization.html"},
+            {"@type": "BlogPosting", "headline": "What separates production AI agents from demos", "url": "https://agentictool.ai/posts/context-engineering.html"}
+        ]
     }
     </script>
 

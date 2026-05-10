@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why does my AI agent get worse without anyone changing it? — ATO</title>
+<meta name="description" content="Models change. Prompts change. Context changes. Quality drifts and you find out from a user complaint two weeks later. A walk through what causes silent regressions in production AI, what the academic literature says, and what to actually monitor.">
+<meta name="keywords" content="AI agent regression testing, LLM quality monitoring, evaluate AI changes, AI prompt versioning, agent eval score, model drift, LLM evaluation">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/ai-agent-regression-detection.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why does my AI agent get worse without anyone changing it?">
+<meta property="og:description" content="Quality drifts and you find out from a user complaint two weeks later. Here's what causes it and what to monitor.">
+<meta property="og:url" content="https://agentictool.ai/posts/ai-agent-regression-detection.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-10T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why does my AI agent get worse without anyone changing it?">
+<meta name="twitter:description" content="Quality drifts and you find out from a user complaint two weeks later. Here's what causes it and what to monitor.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Why does my AI agent get worse without anyone changing it?","description":"Quality drifts and you find out from a user complaint two weeks later. Here's what causes it and what to monitor.","datePublished":"2026-05-10","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/ai-agent-regression-detection.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-10 &middot; LLM Evaluation &middot; 9 min read</div>
+
+  <h1>Why does my AI agent get worse without anyone changing it?</h1>
+
+  <p>You shipped an agent. It worked. A few weeks pass. Now it&rsquo;s subtly worse, and the team can&rsquo;t agree on whether it&rsquo;s actually worse or you&rsquo;re imagining things. The vendor pushed a model update. Someone tweaked the system prompt. Your test set is the same six prompts you wrote on day one. Quality is everyone&rsquo;s responsibility, which means it&rsquo;s no one&rsquo;s.</p>
+
+  <p>This is one of the most-asked questions in production AI right now: <em>what causes silent quality regressions, and how do I catch them before users do?</em></p>
+
+  <h2>What the literature actually says about model drift</h2>
+
+  <p>The phenomenon has names and academic support. A few entry points worth reading:</p>
+
+  <ul>
+    <li><strong>&ldquo;How Is ChatGPT&rsquo;s Behavior Changing Over Time?&rdquo;</strong> &mdash; Lingjiao Chen, Matei Zaharia, James Zou (Stanford / UC Berkeley, 2023). The original headline study. Tracked GPT-3.5 and GPT-4 across four tasks (math, sensitive questions, code generation, visual reasoning) over March-to-June 2023 snapshots. Found GPT-4&rsquo;s prime-number identification accuracy dropped from 97.6% to 2.4% in three months on the same prompts. The methodology was debated, but the result kicked off the public conversation about &ldquo;temporal drift.&rdquo;</li>
+    <li><strong>&ldquo;Holistic Evaluation of Language Models&rdquo; (HELM)</strong> &mdash; Stanford CRFM, ongoing. Long-running benchmark with versioned model snapshots so you can see how scores shift across vendor releases. Useful as the public reference for &ldquo;did this version actually improve.&rdquo;</li>
+    <li><strong>OpenAI&rsquo;s deprecation policy</strong> &mdash; documented but loosely enforced. <code>gpt-4-0613</code> and <code>gpt-4-1106-preview</code> are different models behind potentially the same alias. If your code pins to <code>gpt-4</code>, you&rsquo;re subscribing to whatever OpenAI decides that means today.</li>
+    <li><strong>Anthropic model cards</strong> &mdash; explicit version pinning is supported (<code>claude-3-5-sonnet-20241022</code>). Better hygiene than aliases, but you still have to remember to pin.</li>
+  </ul>
+
+  <p>The combined picture: even if you don&rsquo;t change anything, the underlying model can shift, and even small shifts on weighted-toward-your-edge-cases prompts can produce visible quality regressions.</p>
+
+  <h2>The five things that actually cause regressions</h2>
+
+  <p>From running this in production, the failure modes fall into a small number of buckets:</p>
+
+  <p><strong>1. Vendor pushed a new model behind your alias.</strong> The most common cause when nothing on your side changed. Mitigation: pin to a versioned model identifier. Anthropic&rsquo;s scheme is good. OpenAI&rsquo;s is messier; you have to actively choose dated snapshots, not <code>gpt-4o</code>.</p>
+
+  <p><strong>2. You upgraded.</strong> The conscious version. New model is better on the benchmarks, worse on the prompts your users actually send. This is the silent-regression special: the new model still returns 200, still produces fluent text, still passes the three test prompts you remember. The 14% of conversations where it&rsquo;s worse are invisible until aggregated.</p>
+
+  <p><strong>3. Prompt drift.</strong> Someone &mdash; you, a teammate, a junior engineer with prod access &mdash; edited the system prompt to fix one specific case. The fix worked for that case and broke three others. Without versioning, the change is invisible to everyone except the person who made it, and they forgot.</p>
+
+  <p><strong>4. Context drift.</strong> Your prompt is the same. Your model is the same. But the variables you inject into it (file contents, database query results, MCP tool output) have changed shape. The schema added a column. The file got longer. The tool started returning verbose error messages. The model starts hallucinating because the context shape stopped matching its training.</p>
+
+  <p><strong>5. Tool drift.</strong> Your agent calls an external API. The API&rsquo;s response shape changes &mdash; usually adds a field, sometimes deprecates one. Your agent doesn&rsquo;t crash, it just stops handling cases that involve that field. Hard to attribute because it looks like &ldquo;the model got dumber.&rdquo;</p>
+
+  <h2>What to monitor</h2>
+
+  <p>Five signals, in order of priority:</p>
+
+  <h3>1. Eval score, sliced by configuration</h3>
+
+  <p>Define a per-agent evaluator. Heuristic (regex / substring / response-length / tool-was-called) is cheap and deterministic. LLM-as-judge (a smaller, cheaper model rating 0&ndash;1 with reasoning) is more expensive and more flexible. Either way, you need a numeric score per dispatch.</p>
+
+  <p>Then slice the score by configuration: &ldquo;eval score on Sonnet 4.6 across the last 1000 traces&rdquo; vs &ldquo;eval score on Sonnet 4.7 across the same window after the upgrade.&rdquo; A drop of more than 15 percentage points is a regression. Smaller is noise; larger is alarming.</p>
+
+  <h3>2. Configuration changes as a first-class event</h3>
+
+  <p>Every model swap, system-prompt rewrite, role-models tweak should generate a logged event &mdash; agent slug, field, old value, new value, who, when. Append-only.</p>
+
+  <p>When eval score drops, the question becomes &ldquo;what config events happened in the last 24 hours, and which one preceded the drop?&rdquo; Without the ledger, you&rsquo;re guessing.</p>
+
+  <h3>3. Failing examples, not just aggregate stats</h3>
+
+  <p>&ldquo;Eval score dropped 17pp&rdquo; is a number. It&rsquo;s not actionable. The list of post-change traces where the agent failed (prompt, response, error, timestamp) is. Read three of those and you usually understand the regression in five minutes.</p>
+
+  <h3>4. Cost-per-call, paired with quality</h3>
+
+  <p>Cost without quality context is misleading. Quality without cost context is misleading. Track cost-per-OK-call (cost divided by successful dispatches). A model that&rsquo;s 2&times; more expensive but answers correctly twice as often might be the same dollar-per-good-answer.</p>
+
+  <h3>5. Latency p95</h3>
+
+  <p>Average latency lies. The user who waited eight seconds remembers; the user who waited 1.5 seconds doesn&rsquo;t. p95 catches the bad days.</p>
+
+  <h2>How people actually do this today</h2>
+
+  <p>Three ways, increasing in automation:</p>
+
+  <p><strong>The manual way.</strong> A spreadsheet. Each row is a prompt from production. Columns are model versions. You paste the response from each model into each cell, then read them all. Works for small teams with twenty test cases. Doesn&rsquo;t scale, doesn&rsquo;t catch regressions in real time, but it&rsquo;s honest and beats nothing.</p>
+
+  <p><strong>The custom-pipeline way.</strong> Most production teams build something in-house: a script that reads the trace store, runs an LLM-as-judge against samples, drops scores into a dashboard. The pipeline is usually held together with shell scripts, the dashboard is usually three Grafana panels, the &ldquo;regression detector&rdquo; is &ldquo;an engineer who looks at the dashboard on Mondays.&rdquo; This works until the engineer changes jobs.</p>
+
+  <p><strong>Off-the-shelf observability + eval platforms.</strong> The ecosystem in 2026 has reasonable options:</p>
+
+  <ul>
+    <li><strong>Langfuse</strong> &mdash; open-source LLM observability + evals. Self-hostable. Strong on traces.</li>
+    <li><strong>Helicone</strong> &mdash; logging proxy with eval hooks. Drop-in for OpenAI-shape APIs.</li>
+    <li><strong>Arize Phoenix</strong> &mdash; open-source observability + eval framework. Good on the eval side.</li>
+    <li><strong>Braintrust</strong> &mdash; eval-first platform. &ldquo;Datasets &times; experiments&rdquo; as the primitive.</li>
+    <li><strong>OpenAI Evals</strong> &mdash; vendor-specific framework. Fine if you&rsquo;re single-vendor.</li>
+    <li><strong>Promptfoo</strong> &mdash; CLI-first, declarative YAML evals. Lightweight.</li>
+    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; auto-logs every config change to a per-agent ledger and joins it against trace stats so the regression detector can drill straight into failing examples. Local-first, multi-runtime.</li>
+  </ul>
+
+  <p>None solve the whole problem. The pattern they share: trace every dispatch, define evaluators, run them against the trace store, surface deltas. Differences are mostly vendor lock-in, self-hosting story, and how nicely they handle multi-runtime workflows.</p>
+
+  <p>The thresholds to start with, regardless of tool: success rate &ge;10pp, eval score &ge;15pp, p95 latency &ge;50%, cost-per-call &ge;25%. Inside those bands is noise; above them is signal.</p>
+
+  <hr>
+
+  <div class="related-posts">
+    <h3>More on this</h3>
+    <ul>
+      <li><a href="/posts/ab-testing-ai-prompts.html">How can we actually understand whether a new LLM is better</a></li>
+      <li><a href="/posts/ai-agent-observability.html">What&rsquo;s missing when traditional monitoring meets AI agents</a></li>
+      <li><a href="/posts/llm-cost-optimization.html">Why does my AI agent bill keep growing</a></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">&mdash; Beatriz Nigri</p>
+</article>
+
+</body>
+</html>

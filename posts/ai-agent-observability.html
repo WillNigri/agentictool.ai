@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What's missing when traditional monitoring meets AI agents? — ATO</title>
+<meta name="description" content="Traditional APM tells you the API succeeded. AI agent observability has to tell you whether the answer was actually right, which agent touched which file, and how to stop the one that's stuck. Here's the layer most teams are missing.">
+<meta name="keywords" content="AI agent observability, monitor LLM in production, trace AI calls, agent monitoring, AI agent ops, multi-agent observability">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/ai-agent-observability.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Beyond &quot;200 OK&quot;: observability for AI agents in production">
+<meta property="og:description" content="Traditional APM tells you the API succeeded. AI agent observability has to tell you whether the answer was actually right.">
+<meta property="og:url" content="https://agentictool.ai/posts/ai-agent-observability.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-10T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Beyond &quot;200 OK&quot;: observability for AI agents in production">
+<meta name="twitter:description" content="Traditional APM tells you the API succeeded. AI agent observability has to tell you whether the answer was actually right.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Beyond \"200 OK\": observability for AI agents in production","description":"Traditional APM tells you the API succeeded. AI agent observability has to tell you whether the answer was actually right.","datePublished":"2026-05-10","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/ai-agent-observability.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-10 &middot; AI Engineering &middot; 8 min read</div>
+
+  <h1>What&rsquo;s missing when traditional monitoring meets AI agents</h1>
+
+  <p>Traditional APM was built around a question with a clear answer: <em>did the request succeed?</em> 200, 500, latency, error rate. The taxonomy for ten years of production engineering was &ldquo;up&rdquo; vs &ldquo;down.&rdquo;</p>
+
+  <p>AI agents broke that taxonomy. An agent can return 200, in 800ms, with cleanly-structured JSON, and produce an answer that&rsquo;s confidently, fluently wrong. Datadog has nothing to say about that. Neither does Sentry. Neither does any of the dashboards your platform team built last year.</p>
+
+  <p>What you need is a new layer of observability that doesn&rsquo;t exist in most production systems yet, because the questions are different.</p>
+
+  <h2>The questions agent observability has to answer</h2>
+
+  <p>Five questions traditional APM doesn&rsquo;t cover:</p>
+
+  <ol>
+    <li><strong>Was the answer actually correct?</strong> Not &ldquo;did the model respond&rdquo; &mdash; <em>was it right?</em></li>
+    <li><strong>What did the agent touch?</strong> Files, databases, external APIs &mdash; the side effects, not just the input/output.</li>
+    <li><strong>Which agent did what, when two are running in the same workspace?</strong></li>
+    <li><strong>What&rsquo;s in flight right now, and how do I stop it?</strong></li>
+    <li><strong>What changed about this agent&rsquo;s configuration recently?</strong></li>
+  </ol>
+
+  <p>Each one has a different shape than &ldquo;is the API up.&rdquo;</p>
+
+  <h2>1. Was the answer correct?</h2>
+
+  <p>The hardest question, because it requires evaluating the response &mdash; not just observing that it happened.</p>
+
+  <p>Two viable approaches:</p>
+
+  <p><strong>Heuristic evaluators.</strong> Substring match, regex, response-length-within-range, &ldquo;tool was called when expected.&rdquo; Cheap, deterministic, narrow. Good for known-shape responses (&ldquo;the answer must contain a tracking number&rdquo;). Bad for open-ended answers.</p>
+
+  <p><strong>LLM-as-judge.</strong> A smaller model reads the prompt and the response, scores 0&ndash;1 with reasoning. More expensive, more flexible. Run it as a scheduled batch over recent traces, not synchronously on every dispatch &mdash; cost gets out of hand fast otherwise.</p>
+
+  <p>The output of either approach: a per-trace quality score that you can aggregate, slice, and alert on. Without this score, &ldquo;agent quality&rdquo; is a vibe.</p>
+
+  <h2>2. What did the agent touch?</h2>
+
+  <p>Agents have side effects. They write files. They call external APIs. They modify databases. The trace of &ldquo;here&rsquo;s the prompt and here&rsquo;s the response&rdquo; is only half the picture.</p>
+
+  <p>Two approaches that work:</p>
+
+  <p><strong>Filesystem mtime diff.</strong> Snapshot the project tree before and after the dispatch. The diff is the list of files touched. Works across every runtime because it&rsquo;s OS-level, not stream-parsing. Doesn&rsquo;t require the runtime to cooperate or emit structured events.</p>
+
+  <p><strong>Tool-call instrumentation.</strong> If your agent calls tools (MCP, function calling), the call list is a structured artifact. Capture it. The chain &ldquo;prompt &rarr; reasoning &rarr; tool calls &rarr; final response&rdquo; is the actual unit of agent behavior, not the prompt-and-response pair.</p>
+
+  <p>The combined view: per dispatch, the prompt, the response, the tools called (with arguments and results), and the files touched. That&rsquo;s the trace shape AI agents need.</p>
+
+  <h2>3. Which agent did what, when two share a workspace?</h2>
+
+  <p>This is the multi-agent problem. You&rsquo;re running a writer agent and a reviewer agent in the same project. Both touch files. Git blame says &ldquo;the user did it&rdquo; because both agents commit as the user.</p>
+
+  <p>Honest attribution requires capturing per-dispatch file lists (per the previous section) and detecting when two dispatches overlap on the same files. When they overlap, the right answer isn&rsquo;t to fake an attribution &mdash; it&rsquo;s to flag the overlap as ambiguous and surface the peer agents that contributed.</p>
+
+  <p>This is the &ldquo;truth over false confidence&rdquo; principle: a system that tells you it doesn&rsquo;t know is more useful than one that fabricates an answer.</p>
+
+  <h2>4. What&rsquo;s in flight, and how do I stop it?</h2>
+
+  <p>Agents can hang. Models can take forever. A bad prompt can cause the model to recurse on tool calls. You need a live registry: every active dispatch with agent slug, runtime, workspace, elapsed time, and a kill button.</p>
+
+  <p>This is the &ldquo;ops layer&rdquo; pattern. It&rsquo;s analogous to <code>kubectl get pods</code> but for agent dispatches. Without it, your only recourse to a runaway agent is to find the right terminal buffer (or kill the whole process tree). Both are slow and error-prone.</p>
+
+  <p>The bar for production: &ldquo;is anything stuck?&rdquo; should be a one-click answer, not a forensic investigation.</p>
+
+  <h2>5. What changed recently?</h2>
+
+  <p>When quality drops, the first question is &ldquo;what changed?&rdquo; In code, git answers this in seconds. In agent configurations, most teams have no answer because the configuration isn&rsquo;t versioned.</p>
+
+  <p>Every model swap, every system-prompt edit, every role-models tweak, every memory-policy adjustment should generate a logged event &mdash; agent slug, field, old value, new value, who, when. Append-only.</p>
+
+  <p>Then quality regressions become joins: <em>show me config changes in the last 7 days where eval score dropped &gt;15pp afterward</em>. The cause becomes a query, not a hunt.</p>
+
+  <h2>The unifying shape: agent traces aren&rsquo;t API traces</h2>
+
+  <p>An API trace is &ldquo;request, response, latency, status code.&rdquo; An agent trace has to carry:</p>
+
+  <ul>
+    <li>The prompt (full text, not just a summary &mdash; you&rsquo;ll want to replay it).</li>
+    <li>The response (full text).</li>
+    <li>The configuration that produced it (model, role-models, system prompt version, hooks fired, variables resolved).</li>
+    <li>The tool calls and their results.</li>
+    <li>The files touched.</li>
+    <li>The duration, the cost, the eval score.</li>
+    <li>A correlation ID that ties this trace to its peers if it&rsquo;s part of a multi-stage workflow.</li>
+  </ul>
+
+  <p>That&rsquo;s a much richer object than an HTTP request log. Treating an agent trace as if it were an HTTP request log is the root cause of most production AI debugging pain.</p>
+
+  <p>The teams that handle this well treat agent traces as the central object &mdash; everything else (live runs, regressions, replay, cost) is a query against the trace store. The teams that don&rsquo;t, eventually rebuild their entire AI ops layer once they hit the second silent regression.</p>
+
+  <h2>Tools that exist for this</h2>
+
+  <p>None of these solve the whole problem, but the ecosystem in 2026 has reasonable starting points:</p>
+
+  <ul>
+    <li><strong>Langfuse</strong> &mdash; open-source LLM tracing + evals. Self-hostable. Probably the most-adopted observability layer.</li>
+    <li><strong>Arize Phoenix</strong> &mdash; open-source observability + evals; OpenTelemetry-native.</li>
+    <li><strong>Helicone</strong> &mdash; logging proxy in front of OpenAI-shape APIs. Minimal setup.</li>
+    <li><strong>OpenLLMetry</strong> &mdash; OpenTelemetry-based LLM instrumentation. Good if you already have OTel.</li>
+    <li><strong>LangSmith</strong> &mdash; LangChain&rsquo;s observability. Tightly integrated if you&rsquo;re on LangChain.</li>
+    <li><strong>Datadog LLM Observability</strong> &mdash; if you&rsquo;re a Datadog shop and don&rsquo;t want a second vendor.</li>
+    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; live runs registry with one-click kill, file attribution per dispatch, configuration ledger. Multi-runtime native.</li>
+  </ul>
+
+  <hr>
+
+  <div class="related-posts">
+    <h3>More on this</h3>
+    <ul>
+      <li><a href="/posts/ai-agent-regression-detection.html">Why does my AI agent get worse without anyone changing it</a></li>
+      <li><a href="/posts/ab-testing-ai-prompts.html">How can we actually understand whether a new LLM is better</a></li>
+      <li><a href="/posts/llm-cost-optimization.html">Why does my AI agent bill keep growing</a></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">&mdash; Beatriz Nigri</p>
+</article>
+
+</body>
+</html>

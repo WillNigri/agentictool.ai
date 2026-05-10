@@ -1,0 +1,164 @@
+/* Shared post styles — used by every /posts/*.html page. */
+:root {
+  --bg-dark: #0a0a0a;
+  --bg: #0f0f0f;
+  --bg-elev: #1a1a1a;
+  --text-primary: #f0f0f0;
+  --text-secondary: #c0c0c0;
+  --text-muted: #888;
+  --accent-cyan: #00ffd5;
+  --border: rgba(255, 255, 255, 0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg-dark);
+  color: var(--text-primary);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: var(--accent-cyan); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+code, .mono { font-family: 'JetBrains Mono', monospace; font-size: 0.92em; }
+code {
+  background: var(--bg-elev);
+  padding: 1px 6px;
+  border-radius: 3px;
+  color: var(--accent-cyan);
+}
+
+.post-header {
+  border-bottom: 1px solid var(--border);
+  padding: 18px 24px;
+  position: sticky;
+  top: 0;
+  background: rgba(10, 10, 10, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  z-index: 10;
+}
+.post-header-inner {
+  max-width: 760px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.post-back {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+.post-back:hover { color: var(--accent-cyan); text-decoration: none; }
+.post-cta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent-cyan);
+  border: 1px solid var(--accent-cyan);
+  padding: 6px 14px;
+}
+.post-cta:hover { background: rgba(0, 255, 213, 0.08); text-decoration: none; }
+
+article {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 64px 24px 96px;
+}
+.post-meta {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-bottom: 24px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+h1 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3.2rem);
+  line-height: 1.1;
+  letter-spacing: -1px;
+  margin-bottom: 28px;
+}
+h2 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+  line-height: 1.25;
+  letter-spacing: -0.5px;
+  margin: 56px 0 16px;
+}
+h3 {
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1.15rem;
+  margin: 32px 0 12px;
+}
+p {
+  margin-bottom: 18px;
+  color: var(--text-secondary);
+  font-size: 1.05rem;
+}
+strong { color: var(--text-primary); }
+em { color: var(--text-secondary); }
+ul, ol { margin: 0 0 24px 24px; color: var(--text-secondary); }
+ul li, ol li { margin-bottom: 10px; font-size: 1.02rem; }
+blockquote {
+  border-left: 3px solid var(--accent-cyan);
+  padding: 12px 20px;
+  margin: 24px 0;
+  background: var(--bg-elev);
+  font-style: italic;
+  color: var(--text-primary);
+}
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 56px 0;
+}
+
+.post-footer-cta {
+  margin-top: 64px;
+  padding: 32px;
+  border: 1px solid var(--accent-cyan);
+  background: linear-gradient(180deg, rgba(0, 255, 213, 0.04), transparent);
+  text-align: center;
+}
+.post-footer-cta h3 { margin-top: 0; font-size: 1.4rem; }
+.post-footer-cta p { font-size: 1rem; }
+.post-footer-cta .btn {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 12px 24px;
+  background: var(--accent-cyan);
+  color: var(--bg-dark);
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+}
+.post-footer-cta .btn:hover { text-decoration: none; transform: translateY(-1px); }
+
+.related-posts {
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid var(--border);
+}
+.related-posts h3 {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin: 0 0 16px;
+}
+.related-posts ul { list-style: none; margin: 0; padding: 0; }
+.related-posts li { margin-bottom: 8px; }
+.related-posts li a { color: var(--text-primary); }
+.related-posts li a:hover { color: var(--accent-cyan); }
+
+@media (max-width: 600px) {
+  article { padding: 40px 18px 64px; }
+  h1 { font-size: 1.85rem; }
+}

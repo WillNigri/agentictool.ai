@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Why is multi-LLM development still so painful in 2026? — ATO</title>
+<meta name="description" content="Different models genuinely lead at different tasks. The data shows it clearly. So why do most teams still pick one and use it for everything? A look at the benchmark differences, the tooling gap, and what real multi-LLM workflows look like.">
+<meta name="keywords" content="multi-LLM workflow, chain LLMs, multi-agent orchestration, Claude Codex Gemini, AI agent pipeline, multi-runtime AI, switch AI models, LLM benchmarks">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/multi-llm-workflows.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Why is multi-LLM development still so painful in 2026?">
+<meta property="og:description" content="Different models genuinely lead at different tasks. So why do most teams still pick one and use it for everything?">
+<meta property="og:url" content="https://agentictool.ai/posts/multi-llm-workflows.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-10T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Why is multi-LLM development still so painful in 2026?">
+<meta name="twitter:description" content="Different models genuinely lead at different tasks. So why do most teams still pick one and use it for everything?">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Why is multi-LLM development still so painful in 2026?","description":"Different models genuinely lead at different tasks. So why do most teams still pick one and use it for everything?","datePublished":"2026-05-10","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/multi-llm-workflows.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-10 &middot; Multi-LLM &middot; 9 min read</div>
+
+  <h1>Why is multi-LLM development still so painful in 2026?</h1>
+
+  <p>If you spend your day talking to LLMs, you have already noticed: models are not interchangeable. Claude rewrites a function differently than GPT-4. Gemini handles long context better than either. Codex is sharper at security review. The honest take is that the &ldquo;best&rdquo; model is task-specific, and on any non-trivial workload you should be using more than one.</p>
+
+  <p>And yet most teams pick a single LLM and route everything through it. Not because they don&rsquo;t know better, but because the operational cost of switching models per task &mdash; remembering which CLI to open, copy-pasting outputs between tabs, losing context on a runtime swap &mdash; usually outweighs the marginal quality gain. Multi-LLM is a strategy problem with a tooling root cause.</p>
+
+  <h2>The benchmarks say models really are different</h2>
+
+  <p>Look at any released model card and you can see this directly. A few representative numbers from late-2024 / 2025 releases (these shift on every release; check the latest):</p>
+
+  <ul>
+    <li><strong>SWE-bench Verified</strong> (real GitHub issues solved): Claude 3.5 Sonnet: ~49%. GPT-4o: ~33%. Gemini 1.5 Pro: ~19%. <em>Source: Anthropic SWE-bench Verified scoreboard, 2024.</em></li>
+    <li><strong>GSM8K</strong> (grade-school math): GPT-4o: ~95.8%. Claude 3.5 Sonnet: ~96.4%. Gemini 1.5 Pro: ~91.7%. <em>Source: vendor model cards.</em></li>
+    <li><strong>HumanEval</strong> (function completion, pass-at-1): GPT-4o: ~90.2%. Claude 3.5 Sonnet: ~92.0%. Gemini 1.5 Pro: ~84.1%. <em>Source: vendor releases.</em></li>
+    <li><strong>MMLU-Pro</strong> (broad knowledge, harder than MMLU): Claude 3.5 Sonnet ~78%, GPT-4o ~72.6%, Gemini 1.5 Pro ~75.8%. <em>Source: respective tech reports.</em></li>
+    <li><strong>Long context</strong>: Gemini 1.5 Pro&rsquo;s 1M-token window is meaningfully larger than Claude&rsquo;s 200k or GPT-4o&rsquo;s 128k. The Needle-in-a-Haystack retrieval scores are also higher for Gemini at the long end. <em>Source: Google DeepMind 1.5 tech report, 2024.</em></li>
+    <li><strong>Tool use</strong>: BFCL (Berkeley Function-Calling Leaderboard) consistently shows different leaders depending on the call shape (multi-turn, parallel, irrelevance detection). No single model dominates.</li>
+  </ul>
+
+  <p>The signal across all of these: models lead in different categories. There is no &ldquo;best&rdquo; model. There is the model that does <em>your specific task</em> a little better, and the differences are large enough to matter when you ship to real users.</p>
+
+  <h2>Why teams pick one anyway</h2>
+
+  <p>Three structural reasons, each of them honest:</p>
+
+  <p><strong>1. Each runtime is its own ecosystem.</strong> Claude Code lives in Anthropic&rsquo;s tools. Codex lives in OpenAI&rsquo;s. Each has its own CLI, its own session model, its own way of handling context. Switching means starting from zero &mdash; new conversation, no shared history, often re-explaining the project to the new model.</p>
+
+  <p><strong>2. Vendor lock-in is good business.</strong> Anthropic and OpenAI both invest heavily in their own developer tooling. Smooth handoffs between vendors are a substitute for that lock-in, so neither is going to build them. The community fills the gap with shell scripts that work for a single power user but never feel like real infrastructure.</p>
+
+  <p><strong>3. The conceptual model isn&rsquo;t standardized.</strong> &ldquo;Multi-agent&rdquo; is a buzzword with no canonical definition. Different frameworks invent different abstractions: chains, graphs, swarms, supervisors. None of them have caught on as <em>the</em> way to describe how a writer agent and a reviewer agent share context across runtimes.</p>
+
+  <p>The result: the smartest team in the world picks Claude or GPT for everything because the alternative is operationally impossible.</p>
+
+  <h2>Core problems and what works</h2>
+
+  <h3>Problem: switching runtimes loses the conversation</h3>
+
+  <p>You&rsquo;re mid-thread with Claude. The next question would be better answered by Codex&rsquo;s strength &mdash; long-form code review, say. Switching means typing the prompt fresh into a new tab, re-attaching your project context, and hoping you remember the relevant pieces of the previous conversation.</p>
+
+  <p><em>What works:</em> own your conversation thread separately from any runtime. Treat the runtime as a stateless dispatcher. On every turn, stitch the relevant history into the prompt yourself before calling the runtime. The runtime sees a fresh prompt with the conversation framed in; you keep the canonical thread. Now mid-thread runtime swap is a one-line change to which API you call.</p>
+
+  <h3>Problem: chained agents (writer &rarr; reviewer) require manual handoff</h3>
+
+  <p>The pattern is clean &mdash; one agent drafts, another reviews. The execution is awful: copy stage 1&rsquo;s output into stage 2&rsquo;s prompt, lose track of which version was reviewed, can&rsquo;t answer &ldquo;how long did the whole pipeline take?&rdquo; because each stage is in a different terminal.</p>
+
+  <p><em>What works:</em> represent the pipeline as a first-class object. A &ldquo;sequential group&rdquo; with N children, each on its own runtime. Firing the group runs the chain end to end, the trace is correlated by a shared <code>parent_run_id</code>, and the total duration / cost / handoff points are queryable. The user types one prompt; the framework handles the orchestration.</p>
+
+  <h3>Problem: routing to specialists is hand-coded</h3>
+
+  <p>Customer support agents that route to specialist sub-agents (billing / technical / general) are a strong pattern. But most implementations hard-code the routing logic in if-statements or rely on a frontier model to do classification &mdash; which is wasteful, since classification is a cheap-model task.</p>
+
+  <p><em>What works:</em> make the router a first-class agent with its own (cheap, fast) model. Children are specialist agents with their own (slower, more capable) models. Rules-first routing for the easy cases, LLM-fallback for the ambiguous ones. The pattern is well-described in the &ldquo;router + specialist&rdquo; literature; the question is whether your tooling supports it natively or requires you to build it.</p>
+
+  <h3>Problem: per-task model selection is invisible</h3>
+
+  <p>Inside a single agent, different sub-tasks have different requirements. Routing classification: cheap and fast. Summarization of conversation history: cheap and fast. Final user-facing response: expensive and capable. Evaluator that grades the response: somewhere in between.</p>
+
+  <p><em>What works:</em> agents should expose role-specific model slots: <code>router</code>, <code>summarizer</code>, <code>response</code>, <code>evaluator</code>. Default everything to inherit from <code>response</code>; let teams override per role. Most current frameworks make this awkward because they treat &ldquo;the model&rdquo; as a single setting, conflating capabilities that are actually distinct.</p>
+
+  <h3>Problem: there&rsquo;s no standardized cross-runtime tool layer</h3>
+
+  <p>MCP (the Model Context Protocol) is the closest thing the industry has. Any client speaking MCP can call any server speaking MCP &mdash; that&rsquo;s genuinely good for tools. But MCP is a tool protocol, not a workflow protocol. It tells you how Claude can invoke your custom Python function. It doesn&rsquo;t tell you how Claude hands an in-flight conversation to Codex.</p>
+
+  <p><em>What works (open question):</em> the workflow layer is the part still being figured out. The right shape is probably runtime-agnostic dispatchers + canonical thread store + first-class orchestration primitives. LangChain tried; the community partially moved on. The next attempt will probably look more like Unix pipes &mdash; small, composable, opinionated &mdash; and less like an SDK.</p>
+
+  <h2>The summary, plainly</h2>
+
+  <p>Multi-LLM is the right strategy. Models genuinely lead in different categories, and the gap between &ldquo;best model for everything&rdquo; and &ldquo;best model per task&rdquo; is large enough to matter when you ship. The reason most teams haven&rsquo;t adopted it is operational: copy-paste between three terminals scales to zero people. Solve the orchestration layer &mdash; conversation thread you own, runtime-agnostic dispatch, sequential / routed groups as first-class objects &mdash; and the pain goes away. Until someone standardizes that layer, every team has to assemble it themselves.</p>
+
+  <hr>
+
+  <div class="post-footer-cta">
+    <h3>If you want to try this on ATO</h3>
+    <p>ATO is a free, open-source GUI for multi-runtime AI agents. Sequential and routed groups are first-class objects: pick a child for each stage, fire one prompt, see the whole pipeline run. Mid-thread runtime swaps work because ATO owns the chat thread &mdash; the runtime is a dispatcher, not the source of truth. Six native runtimes (Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama) plus 16 API providers. MIT licensed, local-first.</p>
+    <a href="/#download" class="btn">Try it &rarr;</a>
+  </div>
+
+  <div class="related-posts">
+    <h3>More on this</h3>
+    <ul>
+      <li><a href="/posts/ab-testing-ai-prompts.html">How can we actually understand whether a new LLM is better</a></li>
+      <li><a href="/posts/ai-agent-observability.html">What&rsquo;s missing when traditional monitoring meets AI agents</a></li>
+      <li><a href="/posts/llm-cost-optimization.html">Why does my AI agent bill keep growing</a></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">&mdash; Beatriz Nigri</p>
+</article>
+
+</body>
+</html>

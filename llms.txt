@@ -1,0 +1,44 @@
+# ATO — The GUI for multi-agent runs
+
+> ATO is a free, open-source (MIT) desktop GUI for managing AI agents across multiple runtimes. It's the operations layer for Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, and Ollama — plus 16+ API providers. Built in Rust + React + Tauri. Local-first.
+
+Key things ATO does that competing tools don't:
+
+- Multi-runtime trace observability — every dispatch traced with prompt, response, tool calls, files touched, duration, cost, eval score
+- Cross-runtime replay — re-dispatch any past prompt against a different runtime/model and see source vs replay side-by-side
+- Configuration ledger — every model swap / prompt edit / role-models change auto-logged with diff
+- Cross-runtime regression detection — joins config changes against trace stats, surfaces meaningful deltas, drills into failing examples
+- Cost recommendations — surfaces concrete model-swap savings when historical data justifies them, with quality guards
+- Live runs registry — every in-flight dispatch with kill button; bulk kill for stuck agents
+- Sequential and routed multi-agent groups — first-class objects, runtime-agnostic
+- File attribution per dispatch — mtime-snapshot diff shows which agent touched which file, works across every runtime
+- Dynamic prompts — variables, pre-call context hooks, memory policies, per-task model selection
+- Workspace-wide ⌘K palette — search agents, groups, schedules, secrets, chat threads (title + message content)
+- External agents — deploy bundles for Cloudflare Worker, Vercel Edge, Docker, Node; embed widget included
+
+Free during early access — every feature unlocked with a sign-up. No credit card. MIT licensed open source.
+
+## Homepage
+
+- [agentictool.ai](https://agentictool.ai/): Product overview, hero, feature blocks, download links, MCP server tools
+
+## Blog posts
+
+- [Why is multi-LLM development still so painful in 2026?](https://agentictool.ai/posts/multi-llm-workflows.html): Benchmark differences across Claude / GPT / Gemini, why teams pick one anyway, what real multi-LLM workflows look like (sequential pipelines, routed groups, mid-thread runtime swaps).
+- [How can we actually understand whether a new LLM is better](https://agentictool.ai/posts/ab-testing-ai-prompts.html): Walk through MMLU, HumanEval, GSM8K, SWE-bench, the limits of vendor benchmarks, intuitive evaluation while developing, explicit testing for user-facing agents, evaluator tools.
+- [Why does my AI agent get worse without anyone changing it](https://agentictool.ai/posts/ai-agent-regression-detection.html): The Stanford temporal-drift study, the five causes of silent regressions, what to monitor (eval score, configuration ledger, failing examples, cost-per-OK, p95 latency), tools that handle it.
+- [What's missing when traditional monitoring meets AI agents](https://agentictool.ai/posts/ai-agent-observability.html): Why "200 OK" doesn't mean "good answer", the five questions agent observability has to answer, the shape of an agent trace, tools and approaches.
+- [Why does my AI agent bill keep growing](https://agentictool.ai/posts/llm-cost-optimization.html): Per-million pricing across vendors, why bills grow faster than usage, what to monitor (cost per call, cost per OK call, input/output token split, per-task model selection, p95 conversation cost), tools.
+- [What separates production AI agents from demos](https://agentictool.ai/posts/context-engineering.html): The literature behind context engineering (Lost in the Middle, Anthropic's Building Effective Agents), the seven layers of production-agent context (variables, hooks, memory, per-task models, evaluators, specialization, observability), tools.
+- [What we shipped: ATO becomes the ops layer for multi-runtime agents (v2.1)](https://agentictool.ai/posts/v2.1-ops-layer.html): Release notes covering replay infrastructure, regression detection depth, cost recommendations, pipelines + compare sub-tabs, automations canvas, ⌘K palette, plus the smaller fixes through v2.1.11.
+
+## Repository
+
+- [WillNigri/Agentic-Tool-Optimization](https://github.com/WillNigri/Agentic-Tool-Optimization): Open-source desktop app source code. Tauri 2.x + Rust + React. MIT licensed.
+
+## Download
+
+- macOS (Apple Silicon): https://agentictool.ai/#download
+- macOS (Intel): https://agentictool.ai/#download
+- Windows: https://agentictool.ai/#download
+- Linux: https://agentictool.ai/#download

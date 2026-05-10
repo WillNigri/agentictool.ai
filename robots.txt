@@ -1,4 +1,52 @@
+# ATO is open about its content — every crawler welcome, including
+# LLM training crawlers and agentic-search agents.
+
 User-agent: *
+Allow: /
+
+# Explicit allow for major LLM/AI crawlers (defaulting to allow above
+# already does this, but being explicit avoids accidental blocks from
+# overly-aggressive third-party robots.txt parsers).
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: Meta-ExternalAgent
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: Applebot-Extended
 Allow: /
 
 Sitemap: https://agentictool.ai/sitemap.xml
