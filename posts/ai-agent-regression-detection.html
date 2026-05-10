@@ -107,7 +107,9 @@
 
   <p><strong>The custom-pipeline way.</strong> Most production teams build something in-house: a script that reads the trace store, runs an LLM-as-judge against samples, drops scores into a dashboard. The pipeline is usually held together with shell scripts, the dashboard is usually three Grafana panels, the &ldquo;regression detector&rdquo; is &ldquo;an engineer who looks at the dashboard on Mondays.&rdquo; This works until the engineer changes jobs.</p>
 
-  <p><strong>Off-the-shelf observability + eval platforms.</strong> The ecosystem in 2026 has reasonable options:</p>
+  <p><strong>Off-the-shelf observability + eval platforms.</strong> The ecosystem in 2026 splits cleanly into two groups, and most production teams end up running one from each.</p>
+
+  <p><em>Production-stack regression detection (SDK / proxy logging every user interaction, evals running over the production trace store):</em></p>
 
   <ul>
     <li><strong>Langfuse</strong> &mdash; open-source LLM observability + evals. Self-hostable. Strong on traces.</li>
@@ -116,10 +118,17 @@
     <li><strong>Braintrust</strong> &mdash; eval-first platform. &ldquo;Datasets &times; experiments&rdquo; as the primitive.</li>
     <li><strong>OpenAI Evals</strong> &mdash; vendor-specific framework. Fine if you&rsquo;re single-vendor.</li>
     <li><strong>Promptfoo</strong> &mdash; CLI-first, declarative YAML evals. Lightweight.</li>
-    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; auto-logs every config change to a per-agent ledger and joins it against trace stats so the regression detector can drill straight into failing examples. Local-first, multi-runtime.</li>
   </ul>
 
-  <p>None solve the whole problem. The pattern they share: trace every dispatch, define evaluators, run them against the trace store, surface deltas. Differences are mostly vendor lock-in, self-hosting story, and how nicely they handle multi-runtime workflows.</p>
+  <p><em>Developer-workflow regression detection (config-change-driven, multi-runtime, focused on what <em>you</em> dispatched while building):</em></p>
+
+  <ul>
+    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; auto-logs every config change to a per-agent ledger and joins it against trace stats so the regression detector can drill straight into failing examples. Local-first, multi-runtime. Replay any failing example on a different runtime to ask &ldquo;would the previous model still have been wrong on this one?&rdquo;</li>
+  </ul>
+
+  <p>The two groups answer different questions. The SDK / proxy tools tell you &ldquo;something got worse for end users yesterday&rdquo; based on production traffic. ATO tells you &ldquo;quality changed after this specific config edit&rdquo; and lets you replay the failing examples against alternative runtimes before pushing the fix. Teams running real production agents typically run both: a Langfuse or Phoenix on the production stack, ATO on the developer side. The two views are complementary; the SDK tools catch regressions that only appear in real user traffic, ATO catches regressions before they ship.</p>
+
+  <p>The pattern all of them share: trace every dispatch, define evaluators, run them against the trace store, surface deltas. Differences are mostly vendor lock-in, self-hosting story, and how nicely they handle multi-runtime workflows.</p>
 
   <p>The thresholds to start with, regardless of tool: success rate &ge;10pp, eval score &ge;15pp, p95 latency &ge;50%, cost-per-call &ge;25%. Inside those bands is noise; above them is signal.</p>
 

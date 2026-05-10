@@ -110,17 +110,26 @@
 
   <p><strong>Custom telemetry.</strong> Most production teams write a logging wrapper around their LLM calls that captures prompt tokens, response tokens, model, agent slug. Pipe to a dashboard. Now you have per-call cost. The wrapper grows organically; eventually you reinvent observability.</p>
 
-  <p><strong>Off-the-shelf platforms with cost tracking.</strong> The ecosystem has a handful:</p>
+  <p><strong>Off-the-shelf platforms with cost tracking.</strong> The ecosystem splits into two groups, and most teams end up running one from each.</p>
+
+  <p><em>Production-stack cost logging (SDK / proxy in front of your live app):</em></p>
 
   <ul>
     <li><strong>Helicone</strong> &mdash; logging proxy that attributes cost per request out of the box. Drop-in.</li>
     <li><strong>Langfuse</strong> &mdash; open-source observability with cost tracking; self-hostable.</li>
     <li><strong>OpenMeter / Vellum</strong> &mdash; usage metering platforms with LLM-aware aggregations.</li>
     <li><strong>Vendor consoles</strong> &mdash; OpenAI, Anthropic, and Google all have their own usage dashboards. Single-vendor, no agent-level slicing.</li>
+  </ul>
+
+  <p><em>Developer-workflow cost visibility (what you dispatched while building, what the replay would cost on another runtime, where to swap models):</em></p>
+
+  <ul>
     <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; estimates cost per dispatch (token count &times; published per-million pricing for known models, with an &ldquo;est.&rdquo; badge), surfaces cost recommendations when you have multi-runtime data on the same agent. Multi-runtime native.</li>
   </ul>
 
-  <p>The thing all of these share: cost becomes <em>visible per call</em> instead of <em>summed at month-end</em>. Visibility per call is the only way to catch the four-line prompt edit that doubled your output tokens.</p>
+  <p>The two groups solve different halves of the cost-visibility problem. The SDK / proxy tools tell you how much your <em>deployed</em> agent is costing per user interaction in production. ATO tells you how much each dispatch costs during <em>development</em>, and how much the same prompt would have cost on a different runtime if you replayed it. Teams running real production agents typically run both: a Langfuse or Helicone in front of the production stack for end-user cost attribution, and ATO on the developer side for replay/model-swap exploration. They&rsquo;re complementary; together you can see cost from prompt-design through to production traffic.</p>
+
+  <p>What they all share: cost becomes <em>visible per call</em> instead of <em>summed at month-end</em>. Visibility per call is the only way to catch the four-line prompt edit that doubled your output tokens.</p>
 
   <h2>The summary, plainly</h2>
 

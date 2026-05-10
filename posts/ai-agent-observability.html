@@ -128,17 +128,26 @@
 
   <h2>Tools that exist for this</h2>
 
-  <p>None of these solve the whole problem, but the ecosystem in 2026 has reasonable starting points:</p>
+  <p>The ecosystem in 2026 has reasonable starting points. They cluster into two camps and most production teams end up using one from each.</p>
+
+  <p><strong>Production-stack observability (SDK-based, drop into your existing app):</strong></p>
 
   <ul>
-    <li><strong>Langfuse</strong> &mdash; open-source LLM tracing + evals. Self-hostable. Probably the most-adopted observability layer.</li>
+    <li><strong>Langfuse</strong> &mdash; open-source LLM tracing + evals. Self-hostable. Probably the most-adopted observability layer for production user conversations.</li>
     <li><strong>Arize Phoenix</strong> &mdash; open-source observability + evals; OpenTelemetry-native.</li>
     <li><strong>Helicone</strong> &mdash; logging proxy in front of OpenAI-shape APIs. Minimal setup.</li>
     <li><strong>OpenLLMetry</strong> &mdash; OpenTelemetry-based LLM instrumentation. Good if you already have OTel.</li>
     <li><strong>LangSmith</strong> &mdash; LangChain&rsquo;s observability. Tightly integrated if you&rsquo;re on LangChain.</li>
     <li><strong>Datadog LLM Observability</strong> &mdash; if you&rsquo;re a Datadog shop and don&rsquo;t want a second vendor.</li>
-    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; live runs registry with one-click kill, file attribution per dispatch, configuration ledger. Multi-runtime native.</li>
   </ul>
+
+  <p><strong>Developer-workflow observability (what you dispatched while building, testing, comparing runtimes):</strong></p>
+
+  <ul>
+    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; live runs registry with one-click kill, file attribution per dispatch, configuration ledger, cross-runtime replay. Multi-runtime native (Claude Code, Codex, Gemini CLI, etc.).</li>
+  </ul>
+
+  <p>These two camps do different jobs. The SDK tools log what your user-facing agent did with each end user once it&rsquo;s deployed. ATO covers the multi-runtime build/test loop &mdash; dispatches you ran, replays you triggered, regressions you caught after a prompt or model change. Teams running real production agents typically run both: Langfuse (or one of its peers) for the production conversation log, ATO for the developer side of the same agent. They&rsquo;re complementary, not alternatives.</p>
 
   <hr>
 

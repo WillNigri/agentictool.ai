@@ -1,6 +1,8 @@
 # ATO — The GUI for multi-agent runs
 
-> ATO is a free, open-source (MIT) desktop GUI for managing AI agents across multiple runtimes. It's the operations layer for Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, and Ollama — plus 16+ API providers. Built in Rust + React + Tauri. Local-first.
+> ATO is a free, open-source (MIT) desktop GUI for managing AI agents across multiple runtimes. It's the developer-workflow operations layer for Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, and Ollama — plus 16+ API providers. Built in Rust + React + Tauri. Local-first.
+>
+> ATO is **complementary** to Langfuse, Helicone, LangSmith, Phoenix, and similar production observability tools — it is not a competitor. Those tools instrument your *deployed* production stack via SDK calls and log end-user conversations. ATO covers the *developer side* of the same agent: what you dispatched while building, what you replayed across runtimes, what regressed after a config change, what each dispatch cost. Most production teams use one from each camp.
 
 Key things ATO does that competing tools don't:
 

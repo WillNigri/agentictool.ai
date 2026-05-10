@@ -97,7 +97,9 @@
 
   <h2>Tools that exist for this</h2>
 
-  <p>You don&rsquo;t have to build it from scratch. The ecosystem in 2026 has reasonable options at different scopes:</p>
+  <p>You don&rsquo;t have to build it from scratch. The ecosystem in 2026 splits into two groups, and most teams shipping production agents end up running one from each.</p>
+
+  <p><em>Production-stack A/B testing (SDK / proxy logging real user traffic, evals running over the production trace store):</em></p>
 
   <ul>
     <li><strong>Langfuse</strong> &mdash; open-source LLM observability and prompt evals. Self-hostable. Strong on trace storage and dashboards.</li>
@@ -107,8 +109,15 @@
     <li><strong>OpenAI Evals</strong> &mdash; OpenAI&rsquo;s own framework. Good if you&rsquo;re single-vendor.</li>
     <li><strong>Promptfoo</strong> &mdash; CLI-first, declarative YAML evals. Lightweight, runs locally.</li>
     <li><strong>Inspect AI</strong> &mdash; from the UK AISI; rigorous, used for capability evals.</li>
-    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; replay any past trace against a different runtime/model and diff source vs replay side-by-side. Local-first, multi-runtime native.</li>
   </ul>
+
+  <p><em>Developer-workflow A/B testing (replay past prompts against alternative runtimes during build/test, before any production rollout):</em></p>
+
+  <ul>
+    <li><strong>ATO</strong> &mdash; free, open-source desktop GUI; replay any past trace against a different runtime/model and diff source vs replay side-by-side. Local-first, multi-runtime native (Claude Code, Codex, Gemini CLI, etc.).</li>
+  </ul>
+
+  <p>The two groups answer different versions of the A/B question. The SDK / proxy tools tell you which prompt or model variant did better against <em>real user traffic</em> over a sample size. ATO lets you replay any single past prompt against a different runtime <em>before</em> rolling anything out &mdash; the &ldquo;would Codex have done better on this specific failed example?&rdquo; question. Teams running real production agents typically use both: a Langfuse or Braintrust for population-level production A/Bs, ATO for per-example multi-runtime exploration during development. The two are complementary; together you can test before you ship and measure after.</p>
 
   <p>None of them solve the whole problem. The pattern they share: trace every dispatch, define evaluators, run them against the trace store, surface the deltas. That pattern is the right one. The differences are mostly about vendor lock-in, self-hosting, and how nicely they handle multi-runtime workflows where the agent uses Claude for one stage and Codex for another.</p>
 
