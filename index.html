@@ -198,6 +198,10 @@
         }
 
         /* ========== HERO ========== */
+        /* Option C: title spans the full width up top, then a single
+         * row below with description + stats on the left and CTAs on
+         * the right. Title gets the hero treatment, description + CTAs
+         * stay above the fold side-by-side. */
         .hero {
             position: relative;
             min-height: 100vh;
@@ -208,14 +212,29 @@
         }
 
         .hero-inner {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
+            position: relative;
+            z-index: 2;
             width: 100%;
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 24px;
+        }
+
+        .hero-top {
+            margin-bottom: clamp(32px, 5vh, 56px);
+        }
+
+        .hero-bottom {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            gap: 48px;
+            align-items: end;
+        }
+
+        .hero-bottom-right {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
         }
 
         .hero-content {
@@ -247,15 +266,15 @@
 
         .hero-title {
             font-family: 'Space Grotesk', sans-serif;
-            /* Slightly larger than original 5.5rem cap so the brand
-             * promise has more visual weight without breaking the
-             * single-column flow. */
-            font-size: clamp(3rem, 7vw, 6.5rem);
+            /* Full-width title row — can grow much bigger than the
+             * 2-column version without crowding adjacent content.
+             * Three lines: "THE GUI" / "[FOR]" / "MULTI-AGENT_". */
+            font-size: clamp(3.5rem, 11vw, 10rem);
             font-weight: 700;
-            line-height: 0.95;
-            letter-spacing: -2px;
+            line-height: 0.92;
+            letter-spacing: -3px;
             text-transform: uppercase;
-            margin-bottom: 28px;
+            margin-bottom: 0;
         }
 
         .hero-title .line {
@@ -275,17 +294,19 @@
         }
 
         .hero-subtitle {
-            font-size: 1.1rem;
+            font-size: 1.05rem;
             color: var(--text-secondary);
-            max-width: 520px;
-            line-height: 1.7;
-            margin-bottom: 36px;
+            max-width: 640px;
+            line-height: 1.65;
+            margin-bottom: 24px;
+            margin-top: 8px;
         }
 
         .hero-stats {
             display: flex;
-            gap: 40px;
-            margin-bottom: 40px;
+            gap: 36px;
+            margin-bottom: 0;
+            flex-wrap: wrap;
         }
 
         .hero-stat {
@@ -308,8 +329,15 @@
 
         .hero-ctas {
             display: flex;
-            gap: 16px;
+            gap: 12px;
             flex-wrap: wrap;
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .hero-bottom-right .btn-primary,
+        .hero-bottom-right .btn-outline {
+            justify-content: center;
         }
 
         .btn-primary {
@@ -1155,8 +1183,10 @@
 
         /* ========== RESPONSIVE ========== */
         @media (max-width: 900px) {
-            .hero-inner {
+            .hero-bottom {
                 grid-template-columns: 1fr;
+                gap: 32px;
+                align-items: stretch;
             }
 
             .hero-visual {
@@ -1290,42 +1320,48 @@
     <!-- HERO -->
     <section class="hero">
         <div class="hero-inner">
-            <div class="hero-content">
+            <div class="hero-top">
                 <div class="hero-badge">v2.1 &middot; Replay across runtimes &middot; Every feature free with sign-up</div>
                 <h1 class="hero-title">
                     <span class="line">THE GUI</span>
                     <span class="line"><span class="bracket">[</span><span class="highlight">FOR</span><span class="bracket">]</span></span>
                     <span class="line">MULTI-AGENT<span class="underscore">_</span></span>
                 </h1>
-                <p class="hero-subtitle">Once you run 3+ agents, the hard part is knowing <strong style="color:var(--accent-cyan)">which runtime owns which workspace, what each touched, and how to stop the stuck ones</strong> &mdash; without reading every terminal buffer. ATO is the GUI &mdash; the ops layer for <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, OpenClaw, Hermes, and Ollama. Live runs panel. File attribution per dispatch. Cross-runtime regression detection. Local-first. MIT.</p>
-                <div class="hero-stats">
-                    <div class="hero-stat">
-                        <div class="hero-stat-value">6</div>
-                        <div class="hero-stat-label">Native Runtimes</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-value">Live</div>
-                        <div class="hero-stat-label">Runs Registry</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-value">15+</div>
-                        <div class="hero-stat-label">API Providers</div>
-                    </div>
-                    <div class="hero-stat">
-                        <div class="hero-stat-value">MIT</div>
-                        <div class="hero-stat-label">Open Source</div>
+            </div>
+            <div class="hero-bottom">
+                <div class="hero-content">
+                    <p class="hero-subtitle">Once you run 3+ agents, the hard part is knowing <strong style="color:var(--accent-cyan)">which runtime owns which workspace, what each touched, and how to stop the stuck ones</strong> &mdash; without reading every terminal buffer. ATO is the GUI &mdash; the ops layer for <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, OpenClaw, Hermes, and Ollama. Live runs panel. File attribution per dispatch. Cross-runtime regression detection. Local-first. MIT.</p>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">6</div>
+                            <div class="hero-stat-label">Native Runtimes</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">Live</div>
+                            <div class="hero-stat-label">Runs Registry</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">15+</div>
+                            <div class="hero-stat-label">API Providers</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">MIT</div>
+                            <div class="hero-stat-label">Open Source</div>
+                        </div>
                     </div>
                 </div>
-                <div class="hero-ctas">
-                    <a href="#" data-ato-download="auto" class="btn-primary">Download for Mac / Win / Linux &rarr;</a>
-                    <a href="https://app.agentictool.ai" class="btn-outline" target="_blank" rel="noopener">Sign up free &rarr;</a>
-                    <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="btn-outline" target="_blank" rel="noopener">View on GitHub</a>
+                <div class="hero-bottom-right">
+                    <div class="hero-ctas">
+                        <a href="#" data-ato-download="auto" class="btn-primary">Download for Mac / Win / Linux &rarr;</a>
+                        <a href="https://app.agentictool.ai" class="btn-outline" target="_blank" rel="noopener">Sign up free &rarr;</a>
+                        <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="btn-outline" target="_blank" rel="noopener">View on GitHub</a>
+                    </div>
+                    <p style="margin-top:8px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.05em;line-height:1.6;">Claude Code &middot; Codex &middot; Gemini CLI &middot; OpenClaw &middot; Hermes &middot; Ollama<br>+ DeepSeek, Qwen, MiniMax, Kimi, GLM, Yi via API</p>
                 </div>
-                <p style="margin-top:24px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);letter-spacing:0.05em;">Claude Code &middot; Codex &middot; Gemini CLI &middot; OpenClaw &middot; Hermes &middot; Ollama &middot;<br>+ DeepSeek, Qwen, MiniMax, Kimi, GLM, Yi via API</p>
             </div>
-            <div class="hero-visual">
-                <canvas id="aurora-canvas"></canvas>
-            </div>
+        </div>
+        <div class="hero-visual">
+            <canvas id="aurora-canvas"></canvas>
         </div>
     </section>
 
