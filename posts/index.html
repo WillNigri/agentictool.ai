@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — ATO</title>
+<meta name="description" content="Essays on multi-LLM development, AI agent observability, regression detection, cost optimization, and context engineering. By the team building ATO.">
+<meta name="keywords" content="ATO blog, multi-LLM development, AI agent observability, LLM evaluation, AI cost optimization, context engineering">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog — ATO">
+<meta property="og:description" content="Essays on multi-LLM development, AI agent observability, regression detection, cost optimization, and context engineering.">
+<meta property="og:url" content="https://agentictool.ai/posts/">
+<meta property="og:site_name" content="ATO">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blog — ATO">
+<meta name="twitter:description" content="Essays on multi-LLM development, AI agent observability, regression detection, cost optimization, and context engineering.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+<style>
+  .post-list { list-style: none; margin: 0; padding: 0; }
+  .post-list li {
+    padding: 28px 0;
+    border-bottom: 1px solid var(--border);
+    margin: 0;
+  }
+  .post-list li:last-child { border-bottom: 0; }
+  .post-list a {
+    color: var(--text-primary);
+    display: block;
+    transition: color 0.2s;
+  }
+  .post-list a:hover { text-decoration: none; color: var(--accent-cyan); }
+  .post-list h2 {
+    margin: 0 0 8px;
+    font-size: clamp(1.2rem, 2vw, 1.6rem);
+    line-height: 1.25;
+  }
+  .post-list .post-list-meta {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+  }
+  .post-list .post-list-excerpt {
+    font-size: 0.98rem;
+    color: var(--text-secondary);
+    margin: 6px 0 0;
+  }
+  .blog-intro {
+    font-size: 1.05rem;
+    color: var(--text-secondary);
+    margin-bottom: 48px;
+    max-width: 680px;
+  }
+</style>
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">Blog</div>
+  <h1>Essays</h1>
+  <p class="blog-intro">On multi-LLM development, AI agent observability, regression detection, cost optimization, and context engineering. Mostly written while debugging production agents and noticing patterns. By the team building ATO.</p>
+
+  <ul class="post-list">
+
+    <li>
+      <a href="/posts/multi-llm-workflows.html">
+        <div class="post-list-meta">2026-05-10 &middot; Multi-LLM &middot; 9 min read</div>
+        <h2>Why is multi-LLM development still so painful in 2026?</h2>
+        <p class="post-list-excerpt">Different models genuinely lead at different tasks. The benchmark data shows it clearly. So why do most teams still pick one and use it for everything? A look at the SWE-bench / MMLU / HumanEval differences, the tooling gap, and what real multi-LLM workflows look like.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/ab-testing-ai-prompts.html">
+        <div class="post-list-meta">2026-05-10 &middot; LLM Evaluation &middot; 9 min read</div>
+        <h2>How can we actually understand whether a new LLM is better</h2>
+        <p class="post-list-excerpt">Vendors publish benchmark scores. Those scores tell you something, but not everything you need. A walk through MMLU, HumanEval, GSM8K, your own intuition while developing, and what to do once you have real users in front of your agent.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/ai-agent-regression-detection.html">
+        <div class="post-list-meta">2026-05-10 &middot; LLM Evaluation &middot; 9 min read</div>
+        <h2>Why does my AI agent get worse without anyone changing it?</h2>
+        <p class="post-list-excerpt">Models change. Prompts change. Context changes. Quality drifts and you find out from a user complaint two weeks later. The Stanford temporal-drift study, the five causes of silent regressions, what to actually monitor, and the thresholds that matter.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/ai-agent-observability.html">
+        <div class="post-list-meta">2026-05-10 &middot; AI Engineering &middot; 8 min read</div>
+        <h2>What&rsquo;s missing when traditional monitoring meets AI agents</h2>
+        <p class="post-list-excerpt">Traditional APM tells you the API succeeded. AI agent observability has to tell you whether the answer was actually right, which agent touched which file, and how to stop the one that&rsquo;s stuck. The five questions APM doesn&rsquo;t answer.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/llm-cost-optimization.html">
+        <div class="post-list-meta">2026-05-10 &middot; LLM Cost &middot; 8 min read</div>
+        <h2>Why does my AI agent bill keep growing?</h2>
+        <p class="post-list-excerpt">LLM costs feel arbitrary because most teams don&rsquo;t actually instrument them. A walk through the published per-million pricing, why bills grow faster than usage, and what to monitor before the CFO asks.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/context-engineering.html">
+        <div class="post-list-meta">2026-05-10 &middot; AI Architecture &middot; 9 min read</div>
+        <h2>What separates production AI agents from demos?</h2>
+        <p class="post-list-excerpt">A demo agent has one prompt. A production agent has variables, context hooks, memory policies, evaluators, and per-task models. The shift from prompt engineering to context engineering, with the literature behind it (Lost in the Middle, Anthropic&rsquo;s Building Effective Agents).</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/v2.1-ops-layer.html">
+        <div class="post-list-meta">2026-05-10 &middot; Product / Release &middot; 6 min read</div>
+        <h2>What we shipped: ATO becomes the ops layer for multi-runtime agents</h2>
+        <p class="post-list-excerpt">Twelve releases in two days. Replay any prompt against a different runtime, catch regressions before users do, cut cost without losing quality. The v2.1 release notes for ATO.</p>
+      </a>
+    </li>
+
+  </ul>
+
+</article>
+
+</body>
+</html>
