@@ -266,13 +266,13 @@
 
         .hero-title {
             font-family: 'Space Grotesk', sans-serif;
-            /* Full-width title row — can grow much bigger than the
-             * 2-column version without crowding adjacent content.
-             * Three lines: "THE GUI" / "[FOR]" / "MULTI-AGENT_". */
-            font-size: clamp(3.5rem, 11vw, 10rem);
+            /* Bigger than the original 5.5rem cap to take advantage
+             * of the full-width row, but dialed back from the 10rem
+             * version that ate the whole viewport on wide screens. */
+            font-size: clamp(3rem, 8vw, 7rem);
             font-weight: 700;
-            line-height: 0.92;
-            letter-spacing: -3px;
+            line-height: 0.95;
+            letter-spacing: -2px;
             text-transform: uppercase;
             margin-bottom: 0;
         }
