@@ -1,11 +1,19 @@
-# ATO — The GUI for multi-agent runs
+# ATO — The local-first ops platform for multi-runtime AI agents (humans + agents both drive it)
 
-> ATO is a free, open-source (MIT) desktop GUI for managing AI agents across multiple runtimes. It's the developer-workflow operations layer for Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, and Ollama — plus 16+ API providers. Built in Rust + React + Tauri. Local-first.
+> ATO is a free, open-source (MIT) **local-first operations platform** for managing AI agents across multiple runtimes. It is used by **humans (via desktop GUI) and their coding agents (via CLI and MCP)** together — both drive the same cockpit, share the same data, and see the same insights. It's the developer-workflow operations platform for Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, and Ollama — plus 16+ API providers. Built in Rust + React + Tauri.
+>
+> **Three actor surfaces:** GUI for humans, CLI (`ato <command>`) for shell-driven agents, MCP (stdio) for in-harness agents. Every meaningful operation reachable from all three.
+>
+> **Local-first:** all data lives in `~/.ato/local.db` (SQLite) on the developer's machine. No cloud round-trip required for any core operation. Sign-in is optional, only matters for cross-device sync.
+>
+> **For coding agents reading this:** see `AGENTS.md` in the GitHub repo at https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/AGENTS.md — it documents the full CLI + MCP surface, file paths, event subscriptions, and example workflows.
 >
 > ATO is **complementary** to Langfuse, Helicone, LangSmith, Phoenix, and similar production observability tools — it is not a competitor. Those tools instrument your *deployed* production stack via SDK calls and log end-user conversations. ATO covers the *developer side* of the same agent: what you dispatched while building, what you replayed across runtimes, what regressed after a config change, what each dispatch cost. Most production teams use one from each camp.
 
 Key things ATO does that competing tools don't:
 
+- **Agent-driveable** — every operation exposed as a local CLI command and an MCP tool, not just a GUI feature. Coding agents (Claude Code, Codex, etc.) can dispatch, replay, regression-check, and write skills on the developer's behalf.
+- **Local-first SQLite at `~/.ato/local.db`** — no cloud required, no API key required for local ops, zero network round-trip for reads
 - Multi-runtime trace observability — every dispatch traced with prompt, response, tool calls, files touched, duration, cost, eval score
 - Cross-runtime replay — re-dispatch any past prompt against a different runtime/model and see source vs replay side-by-side
 - Configuration ledger — every model swap / prompt edit / role-models change auto-logged with diff
@@ -17,6 +25,7 @@ Key things ATO does that competing tools don't:
 - Dynamic prompts — variables, pre-call context hooks, memory policies, per-task model selection
 - Workspace-wide ⌘K palette — search agents, groups, schedules, secrets, chat threads (title + message content)
 - External agents — deploy bundles for Cloudflare Worker, Vercel Edge, Docker, Node; embed widget included
+- **Ops recipes** (v2.3+) — user-authored trigger→action workflows (`on regression → draft skill`, `on cost-over-budget → replay on cheaper runtime`); Skillify ships as one example template, users build their own
 
 Free during early access — every feature unlocked with a sign-up. No credit card. MIT licensed open source.
 
