@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATO — The GUI for multi-agent runs. The ops layer for every runtime.</title>
-    <meta name="description" content="The GUI / desktop control panel for Claude Code, Codex, Gemini CLI, and more. Live runs registry, file attribution per dispatch, cross-runtime regression detection. See who touched which files when Claude → Codex → Gemini chains run. Local-first, MIT.">
-    <meta name="keywords" content="agentic tool optimization, agent GUI, agentic GUI, multi-agent GUI, multi-runtime agents, agent ops, Claude Code, Codex, OpenAI Agents SDK, Gemini CLI, ADK, OpenClaw, Hermes, Ollama, DeepSeek, agent groups, sequential automation, MCP, file attribution, regression detection, observability, agent control panel">
+    <title>ATO — Your local war room for humans and LLMs.</title>
+    <meta name="description" content="Multi-LLM debate sessions with tool calls and an audit trail. Drop Claude, GPT, Gemini, Grok, MiniMax — or any of 20+ runtimes — into one session, push back on each other, cite the files they checked. Local-first, MIT. The maintained version of the LLM Council pattern.">
+    <meta name="keywords" content="ato, agentic tool optimization, LLM war room, multi-LLM debate, LLM Council, Karpathy llm-council, tool-calling LLMs, AI code review, multi-runtime agents, Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama, audit trail, local-first AI, agent ops, MCP, OpenRouter alternative">
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://agentictool.ai/">
-    <meta property="og:title" content="ATO — The GUI for multi-agent runs.">
-    <meta property="og:description" content="The GUI for Claude Code + Codex + Gemini. Live runs registry, file attribution, cross-runtime regression detection. See who touched what across pipelines. Local-first, MIT.">
+    <meta property="og:title" content="ATO — Your local war room for humans and LLMs.">
+    <meta property="og:description" content="Decide together, call real tools, walk out with a signed audit trail. Drop in any of your LLMs (Claude, GPT, Gemini, Grok, MiniMax, and 15+ more) and have them argue a decision while you push back. Local-first. MIT.">
     <meta property="og:site_name" content="Agentic Tool Optimization">
 
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="ATO — The GUI for multi-agent runs.">
-    <meta name="twitter:description" content="The GUI for Claude Code + Codex + Gemini. Live runs registry, file attribution, cross-runtime regression detection. Local-first, MIT.">
+    <meta name="twitter:title" content="ATO — Your local war room for humans and LLMs.">
+    <meta name="twitter:description" content="Multi-LLM debate sessions with tool calls and an audit trail. The maintained version of the LLM Council pattern. Local-first. MIT.">
 
     <link rel="canonical" href="https://agentictool.ai/">
 
@@ -39,20 +39,22 @@
             "price": "0",
             "priceCurrency": "USD"
         },
-        "description": "Free, open-source desktop GUI for multi-runtime AI agents. Replay any past prompt against a different runtime, detect quality regressions before users do, surface concrete cost-saving model swaps. Live runs registry, file attribution per dispatch, configuration ledger. Six native runtimes (Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama) plus 16 API providers. Local-first, MIT licensed.",
-        "softwareVersion": "2.2.1",
+        "description": "Free, open-source desktop app + CLI for multi-LLM debate sessions with tool calls and an audit trail. Drop Claude, GPT, Gemini, Grok, MiniMax — or any of 20+ supported runtimes — into one session; the LLMs see each other's findings via history replay, call function-calling tools (read_file, grep, git_log) to verify claims in your repo, and produce a signed audit trail ready to paste into a PR. The maintained, tool-equipped, multi-provider version of the LLM Council pattern. Six native runtimes (Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama) plus 15+ API providers. Local-first, MIT licensed.",
+        "softwareVersion": "2.4.6",
         "downloadUrl": "https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest",
         "featureList": [
-            "Cross-runtime replay (re-dispatch past prompts against a different model)",
+            "Multi-LLM debate sessions (ato review) with tool-call audit",
+            "Function-calling tools (read_file, grep, git_log) — LLMs verify claims in your live repo",
+            "Persistent specialist agents (@security-specialist, @perf-reviewer, etc.)",
+            "Per-turn audit trail (which LLM made which tool call with what arguments)",
+            "20+ supported runtimes — CLI subscriptions + API providers (not OpenRouter-locked)",
+            "Cross-runtime replay (re-dispatch any past prompt against a different model)",
             "Compare workbench (side-by-side diff of any two cloud traces)",
             "Regression detection (eval-score deltas + failing-example drill-down)",
             "Cost recommendations (prescriptive model swaps with quality guards)",
             "Live runs registry with kill button",
-            "File attribution per dispatch (mtime-snapshot diff)",
             "Configuration impact ledger (auto-logged config changes)",
-            "Sequential and routed multi-agent groups",
-            "Dynamic prompts: variables, hooks, memory policies",
-            "Per-task model selection (router / summarizer / response / evaluator)",
+            "MCP server — every meaningful op reachable from coding agents",
             "Workspace-wide ⌘K palette",
             "External agent deploy bundles (Cloudflare Worker, Vercel Edge, Docker, Node)"
         ],
@@ -1377,32 +1379,32 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-top">
-                <a href="/posts/v2.1-ops-layer.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.3 &middot; Now agent-driveable: CLI + MCP &middot; Read what&rsquo;s new &rarr;</a>
+                <a href="/posts/llm-council-tool-calls.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.4 &middot; The maintained LLM Council, with tool calls &middot; Read the post &rarr;</a>
                 <h1 class="hero-title">
-                    <span class="line">THE GUI</span>
-                    <span class="line"><span class="bracket">[</span><span class="highlight">FOR</span><span class="bracket">]</span></span>
-                    <span class="line">MULTI-AGENT<span class="underscore">_</span></span>
+                    <span class="line">LOCAL</span>
+                    <span class="line"><span class="bracket">[</span><span class="highlight">WAR</span><span class="bracket">]</span></span>
+                    <span class="line">ROOM<span class="underscore">_</span></span>
                 </h1>
             </div>
             <div class="hero-bottom">
                 <div class="hero-content">
-                    <p class="hero-subtitle">Once you run 3+ agents, the hard part is knowing <strong style="color:var(--accent-cyan)">which runtime owns which workspace, what each touched, and how to stop the stuck ones</strong> &mdash; without reading every terminal buffer. ATO is the cockpit <strong style="color:var(--accent-cyan)">both you and your coding agent drive together</strong> &mdash; via GUI, CLI, or MCP. The ops platform for <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, OpenClaw, Hermes, and Ollama. Live runs panel. File attribution per dispatch. Cross-runtime regression detection. Local-first. MIT.</p>
+                    <p class="hero-subtitle">Drop any of your LLMs &mdash; <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">GPT</span>, <span style="color:#3b82f6">Gemini</span>, Grok, MiniMax, or any of 20+ supported runtimes &mdash; into <strong style="color:var(--accent-cyan)">one shared session</strong>. They see each other&rsquo;s findings via history replay, call <strong style="color:var(--accent-cyan)">real tools</strong> (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) to verify claims in your repo, and you walk out with a <strong style="color:var(--accent-cyan)">signed audit trail</strong> to paste into your PR. The maintained, tool-equipped version of <a href="https://github.com/karpathy/llm-council" target="_blank" rel="noopener" style="color:var(--accent-cyan);text-decoration:underline;">Karpathy&rsquo;s LLM Council</a> pattern. Local-first. MIT.</p>
                     <div class="hero-stats">
                         <div class="hero-stat">
-                            <div class="hero-stat-value">6</div>
-                            <div class="hero-stat-label">Native Runtimes</div>
+                            <div class="hero-stat-value">N</div>
+                            <div class="hero-stat-label">LLMs per session</div>
                         </div>
                         <div class="hero-stat">
-                            <div class="hero-stat-value">Live</div>
-                            <div class="hero-stat-label">Runs Registry</div>
+                            <div class="hero-stat-value">20+</div>
+                            <div class="hero-stat-label">Runtimes</div>
                         </div>
                         <div class="hero-stat">
-                            <div class="hero-stat-value">15+</div>
-                            <div class="hero-stat-label">API Providers</div>
+                            <div class="hero-stat-value">Signed</div>
+                            <div class="hero-stat-label">Audit trail</div>
                         </div>
                         <div class="hero-stat">
                             <div class="hero-stat-value">MIT</div>
-                            <div class="hero-stat-label">Open Source</div>
+                            <div class="hero-stat-label">Open source</div>
                         </div>
                     </div>
                 </div>
@@ -1424,22 +1426,22 @@
     <section class="problem" id="problem">
         <div class="container">
             <div class="section-label fade-in">The Problem</div>
-            <h2 class="section-title fade-in">AI agents don&rsquo;t talk to each other</h2>
+            <h2 class="section-title fade-in">You can&rsquo;t get N LLMs to argue with receipts</h2>
             <div class="problem-grid">
                 <div class="problem-card fade-in">
                     <div class="problem-card-icon">&#x1f504;</div>
-                    <h3>Each tool is its own island</h3>
-                    <p>Claude has Claude Code, OpenAI has Codex, Google has Gemini. Each starts every conversation from zero. Switching tools means re-explaining context.</p>
+                    <h3>Three browser tabs, no shared context</h3>
+                    <p>You paste the same question into Claude, GPT, Gemini one tab at a time. Each starts from zero. None of them see what the others said. The disagreement that should be the signal is buried in your clipboard history.</p>
                 </div>
                 <div class="problem-card fade-in">
                     <div class="problem-card-icon">&#x26d3;&#xfe0f;</div>
-                    <h3>No way to chain agents</h3>
-                    <p>You want a workflow: writer drafts code, reviewer checks security, summarizer reports back. Today you copy-paste between three CLIs by hand.</p>
+                    <h3>Existing council tools just shuffle text</h3>
+                    <p>Karpathy&rsquo;s LLM Council got 18k stars and walked away. Most multi-LLM debate tools (theirs included) can&rsquo;t read your repo, can&rsquo;t grep, can&rsquo;t verify a single claim. They&rsquo;re vibes-as-a-service.</p>
                 </div>
                 <div class="problem-card fade-in">
                     <div class="problem-card-icon">&#x1f441;&#xfe0f;</div>
-                    <h3>Agents run blind</h3>
-                    <p>Production agents need variables, hooks, summarizers, evaluators &mdash; but most tools give you a single system-prompt textarea and call it a day.</p>
+                    <h3>The session disappears</h3>
+                    <p>You get an answer, you read it, you move on. No record of which LLM made which claim, no way to cite &ldquo;confirmed by GPT, disputed by Claude,&rdquo; no markdown you can paste into a PR. The receipt is the artifact, and it&rsquo;s missing.</p>
                 </div>
             </div>
         </div>
@@ -1449,13 +1451,13 @@
     <section class="features" id="features">
         <div class="container">
             <div class="section-label fade-in">Features</div>
-            <h2 class="section-title fade-in">The agentic workspace, not just a control panel</h2>
+            <h2 class="section-title fade-in">The war-room engine, plus everything you&rsquo;d want around it</h2>
 
             <!-- NEW IN v1.5.5 -->
             <div class="feature-block fade-in" style="margin-bottom: 3rem;">
                 <div class="feature-info">
-                    <h3 style="color: var(--accent-cyan);">New in v2.1 &mdash; The Multi-Agent Ops Layer</h3>
-                    <p>Live runs registry &bull; File attribution per dispatch &bull; Cross-runtime regression detection &bull; File history modal &bull; Honest concurrent attribution &bull; Configuration impact ledger</p>
+                    <h3 style="color: var(--accent-cyan);">New in v2.4 &mdash; Multi-LLM war room with tool calls</h3>
+                    <p><code class="mono">ato review --reviewer @security-specialist --reviewer @perf-reviewer --reviewer claude --reviewer minimax</code> &bull; Function-calling tools (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) &bull; Persistent specialist agents with system prompts &bull; Per-turn audit trail in the GUI &mdash; verified-via-N-tool-calls vs prompt-only badges &bull; Lean mode forces the LLMs to walk the live repo</p>
                     <ul class="feature-bullets">
                         <li><strong>Live runs panel</strong> &mdash; See every in-flight dispatch with agent slug, runtime, workspace, and elapsed time. Kill stuck dispatches with one click &mdash; no more reading every terminal buffer to find the runaway. Shows up the moment you fire something via Quick Test, the chat pane, scheduled cron, or MCP <code class="mono">run_agent</code>.</li>
                         <li><strong>File attribution per dispatch</strong> &mdash; Every run captures the list of files touched in the project root via mtime-snapshot diff. Works across <em>every</em> runtime since it&rsquo;s filesystem-level, not stream-parsing. Click any file in the dashboard to see every dispatch that ever touched it &mdash; agent, runtime, timestamp, prompt summary, sibling files.</li>
