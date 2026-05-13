@@ -35,6 +35,7 @@ Free during early access — every feature unlocked with a sign-up. No credit ca
 
 ## Blog posts
 
+- [I rebuilt Karpathy's LLM Council with tool calls and an audit trail](https://agentictool.ai/posts/llm-council-tool-calls.html): How ato compares to Karpathy's llm-council (18.7k stars, explicitly unmaintained): multi-provider auth (not OpenRouter-locked), function-calling tools so the LLMs verify claims in your repo, persistent specialist agents (@security-specialist, @perf-reviewer), per-turn audit trail, MIT, maintained. Dogfooded by using ato itself to settle ato's positioning in a recorded multi-LLM debate session.
 - [Why is multi-LLM development still so painful in 2026?](https://agentictool.ai/posts/multi-llm-workflows.html): Benchmark differences across Claude / GPT / Gemini, why teams pick one anyway, what real multi-LLM workflows look like (sequential pipelines, routed groups, mid-thread runtime swaps).
 - [How can we actually understand whether a new LLM is better](https://agentictool.ai/posts/ab-testing-ai-prompts.html): Walk through MMLU, HumanEval, GSM8K, SWE-bench, the limits of vendor benchmarks, intuitive evaluation while developing, explicit testing for user-facing agents, evaluator tools.
 - [Why does my AI agent get worse without anyone changing it](https://agentictool.ai/posts/ai-agent-regression-detection.html): The Stanford temporal-drift study, the five causes of silent regressions, what to monitor (eval score, configuration ledger, failing examples, cost-per-OK, p95 latency), tools that handle it.

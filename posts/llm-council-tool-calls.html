@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I rebuilt Karpathy's LLM Council with tool calls and an audit trail — ATO</title>
+<meta name="description" content="Karpathy shipped llm-council last November and explicitly walked away from it. Here's the maintained, tool-equipped, multi-provider version: ato. Multi-LLM debate sessions where models verify claims in your repo via read_file / grep / git_log, with a per-turn audit trail.">
+<meta name="keywords" content="LLM Council, Karpathy llm-council, multi-LLM debate, tool-calling LLMs, AI code review, multi-runtime AI agents, audit trail LLM, ato, OpenRouter alternative, war room LLM">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/llm-council-tool-calls.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="I rebuilt Karpathy's LLM Council with tool calls and an audit trail">
+<meta property="og:description" content="Karpathy shipped the primitive. Same pattern, different shape: multi-provider, tool-calling, audit trail, maintained.">
+<meta property="og:url" content="https://agentictool.ai/posts/llm-council-tool-calls.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-13T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="I rebuilt Karpathy's LLM Council with tool calls and an audit trail">
+<meta name="twitter:description" content="Karpathy shipped the primitive. Same pattern, different shape: multi-provider, tool-calling, audit trail, maintained.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"I rebuilt Karpathy's LLM Council with tool calls and an audit trail","description":"Karpathy shipped llm-council last November and explicitly walked away from it. Here's the maintained, tool-equipped, multi-provider version: ato.","datePublished":"2026-05-13","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/llm-council-tool-calls.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-13 &middot; Multi-LLM &middot; 8 min read</div>
+
+  <h1>I rebuilt Karpathy&rsquo;s LLM Council with tool calls and an audit trail</h1>
+
+  <p>Last November, <a href="https://x.com/karpathy" target="_blank" rel="noopener">Andrej Karpathy</a> shipped a small repo called <a href="https://github.com/karpathy/llm-council" target="_blank" rel="noopener">llm-council</a>. The idea: instead of asking one LLM a hard question, you ask a <em>council</em> of them. Each model answers independently, they review each other anonymously, and a &ldquo;Chairman LLM&rdquo; compiles the final response.</p>
+
+  <p><strong>18,695 stars. 3,616 forks. 124 open issues. Last commit: November 22, 2025.</strong></p>
+
+  <p>Karpathy put this note in the README:</p>
+
+  <blockquote>
+    <p>&ldquo;I&rsquo;m not going to support it in any way, it&rsquo;s provided here as is for other people&rsquo;s inspiration and I don&rsquo;t intend to improve it. Code is ephemeral now and libraries are over, ask your LLM to change it in whatever way you like.&rdquo;</p>
+  </blockquote>
+
+  <p>That&rsquo;s a compact validation of a real pattern &mdash; and an explicit invitation for someone else to make it actually useful.</p>
+
+  <p>We&rsquo;ve been building <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" target="_blank" rel="noopener">ato</a> in the open for the last 60 days. Originally we positioned it as &ldquo;the GUI for multi-runtime AI agents.&rdquo; It wasn&rsquo;t landing. Then a friend &mdash; call him Thiago, a $200/mo Claude Max + $200/mo Codex power user, plugged into the OpenClaw community &mdash; sent us Karpathy&rsquo;s repo and said, paraphrased: <em>&ldquo;I don&rsquo;t see myself using ato for code review, but my actual pain is exactly this thing Karpathy just shipped. I vibe-coded a version of it with LangChain last year. It worked. Then LangChain caducated.&rdquo;</em></p>
+
+  <p>So we repositioned around the council pattern. And in doing so, we noticed that ato had quietly become the maintained, tool-equipped, multi-provider version of Karpathy&rsquo;s repo. Same primitive. Different shape.</p>
+
+  <p>This post is what&rsquo;s different, why, and how to try it.</p>
+
+  <h2>What&rsquo;s in Karpathy&rsquo;s repo</h2>
+
+  <p>A FastAPI backend, a React + Vite frontend, OpenRouter as the model gateway. The 3-stage flow:</p>
+
+  <ol>
+    <li><strong>First opinions</strong> &mdash; each LLM answers the user&rsquo;s query independently.</li>
+    <li><strong>Review</strong> &mdash; each LLM ranks the others&rsquo; answers (anonymized so no model can play favorites).</li>
+    <li><strong>Chairman</strong> &mdash; a designated LLM compiles a final synthesized answer.</li>
+  </ol>
+
+  <p>JSON files in <code>data/conversations/</code>. About 600 lines of Python. Clever, fast, lovely as a Saturday hack. Karpathy was clear about its scope: a tool for exploring multiple models side by side, especially in the context of <a href="https://x.com/karpathy/status/1990577951671509438" target="_blank" rel="noopener">reading books together with LLMs</a>.</p>
+
+  <h2>What&rsquo;s NOT in Karpathy&rsquo;s repo</h2>
+
+  <p>None of these gaps are criticism &mdash; Karpathy was explicit it was a hack. They&rsquo;re the gaps that turn the primitive into something usable in a developer&rsquo;s day-to-day.</p>
+
+  <p><strong>Tool calls.</strong> The LLMs shuffle text. They can&rsquo;t read your repo, can&rsquo;t grep, can&rsquo;t check whether a function they&rsquo;re claiming exists actually exists. If you ask &ldquo;review my PR,&rdquo; they&rsquo;re guessing from the diff you pasted.</p>
+
+  <p><strong>Multi-provider auth.</strong> OpenRouter only. If you have a Claude Max subscription, a Codex CLI subscription, or local Ollama, you pay a third time to use them through llm-council. The $400/mo power user is a third-class citizen.</p>
+
+  <p><strong>A persistent audit log.</strong> The council answers your question, you read the output, the session disappears. There&rsquo;s no record of which LLM made which claim, no way to cite &ldquo;this finding was confirmed by Reviewer A and disputed by Reviewer B,&rdquo; no way to paste a signed transcript into a PR.</p>
+
+  <p><strong>Persistent specialists.</strong> Same models every time, configured in <code>config.py</code>. You can&rsquo;t say &ldquo;use <code>@security-specialist</code> on Gemini and <code>@perf-reviewer</code> on MiniMax for this one.&rdquo;</p>
+
+  <p><strong>Active maintenance.</strong> Karpathy said it himself.</p>
+
+  <h2>What ato adds</h2>
+
+  <p>The core command:</p>
+
+  <pre><code>ato review --against main \
+  --reviewer @security-specialist \
+  --reviewer @perf-reviewer \
+  --reviewer claude \
+  --reviewer minimax \
+  --lean \
+  --out review.md</code></pre>
+
+  <p>Each reviewer runs in the <strong>same session</strong> &mdash; reviewer #2 sees #1&rsquo;s findings via history replay, no re-pasting context. Function-calling tools (<code>read_file</code>, <code>grep</code>, <code>git_log</code>) let every LLM walk your actual repo and cite files at the line level. The audit log records every tool call by every reviewer, so the GUI can badge a reply <code>verified via 3 tool calls</code> versus <code>prompt-only</code>.</p>
+
+  <p>Agents are specialists you define once and compose:</p>
+
+  <pre><code>ato agents create --slug security-specialist --runtime claude \
+  --system-prompt "You are a senior security reviewer. Prioritize auth changes,
+input validation, secrets in logs, crypto correctness. Cite file:line."
+
+ato agents create --slug perf-reviewer --runtime minimax \
+  --system-prompt "You're a perf reviewer. Flag N+1 patterns, hot-path allocations,
+sync I/O in async contexts. Cite file:line."</code></pre>
+
+  <p>Then <code>ato review --reviewer @security-specialist --reviewer @perf-reviewer</code> runs both in one session against your PR. They see each other&rsquo;s findings. You moderate. The audit log captures who did what.</p>
+
+  <h2>We tested this on ato&rsquo;s own positioning</h2>
+
+  <p>When it came time to pick a new headline for ato, we did the dogfooding move: opened a session, dropped Gemini and MiniMax into it, and made them argue about ato&rsquo;s positioning for five rounds with the human as moderator. They disagreed in interesting ways &mdash; Gemini argued use-case-first (citing Crossing the Chasm), MiniMax argued primitive-first (citing category creation). We pushed back on both. Round 5 they converged on a hybrid.</p>
+
+  <p>Session id: <code>1379b231-9d2b-4e06-a974-e9eb9217fbb6</code>. Recorded as live demo.</p>
+
+  <p>The headline currently shipping:</p>
+
+  <blockquote>
+    <p><strong>ato is your local war room for humans and LLMs: decide together, call real tools, walk out with a signed audit trail.</strong></p>
+  </blockquote>
+
+  <p>That sentence was produced by the product, on camera, in 45 minutes of structured debate. We find it hard to fake that.</p>
+
+  <h2>Honest tradeoffs vs. llm-council</h2>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0;">
+    <thead>
+      <tr style="border-bottom: 1px solid var(--border);">
+        <th style="text-align:left; padding: 8px 12px;">&nbsp;</th>
+        <th style="text-align:left; padding: 8px 12px;">llm-council</th>
+        <th style="text-align:left; padding: 8px 12px;">ato</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 8px 12px;">Install</td><td style="padding: 8px 12px;"><code>uv sync &amp;&amp; npm install</code></td><td style="padding: 8px 12px;">Tauri desktop + CLI (heavier)</td></tr>
+      <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 8px 12px;">Vendor lock</td><td style="padding: 8px 12px;">OpenRouter only</td><td style="padding: 8px 12px;">20+ runtimes, CLI subs supported</td></tr>
+      <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 8px 12px;">Tool calls</td><td style="padding: 8px 12px;">None</td><td style="padding: 8px 12px;"><code>read_file</code> / <code>grep</code> / <code>git_log</code></td></tr>
+      <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 8px 12px;">Audit trail</td><td style="padding: 8px 12px;">JSON dump</td><td style="padding: 8px 12px;">SQLite session, per-turn tool-call log</td></tr>
+      <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 8px 12px;">Anonymized cross-review</td><td style="padding: 8px 12px;">Yes</td><td style="padding: 8px 12px;">No &mdash; identity is the receipt</td></tr>
+      <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 8px 12px;">Chairman synthesizes</td><td style="padding: 8px 12px;">Yes</td><td style="padding: 8px 12px;">Human moderates (CLI flag coming)</td></tr>
+      <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 8px 12px;">ChatGPT-like web UI</td><td style="padding: 8px 12px;">Yes</td><td style="padding: 8px 12px;">Desktop GUI + CLI + MCP</td></tr>
+      <tr style="border-bottom: 1px solid var(--border);"><td style="padding: 8px 12px;">License</td><td style="padding: 8px 12px;">Unlicensed</td><td style="padding: 8px 12px;">MIT</td></tr>
+      <tr><td style="padding: 8px 12px;">Maintained</td><td style="padding: 8px 12px;">Explicitly no</td><td style="padding: 8px 12px;">Active, daily ships</td></tr>
+    </tbody>
+  </table>
+
+  <p>A few of those are real losses to call out:</p>
+
+  <p><strong>Higher install friction.</strong> A <code>docker-compose</code> for the &ldquo;just let me try it&rdquo; persona is on the way.</p>
+
+  <p><strong>No Chairman pattern (yet).</strong> Karpathy&rsquo;s design synthesizes the council&rsquo;s verdict for you. ato puts the human in the chairman seat &mdash; intentional, because the high-touch part is the feature for power users who want product input between turns. An opt-in <code>--chairman &lt;runtime&gt;</code> flag is on the roadmap for the audience that wants a pre-chewed verdict.</p>
+
+  <p><strong>Less polished web UI.</strong> We&rsquo;re not competing on the ChatGPT-clone vector. The CLI + GUI + MCP triad is the wedge.</p>
+
+  <h2>How to try it</h2>
+
+  <pre><code>brew tap WillNigri/ato
+brew install --cask ato</code></pre>
+
+  <p>Or grab the DMG / AppImage / Windows installer directly from <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases" target="_blank" rel="noopener">Releases</a>.</p>
+
+  <p>Bring your own API keys, or piggyback on a CLI subscription you already have (Claude Code, Codex CLI, Gemini CLI, OpenClaw, Hermes, Ollama). OpenRouter is supported, not required.</p>
+
+  <h2>A thank-you and an open invitation</h2>
+
+  <p><strong>@karpathy</strong> &mdash; thanks for shipping the primitive. Two of the things ato does differently were directly motivated by Thiago&rsquo;s first read of your repo on WhatsApp last weekend (&ldquo;multi-provider so my Claude Max isn&rsquo;t wasted,&rdquo; &ldquo;tool calls so the council can actually read my code&rdquo;). Happy to remove or restructure the framing if you&rsquo;d prefer a different reference; otherwise consider this the maintained-fork-in-spirit. Either way, the council pattern was the unlock.</p>
+
+  <p>If you starred llm-council and have been waiting for someone to actually finish it &mdash; this is us trying. Bug reports and feedback are very welcome; the <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/issues" target="_blank" rel="noopener">issues tab</a> is wide open.</p>
+
+  <hr>
+
+  <div class="post-footer-cta">
+    <h3>Try the council pattern with tool calls</h3>
+    <p>ato is free, open source (MIT), local-first. Bring your own LLM keys or use the CLI subscriptions you already have. Multi-LLM sessions with read_file / grep / git_log tool access, persistent specialist agents, and an audit trail that lands as markdown in your PR description.</p>
+    <a href="/#download" class="btn">Download &rarr;</a>
+  </div>
+
+  <div class="related-posts">
+    <h3>More on this</h3>
+    <ul>
+      <li><a href="/posts/multi-llm-workflows.html">Why is multi-LLM development still so painful in 2026?</a></li>
+      <li><a href="/posts/ai-agent-observability.html">What&rsquo;s missing when traditional monitoring meets AI agents</a></li>
+      <li><a href="/posts/context-engineering.html">What separates production AI agents from demos?</a></li>
+    </ul>
+  </div>
+
+  <p style="margin-top: 56px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--text-muted);">&mdash; Beatriz Nigri</p>
+</article>
+
+</body>
+</html>
