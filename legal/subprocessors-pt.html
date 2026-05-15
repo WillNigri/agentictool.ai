@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Operadores — ATO</title>
+<meta name="description" content="Lista de operadores da ATO. Toda entidade que trata dados pessoais em nome da ATO, com finalidade, localização e link do DPA.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agentictool.ai/legal/subprocessors-pt.html">
+<link rel="alternate" hreflang="en" href="https://agentictool.ai/legal/subprocessors.html">
+<link rel="alternate" hreflang="pt-BR" href="https://agentictool.ai/legal/subprocessors-pt.html">
+<link rel="alternate" hreflang="es" href="https://agentictool.ai/legal/subprocessors-es.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/index-pt.html" class="post-back">&larr; agentictool.ai</a>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;">
+      <a href="/legal/subprocessors.html" style="color:var(--text-muted);">EN</a> /
+      <a href="/legal/subprocessors-pt.html" style="color:var(--accent-cyan);font-weight:700;">PT</a> /
+      <a href="/legal/subprocessors-es.html" style="color:var(--text-muted);">ES</a>
+    </span>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">Última atualização: 15/05/2026 &middot; Versão 1.0</div>
+
+  <h1>Operadores</h1>
+
+  <p>Esta página lista todo serviço de terceiros que trata dados pessoais em nome da ATO para que possamos entregar o Serviço. É publicada e mantida em conformidade com as expectativas de transparência do GDPR art. 28 e da LGPD art. 39.</p>
+
+  <p>Para cada entrada abaixo identificamos o operador, a finalidade, as categorias de dados pessoais compartilhados, a localização do tratamento e o respectivo Data Processing Agreement (DPA) ou contrato equivalente.</p>
+
+  <p>Se você quiser ser notificado de mudanças nesta lista antes que elas entrem em vigor, escreva para <a href="mailto:will@nigri.io?subject=Notifica%C3%A7%C3%B5es%20de%20operadores">will@nigri.io</a> com o assunto &ldquo;Notificações de operadores&rdquo;. Buscamos dar pelo menos 30 dias de antecedência sobre adições que afetam usuários da UE/EEE/Reino Unido ou do Brasil.</p>
+
+  <h2>1. Operadores ativos</h2>
+
+  <h3>Infraestrutura</h3>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead><tr style="border-bottom: 1px solid rgba(255,255,255,0.12);"><th style="text-align:left; padding: 8px 12px;">Operador</th><th style="text-align:left; padding: 8px 12px;">Finalidade</th><th style="text-align:left; padding: 8px 12px;">Dados compartilhados</th><th style="text-align:left; padding: 8px 12px;">Localização</th><th style="text-align:left; padding: 8px 12px;">DPA</th></tr></thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Railway Corp.</strong></td>
+        <td style="padding:8px 12px;">Hospedagem da aplicação (compute, PostgreSQL, armazenamento de objetos) para o backend ato-cloud</td>
+        <td style="padding:8px 12px;">Todos os dados pessoais server-side: e-mail, nome, hash de senha, metadados de sessão, traces sincronizados do desktop</td>
+        <td style="padding:8px 12px;">Estados Unidos como primário</td>
+        <td style="padding:8px 12px;"><a href="https://railway.com/legal/dpa" target="_blank" rel="noopener">Link</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Comunicações</h3>
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead><tr style="border-bottom: 1px solid rgba(255,255,255,0.12);"><th style="text-align:left; padding: 8px 12px;">Operador</th><th style="text-align:left; padding: 8px 12px;">Finalidade</th><th style="text-align:left; padding: 8px 12px;">Dados compartilhados</th><th style="text-align:left; padding: 8px 12px;">Localização</th><th style="text-align:left; padding: 8px 12px;">DPA</th></tr></thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Provedor de e-mail transacional</strong> (a ser definido; esperado: Postmark ou SendGrid)</td>
+        <td style="padding:8px 12px;">Verificação de e-mail, recuperação de senha, alertas de segurança, notificações de conta, respostas a solicitações de titular</td>
+        <td style="padding:8px 12px;">E-mail, nome, conteúdo da mensagem</td>
+        <td style="padding:8px 12px;">EUA ou UE (conforme fornecedor escolhido)</td>
+        <td style="padding:8px 12px;">A definir na seleção</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Provedores de LLM (pass-through BYOK)</h3>
+  <p>Quando você envia prompts via ATO a um destes provedores usando sua própria chave de API ou sua própria assinatura de CLI, a ATO atua como pass-through transitório. Você é o controlador dos dados enviados; o provedor é seu operador conforme o próprio DPA e termos. A ATO não armazena o conteúdo do prompt ou da resposta em nossos servidores, a menos que você habilite separadamente a sincronização de traces.</p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead><tr style="border-bottom: 1px solid rgba(255,255,255,0.12);"><th style="text-align:left; padding: 8px 12px;">Provedor</th><th style="text-align:left; padding: 8px 12px;">Papel típico</th><th style="text-align:left; padding: 8px 12px;">DPA / Privacidade</th></tr></thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Anthropic, PBC</strong> (Claude / Claude Code)</td>
+        <td style="padding:8px 12px;">Seu operador (BYOK / assinatura CLI)</td>
+        <td style="padding:8px 12px;"><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Privacidade</a> &middot; <a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Termos comerciais</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>OpenAI, L.L.C.</strong> (GPT / Codex)</td>
+        <td style="padding:8px 12px;">Seu operador (BYOK / assinatura CLI)</td>
+        <td style="padding:8px 12px;"><a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">Privacidade</a> &middot; <a href="https://openai.com/policies/eu-data-processing-addendum" target="_blank" rel="noopener">DPA</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Google LLC</strong> (Gemini / Gemini CLI)</td>
+        <td style="padding:8px 12px;">Seu operador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://cloud.google.com/terms/data-processing-addendum" target="_blank" rel="noopener">DPA</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>MiniMax</strong></td>
+        <td style="padding:8px 12px;">Seu operador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://intl.minimaxi.com/privacy-policy" target="_blank" rel="noopener">Privacidade</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>xAI</strong> (Grok)</td>
+        <td style="padding:8px 12px;">Seu operador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://x.ai/legal/privacy-policy" target="_blank" rel="noopener">Privacidade</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>DeepSeek</strong></td>
+        <td style="padding:8px 12px;">Seu operador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://chat.deepseek.com/downloads/DeepSeek%20Privacy%20Policy.html" target="_blank" rel="noopener">Privacidade</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Alibaba Cloud</strong> (Qwen via DashScope)</td>
+        <td style="padding:8px 12px;">Seu operador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://www.alibabacloud.com/help/en/legal/" target="_blank" rel="noopener">Legal</a></td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;"><strong>OpenRouter</strong></td>
+        <td style="padding:8px 12px;">Seu operador (BYOK) &mdash; gateway multi-provedor</td>
+        <td style="padding:8px 12px;"><a href="https://openrouter.ai/privacy" target="_blank" rel="noopener">Privacidade</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Se você configurar provedores de LLM adicionais na ATO que não estão listados acima, confirme diretamente com esse provedor que os termos dele permitem o uso pretendido.</p>
+
+  <h2>2. Sub-operadores</h2>
+
+  <p>Nossos operadores podem, por sua vez, contratar outros operadores (sub-operadores). Quando exigido por seus respectivos DPAs, eles mantêm suas próprias listas públicas de sub-operadores.</p>
+
+  <h2>3. Operadores planejados (ainda não ativos)</h2>
+
+  <p>Os seguintes estão na nossa roadmap. Nenhum está tratando dados de usuário ainda:</p>
+  <ul>
+    <li><strong>Stripe, Inc.</strong> &mdash; processamento de pagamentos, quando os planos pagos forem lançados.</li>
+    <li><strong>Sentry, Inc.</strong> &mdash; rastreamento de erros, quando adicionarmos monitoramento de erros server-side ou client-side. Residência de dados na UE configurada por padrão para usuários da UE.</li>
+    <li><strong>Analytics privacy-friendly</strong> &mdash; se adicionarmos analytics, a preferência atual é Plausible Analytics OÜ (hospedado na UE, sem cookies).</li>
+  </ul>
+
+  <p>Cada um destes será adicionado à seção &ldquo;Ativos&rdquo; acima quando começar a tratar dados, após pelo menos 30 dias de aviso prévio aos assinantes da mudança.</p>
+
+  <h2>4. Como ser notificado de mudanças</h2>
+
+  <p>Envie e-mail para <a href="mailto:will@nigri.io?subject=Notifica%C3%A7%C3%B5es%20de%20operadores">will@nigri.io</a> com o assunto &ldquo;Notificações de operadores&rdquo; para receber aviso prévio de adições ou alterações materiais.</p>
+
+  <h2>5. Contato</h2>
+
+  <p>Perguntas sobre um operador específico ou sobre seus direitos relativos a transferências: <a href="mailto:will@nigri.io">will@nigri.io</a>.</p>
+
+  <p>Ver também: <a href="/legal/privacy-pt.html">Política de Privacidade</a> &middot; <a href="/legal/terms-pt.html">Termos de Uso</a> &middot; <a href="/legal/cookies-pt.html">Política de Cookies</a> &middot; <a href="/legal/data-request.html">Solicitar acesso aos dados</a></p>
+
+</article>
+
+</body>
+</html>

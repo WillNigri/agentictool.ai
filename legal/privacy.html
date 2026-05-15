@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Privacy Policy — ATO</title>
+<meta name="description" content="ATO Privacy Policy. How we collect, use, share, and protect personal data. Your rights under LGPD, GDPR, and US state privacy laws. Local-first by design.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agentictool.ai/legal/privacy.html">
+<link rel="alternate" hreflang="en" href="https://agentictool.ai/legal/privacy.html">
+<link rel="alternate" hreflang="pt-BR" href="https://agentictool.ai/legal/privacy-pt.html">
+<link rel="alternate" hreflang="es" href="https://agentictool.ai/legal/privacy-es.html">
+<link rel="alternate" hreflang="x-default" href="https://agentictool.ai/legal/privacy.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/legal/privacy-pt.html" class="post-cta">PT-BR</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">Effective: 2026-05-15 &middot; Version 1.0</div>
+
+  <h1>Privacy Policy</h1>
+
+  <p>This Privacy Policy explains how Agentic Tool Optimization (&ldquo;<strong>ATO</strong>,&rdquo; &ldquo;<strong>we</strong>,&rdquo; &ldquo;<strong>us</strong>,&rdquo; or &ldquo;<strong>our</strong>&rdquo;) collects, uses, shares, retains, and protects personal data when you visit <a href="https://agentictool.ai">agentictool.ai</a>, install the open-source ATO desktop application, or sign up for an ATO cloud account.</p>
+
+  <p>ATO is local-first by design. Most of what the product does happens on your own machine, in a SQLite database at <code>~/.ato/local.db</code>. We only see data when you choose to sync to the optional cloud service. This document explains that distinction in detail.</p>
+
+  <p>We comply with the General Data Protection Regulation (GDPR, Regulation (EU) 2016/679 and the UK GDPR), the Brazilian General Data Protection Law (Lei Geral de Proteção de Dados, Lei nº 13.709/2018, or &ldquo;LGPD&rdquo;), the California Consumer Privacy Act / California Privacy Rights Act (CCPA/CPRA), and the privacy laws of other US states where they apply.</p>
+
+  <h2>1. Who we are (the controller)</h2>
+
+  <p><strong>Controller:</strong> Guilherme Nigri, operating as the publisher of ATO and agentictool.ai.</p>
+  <p><strong>Privacy contact:</strong> <a href="mailto:will@nigri.io">will@nigri.io</a></p>
+  <p><strong>Postal contact:</strong> available on request at the email above.</p>
+
+  <p>We do not currently have a designated Data Protection Officer (DPO) or Encarregado de Tratamento de Dados Pessoais under LGPD Art.41, because our processing volume does not require one. The privacy contact above functions as our point of contact for all data-protection inquiries. We will appoint a formal DPO/Encarregado when processing scale requires it, and will update this Policy at that point.</p>
+
+  <h2>2. Plain-language summary</h2>
+
+  <ul>
+    <li><strong>The desktop app stores your data locally on your computer.</strong> We don&rsquo;t see it unless you sign in to the cloud and turn on sync.</li>
+    <li><strong>When you sign up</strong>, we collect your email, a hashed password, and your name. That&rsquo;s it for the account itself.</li>
+    <li><strong>When you use the product to dispatch prompts to AI providers</strong> like Anthropic, OpenAI, Google, or MiniMax, your prompts and any files the model reads via tool calls leave your machine and go to that provider. We do not store the prompt content on our servers unless you choose to sync traces.</li>
+    <li><strong>We do not use cookies, analytics, advertising trackers, or session replay on our website today.</strong> When we add any of those, this Policy will be updated and (where required) we will ask for your consent first.</li>
+    <li><strong>You have rights</strong> over your data: access, correction, deletion, export, and more. Section 11 explains how to exercise them.</li>
+  </ul>
+
+  <h2>3. What personal data we collect</h2>
+
+  <h3>3.1 Data you give us directly</h3>
+  <p>When you create an ATO cloud account, we collect:</p>
+  <ul>
+    <li><strong>Email address</strong> &mdash; used as your account identifier, for login, password reset, security notifications, and required service communications.</li>
+    <li><strong>Password</strong> &mdash; stored as a bcrypt hash with a cost factor of 12 or higher. We never see, store, or log your plain-text password.</li>
+    <li><strong>Display name</strong> &mdash; shown in the product UI; can be edited or removed.</li>
+    <li><strong>Avatar URL</strong> (optional) &mdash; if you choose to set one.</li>
+    <li><strong>Consent records</strong> &mdash; timestamp, version of the policy and terms you accepted, plus your separate (optional) marketing-communications consent.</li>
+  </ul>
+
+  <p>When you contact us by email or via our data-request form, we receive whatever you send us &mdash; typically your name, email, and the contents of your message.</p>
+
+  <h3>3.2 Data we generate when you use the cloud service</h3>
+  <ul>
+    <li><strong>Login attempts</strong> &mdash; email-lowercased, IP address, success/failure, reason code. Used to detect and throttle brute-force attacks. Retained for 90 days.</li>
+    <li><strong>Refresh tokens</strong> &mdash; hashed (not the raw token), expiry timestamp, revocation timestamp.</li>
+    <li><strong>Session metadata</strong> &mdash; when you sync sessions from the desktop, we receive token counts, model identifiers, timestamps, and aggregated cost figures. We do not store prompt or response content on our servers unless you explicitly enable trace sync.</li>
+    <li><strong>Usage records</strong> &mdash; per-request token usage for billing and analytics within your account.</li>
+    <li><strong>Agent traces, configuration changes, file-attribution snapshots, prompt summaries, pipeline traces, embed keys, mesh-relay records, provider-key references</strong> &mdash; populated only for users who opt into cloud sync of those specific features.</li>
+  </ul>
+
+  <h3>3.3 Data that stays on your machine</h3>
+  <p>The ATO desktop application stores all of the following on your computer and does not transmit it to us unless you turn on cloud sync:</p>
+  <ul>
+    <li>Dispatch history, replay history, full prompts and responses, agent definitions, chat threads, file-attribution snapshots, configuration change ledger, automation workflows, cron schedules</li>
+    <li>LLM API keys you supply (encrypted at rest within the local SQLite database)</li>
+    <li>Local backups of your configurations</li>
+  </ul>
+
+  <p>You are the controller of this local data. ATO is a tool you run on your machine; we never receive it.</p>
+
+  <h3>3.4 Data we do <em>not</em> currently collect</h3>
+  <ul>
+    <li>No website analytics, page-view trackers, or visitor identifiers</li>
+    <li>No error tracking or session replay</li>
+    <li>No marketing pixels, conversion APIs, or retargeting</li>
+    <li>No cookies, localStorage tracking, or fingerprinting on agentictool.ai (other than purely-essential storage your browser may use to remember language settings)</li>
+    <li>No payment information &mdash; ATO does not currently process payments</li>
+    <li>No children&rsquo;s data &mdash; the product is not directed to anyone under 18</li>
+  </ul>
+
+  <p>If we add any of these in the future, this Policy will be updated <strong>before</strong> the change takes effect, and where applicable we will ask for your consent (see Section 12).</p>
+
+  <h2>4. Why we process your data, and the legal basis</h2>
+
+  <p>Under GDPR Art.6 / LGPD Art.7, every processing activity must rest on a specific legal basis. We rely on the following:</p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.12);">
+        <th style="text-align:left; padding: 8px 12px;">Processing activity</th>
+        <th style="text-align:left; padding: 8px 12px;">Purpose</th>
+        <th style="text-align:left; padding: 8px 12px;">Legal basis</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Account creation and authentication</td><td style="padding:8px 12px;">Identify you, log you in, secure your account</td><td style="padding:8px 12px;">Contract execution (GDPR 6(1)(b) / LGPD 7(V))</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Security event logging (login attempts, IPs)</td><td style="padding:8px 12px;">Detect and prevent unauthorized access</td><td style="padding:8px 12px;">Legitimate interests in service security (GDPR 6(1)(f) / LGPD 7(IX))</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Sync of sessions, traces, configs (when enabled)</td><td style="padding:8px 12px;">Provide cross-device access to your own data</td><td style="padding:8px 12px;">Contract execution (GDPR 6(1)(b) / LGPD 7(V))</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Forwarding your prompts to LLM providers you select</td><td style="padding:8px 12px;">Deliver the multi-runtime dispatch feature you requested</td><td style="padding:8px 12px;">Contract execution (GDPR 6(1)(b) / LGPD 7(V)). For BYOK (bring-your-own-key) setups, you remain the controller of the relationship with the LLM provider; we act as a transient processor for the forwarding step.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Required service notifications (email verification, password reset, security alerts)</td><td style="padding:8px 12px;">Operate the service safely</td><td style="padding:8px 12px;">Contract execution + legal obligation (GDPR 6(1)(b)(c) / LGPD 7(V)(II))</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Marketing emails about ATO product updates</td><td style="padding:8px 12px;">Share product news with subscribers who opted in</td><td style="padding:8px 12px;">Explicit consent (GDPR 6(1)(a) / LGPD 7(I)). Separate opt-in at signup; withdrawable at any time.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Records-keeping required by Brazilian tax and commercial law</td><td style="padding:8px 12px;">Comply with retention obligations on fiscal records</td><td style="padding:8px 12px;">Legal obligation (GDPR 6(1)(c) / LGPD 7(II)). Applies once we begin billing.</td></tr>
+      <tr><td style="padding:8px 12px;">Responding to data subject requests, complaints, legal inquiries</td><td style="padding:8px 12px;">Comply with our duties to you and to authorities</td><td style="padding:8px 12px;">Legal obligation (GDPR 6(1)(c) / LGPD 7(II))</td></tr>
+    </tbody>
+  </table>
+
+  <p>We do not process sensitive personal data (special categories under GDPR Art.9 / dados pessoais sensíveis under LGPD Art.11) in the ordinary operation of the service. If we ever introduce a feature that processes such data, we will require explicit, separate consent under the higher standard those laws set.</p>
+
+  <h2>5. Who we share your data with (recipients and subprocessors)</h2>
+
+  <p>We share personal data only with parties that help us operate the service, and only to the extent necessary. We do not sell personal data. We do not share personal data with advertisers or data brokers.</p>
+
+  <p>Current recipients (subprocessors):</p>
+
+  <ul>
+    <li><strong>Railway Corp.</strong> &mdash; hosting provider for the ato-cloud backend (compute, PostgreSQL, file storage). Data processed: all server-side personal data. DPA: <a href="https://railway.com/legal/dpa" target="_blank" rel="noopener">railway.com/legal/dpa</a>. Location: United States primary, with regional options.</li>
+    <li><strong>Email delivery provider</strong> (currently being finalized; will be SendGrid, Postmark, or similar) &mdash; sends verification, password-reset, and notification emails. Data processed: your email address, your display name, the message contents.</li>
+    <li><strong>LLM providers you choose to dispatch to</strong> &mdash; when you send a prompt through ATO to Anthropic, OpenAI (including Codex), Google (Gemini), MiniMax, Grok, DeepSeek, Qwen, OpenRouter, or any other configured provider, the prompt content and any files the model reads via tool calls leave your machine and go to that provider. If you supply your own API key (BYOK), you are the controller and the provider is your processor; we are a transient pass-through. If you use a provider key supplied by ATO under a future paid tier, we are the controller of the dispatch and the provider is our subprocessor.</li>
+    <li><strong>Future payment processor</strong> (Stripe, expected): once paid tiers go live, billing data will flow to Stripe. PCI-sensitive data (card numbers) never reaches our servers; only billing metadata (subscription state, invoice IDs) is retained on our side.</li>
+  </ul>
+
+  <p>A current, up-to-date list of every subprocessor we use, with links to each DPA, is published at <a href="/legal/subprocessors.html">/legal/subprocessors.html</a>. We update that list when we add a subprocessor, and we will notify users of changes that affect EU/EEA/UK or Brazilian users with at least 30 days&rsquo; advance notice, except in emergencies.</p>
+
+  <h3>How our agreements with subprocessors work</h3>
+
+  <p>For subprocessors where ATO is the controller and the vendor is our processor (such as our hosting provider, email vendor, future payment processor, future error-tracking and analytics providers), the legal contract is the vendor&rsquo;s published Data Processing Agreement (DPA). We accept that DPA when we accept the vendor&rsquo;s Terms of Service at signup, and we maintain a dated copy of each DPA on file. The links on the Subprocessors page point to the version currently in force. We re-verify each DPA annually and replace our copy on file if the vendor publishes a material change.</p>
+
+  <p>For LLM providers used in BYOK (bring-your-own-key) mode &mdash; that is, when you provide your own API key or your own CLI subscription &mdash; you have a direct contractual relationship with that provider. The provider&rsquo;s Privacy Policy and Terms apply to your prompts and responses. ATO is not a party to that relationship and acts as a transient pass-through for the dispatch. The Subprocessors page lists each provider&rsquo;s Privacy Policy for your reference, not a DPA with ATO, because no DPA-with-ATO is the operative contract in that arrangement.</p>
+
+  <h2>6. International transfers</h2>
+
+  <p>ATO data is processed on infrastructure located in the United States and (depending on your runtime selections) in the regions where the LLM providers operate. For users in the EU/EEA, UK, or Brazil, this means your personal data may be transferred outside your home jurisdiction.</p>
+
+  <p>For transfers from the EU/EEA/UK to recipients in the US or other third countries, we rely on:</p>
+  <ul>
+    <li>The EU-US Data Privacy Framework adequacy decision where the recipient is self-certified (most major LLM providers participate);</li>
+    <li>Standard Contractual Clauses (SCCs) issued by the European Commission, where adequacy does not apply;</li>
+    <li>UK International Data Transfer Agreement (IDTA) or the UK Addendum to the SCCs for UK transfers.</li>
+  </ul>
+
+  <p>For transfers from Brazil to recipients abroad, we rely on the standard clauses approved by the Brazilian National Data Protection Authority (ANPD) under LGPD Art.33, or on the recipient&rsquo;s compliance with a regime ANPD has recognized.</p>
+
+  <p>Copies of the relevant transfer instruments are available on request to <a href="mailto:will@nigri.io">will@nigri.io</a>.</p>
+
+  <h2>7. How long we keep your data</h2>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead><tr style="border-bottom: 1px solid rgba(255,255,255,0.12);"><th style="text-align:left; padding: 8px 12px;">Data</th><th style="text-align:left; padding: 8px 12px;">Retention</th></tr></thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Account record (email, password hash, name)</td><td style="padding:8px 12px;">Until account deletion, plus a 30-day grace window in case of accidental deletion.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Sessions, usage records, traces, configs (synced to cloud)</td><td style="padding:8px 12px;">Until account deletion, or until you delete them individually via the product.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Login attempts and security audit logs</td><td style="padding:8px 12px;">90 days, then automatically deleted.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Refresh tokens</td><td style="padding:8px 12px;">Until expiry or revocation.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Consent records</td><td style="padding:8px 12px;">For the life of the account, plus 5 years after deletion (to demonstrate lawful basis if a dispute arises).</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Data subject request records</td><td style="padding:8px 12px;">5 years (to demonstrate compliance with rights requests).</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Fiscal records (once billing is live)</td><td style="padding:8px 12px;">5 years from the end of the relevant fiscal year (Brazilian law).</td></tr>
+      <tr><td style="padding:8px 12px;">Support email correspondence</td><td style="padding:8px 12px;">3 years after the last interaction, then deleted unless tied to an unresolved dispute.</td></tr>
+    </tbody>
+  </table>
+
+  <p>When a retention period ends, we delete or irreversibly anonymize the data.</p>
+
+  <h2>8. Security</h2>
+
+  <p>We use industry-standard measures to protect your data, including:</p>
+  <ul>
+    <li>Bcrypt password hashing with a work factor of 12+; we never store plaintext passwords.</li>
+    <li>TLS 1.2 or higher on all client-to-server connections.</li>
+    <li>Encrypted storage of secrets (API keys, refresh tokens, embed keys) at rest.</li>
+    <li>Parameterized SQL queries to prevent injection.</li>
+    <li>Zod-based input validation on every endpoint.</li>
+    <li>JWT authentication with rotation on every refresh.</li>
+    <li>Role-based access to admin endpoints.</li>
+    <li>Continuous monitoring of authentication anomalies.</li>
+  </ul>
+
+  <p>No system is impenetrable. If we discover a data breach affecting your personal data, we will notify you and the relevant supervisory authority (ANPD, your EU/EEA/UK supervisory authority, or applicable US state authority) in accordance with applicable law &mdash; GDPR requires us to notify the supervisory authority within 72 hours of becoming aware of the breach where feasible, and we follow that timeline regardless of which jurisdiction applies.</p>
+
+  <h2>9. Cookies and similar technologies</h2>
+
+  <p><strong>We do not set cookies or use localStorage tracking on agentictool.ai today.</strong> No analytics. No advertising trackers. No fingerprinting. No session replay. No third-party scripts that set storage on your browser.</p>
+
+  <p>When you sign in to the cloud product or the desktop app, we issue an authentication token (JWT) that is stored in your client&rsquo;s memory or local storage. This is strictly necessary for the product to function and is not used for tracking.</p>
+
+  <p>If we add analytics, advertising, error tracking, or any other technology that sets cookies or otherwise tracks you in the future, we will:</p>
+  <ul>
+    <li>Update this Policy and the dedicated Cookie Notice (<a href="/legal/cookies.html">/legal/cookies.html</a>);</li>
+    <li>Display a cookie consent banner that lets you accept, reject, or customize your choices, with reject and customize given equal prominence to accept;</li>
+    <li>Honor the Global Privacy Control (GPC) signal for users in jurisdictions where it is recognized;</li>
+    <li>Not fire any non-essential script before you make a choice.</li>
+  </ul>
+
+  <h2>10. Children</h2>
+
+  <p>ATO is a tool for adult developers and is not directed at anyone under 18. We do not knowingly collect personal data from anyone under 13 in jurisdictions where that age is the threshold (e.g., COPPA in the United States), nor from anyone under 13 in Brazil (LGPD Art.14), nor from anyone under 16 without parental consent in the EU/EEA where the local age of digital consent is 16. The Terms of Service require all users to be 18 or older.</p>
+
+  <p>If we learn we have collected personal data from a child below the applicable threshold, we will delete it. Parents and legal guardians who believe their child has provided personal data to us should contact <a href="mailto:will@nigri.io">will@nigri.io</a>.</p>
+
+  <h2>11. Your rights</h2>
+
+  <p>You have the following rights over your personal data. Some are framed differently under LGPD, GDPR, and US state laws, but they overlap substantially; we honor each on the most generous interpretation.</p>
+
+  <ul>
+    <li><strong>Confirmation and access</strong> &mdash; you can ask whether we process your personal data and request a copy of that data.</li>
+    <li><strong>Correction</strong> &mdash; you can ask us to correct inaccurate or incomplete data.</li>
+    <li><strong>Deletion / right to be forgotten</strong> &mdash; you can ask us to delete your personal data. We will do so within 30 days, except where retention is required by law (e.g., fiscal records once billing is live, or audit logs of the deletion request itself).</li>
+    <li><strong>Portability</strong> &mdash; you can ask us for a copy of your personal data in a structured, commonly used, machine-readable format (we provide JSON).</li>
+    <li><strong>Restriction of processing</strong> (GDPR) &mdash; you can ask us to limit processing in certain circumstances.</li>
+    <li><strong>Objection</strong> (GDPR / LGPD) &mdash; you can object to processing based on legitimate interests; we will stop unless we demonstrate compelling overriding grounds.</li>
+    <li><strong>Withdrawal of consent</strong> &mdash; for processing based on consent (e.g., marketing emails), you can withdraw consent at any time.</li>
+    <li><strong>Opt out of sale or sharing</strong> (CCPA/CPRA, VCDPA, CPA, CTDPA, UCPA) &mdash; we do not sell or share personal data for cross-context behavioral advertising, but if that ever changes you may opt out.</li>
+    <li><strong>Non-discrimination</strong> &mdash; we will not deny service, charge different prices, or provide different quality because you exercised any of these rights.</li>
+    <li><strong>Information about how decisions are made</strong> &mdash; we do not make automated decisions that produce legal or similarly significant effects about you.</li>
+  </ul>
+
+  <h3>How to exercise your rights</h3>
+
+  <p>If you have an ATO cloud account, the easiest path is in-product: <strong>Settings → Privacy</strong> exposes data export, account deletion, and consent management directly.</p>
+
+  <p>Otherwise, submit a request at <a href="/legal/data-request.html">/legal/data-request.html</a> or by email to <a href="mailto:will@nigri.io">will@nigri.io</a>. We will respond within 30 days of receiving a verifiable request, in accordance with GDPR Art.12, LGPD Art.19, and applicable US state laws.</p>
+
+  <p>If you believe we have not handled your data correctly, you have the right to lodge a complaint with:</p>
+  <ul>
+    <li><strong>Brazil:</strong> Autoridade Nacional de Proteção de Dados (ANPD) &mdash; <a href="https://www.gov.br/anpd" target="_blank" rel="noopener">gov.br/anpd</a></li>
+    <li><strong>EU/EEA:</strong> your local supervisory authority (list at <a href="https://edpb.europa.eu/about-edpb/about-edpb/members_en" target="_blank" rel="noopener">edpb.europa.eu</a>)</li>
+    <li><strong>UK:</strong> Information Commissioner&rsquo;s Office (ICO) &mdash; <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a></li>
+    <li><strong>California:</strong> California Privacy Protection Agency &mdash; <a href="https://cppa.ca.gov" target="_blank" rel="noopener">cppa.ca.gov</a></li>
+    <li><strong>Other US states:</strong> your state Attorney General&rsquo;s office</li>
+  </ul>
+
+  <p>We would prefer you contact us first so we can address your concern directly.</p>
+
+  <h2>12. Changes to this Policy</h2>
+
+  <p>We may update this Policy from time to time. When we make material changes, we will:</p>
+  <ul>
+    <li>Update the &ldquo;Effective&rdquo; date and version number at the top;</li>
+    <li>Notify registered users by email at least 30 days before the change takes effect, except where the change reduces our obligations or is required by law to take immediate effect;</li>
+    <li>For changes that broaden the scope of processing, request renewed consent where the original processing was consent-based.</li>
+  </ul>
+
+  <p>Prior versions of this Policy are available on request.</p>
+
+  <h2>13. Contact</h2>
+
+  <p><strong>Privacy contact:</strong> <a href="mailto:will@nigri.io">will@nigri.io</a></p>
+  <p><strong>Data Subject Request form:</strong> <a href="/legal/data-request.html">/legal/data-request.html</a></p>
+  <p><strong>Subprocessor list:</strong> <a href="/legal/subprocessors.html">/legal/subprocessors.html</a></p>
+  <p><strong>Terms of Service:</strong> <a href="/legal/terms.html">/legal/terms.html</a></p>
+  <p><strong>Cookie Notice:</strong> <a href="/legal/cookies.html">/legal/cookies.html</a></p>
+
+</article>
+
+</body>
+</html>

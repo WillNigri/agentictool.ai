@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solicitar acceso a tus datos — ATO</title>
+<meta name="description" content="Envía una solicitud de titular a ATO: acceso, eliminación, corrección, portabilidad u otros derechos bajo LGPD, GDPR y leyes de privacidad de los EE.UU.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agentictool.ai/legal/data-request-es.html">
+<link rel="alternate" hreflang="en" href="https://agentictool.ai/legal/data-request.html">
+<link rel="alternate" hreflang="pt-BR" href="https://agentictool.ai/legal/data-request-pt.html">
+<link rel="alternate" hreflang="es" href="https://agentictool.ai/legal/data-request-es.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+<style>
+  .form-grid { display: grid; gap: 16px; margin: 24px 0; }
+  .form-row { display: flex; flex-direction: column; gap: 6px; }
+  .form-row label { font-size: 13px; color: var(--text-secondary); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; text-transform: uppercase; }
+  .form-row input, .form-row select, .form-row textarea {
+    background: var(--bg-elev); color: var(--text-primary); border: 1px solid var(--border);
+    border-radius: 4px; padding: 10px 12px; font-family: inherit; font-size: 1rem;
+  }
+  .form-row input:focus, .form-row select:focus, .form-row textarea:focus { outline: none; border-color: var(--accent-cyan); }
+  .form-row textarea { min-height: 120px; resize: vertical; }
+  .form-submit {
+    background: var(--accent-cyan); color: var(--bg-dark); border: none; padding: 14px 28px;
+    font-family: 'Space Grotesk', sans-serif; font-weight: 600; font-size: 1rem; cursor: pointer; align-self: flex-start; border-radius: 4px;
+  }
+  .form-submit:hover { transform: translateY(-1px); }
+  .form-note { font-size: 0.92rem; color: var(--text-muted); margin-top: 8px; }
+  .form-checkbox { display: flex; gap: 10px; align-items: flex-start; margin-top: 8px; }
+  .form-checkbox input { margin-top: 4px; }
+  .form-checkbox label { font-size: 0.95rem; color: var(--text-secondary); text-transform: none; letter-spacing: 0; font-family: inherit; }
+</style>
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/index-es.html" class="post-back">&larr; agentictool.ai</a>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;">
+      <a href="/legal/data-request.html" style="color:var(--text-muted);">EN</a> /
+      <a href="/legal/data-request-pt.html" style="color:var(--text-muted);">PT</a> /
+      <a href="/legal/data-request-es.html" style="color:var(--accent-cyan);font-weight:700;">ES</a>
+    </span>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">Formulario &middot; Solicitud de Titular</div>
+
+  <h1>Solicitar acceso a tus datos</h1>
+
+  <p>Usa este formulario para ejercer tus derechos bajo la LGPD (Brasil), GDPR (UE/Reino Unido), CCPA/CPRA (California) o cualquier otra ley de privacidad aplicable. Responderemos en hasta 30 días desde la recepción de una solicitud verificable, salvo cuando la ley permita un plazo mayor.</p>
+
+  <p><strong>Si tienes una cuenta en la nube de ATO,</strong> el camino más rápido es dentro del producto: <strong>Configuración → Privacidad</strong> expone exportación, eliminación de cuenta y gestión de consentimientos directamente. El formulario de abajo es para usuarios sin cuenta o para solicitudes que requieren revisión del operador.</p>
+
+  <h2>Qué puedes solicitar</h2>
+
+  <ul>
+    <li><strong>Acceso</strong> &mdash; confirmar si tenemos datos personales sobre ti y recibir una copia.</li>
+    <li><strong>Exportación / portabilidad</strong> &mdash; recibir tus datos en formato estructurado y legible por máquina (JSON).</li>
+    <li><strong>Corrección</strong> &mdash; corregir información inexacta o incompleta.</li>
+    <li><strong>Eliminación</strong> &mdash; eliminar tu cuenta y datos asociados, sujeto a requisitos de retención legal.</li>
+    <li><strong>Restricción</strong> (GDPR) &mdash; limitar nuestro procesamiento de tus datos en ciertas circunstancias.</li>
+    <li><strong>Oposición</strong> &mdash; oponerte al procesamiento basado en intereses legítimos.</li>
+    <li><strong>Información sobre compartir</strong> &mdash; saber con quién compartimos tus datos.</li>
+    <li><strong>Retirar consentimiento</strong> &mdash; revocar consentimiento previamente concedido (por ejemplo, correos de marketing).</li>
+    <li><strong>Opt-out de venta o compartir</strong> (CCPA/CPRA) &mdash; actualmente no vendemos ni compartimos, pero puedes registrar esta solicitud de todos modos.</li>
+  </ul>
+
+  <h2>El formulario</h2>
+
+  <p class="form-note">Este formulario abre un correo a <a href="mailto:will@nigri.io">will@nigri.io</a> con tu solicitud pre-llenada. Responderemos desde la misma dirección en hasta 30 días. Si prefieres escribir el correo directamente, envíalo al mismo destino con los detalles de abajo.</p>
+
+  <form id="dsr-form" class="form-grid" onsubmit="return submitDsr(event);">
+    <div class="form-row">
+      <label for="dsr-name">Tu nombre completo</label>
+      <input type="text" id="dsr-name" name="name" required autocomplete="name">
+    </div>
+
+    <div class="form-row">
+      <label for="dsr-email">Tu dirección de correo electrónico</label>
+      <input type="email" id="dsr-email" name="email" required autocomplete="email">
+      <span class="form-note">Si tienes cuenta en ATO, usa el correo de la cuenta para que podamos verificar tu identidad.</span>
+    </div>
+
+    <div class="form-row">
+      <label for="dsr-country">País de residencia</label>
+      <input type="text" id="dsr-country" name="country" required autocomplete="country-name">
+      <span class="form-note">Ayuda a identificar qué ley de privacidad gobierna principalmente tu solicitud.</span>
+    </div>
+
+    <div class="form-row">
+      <label for="dsr-kind">Tipo de solicitud</label>
+      <select id="dsr-kind" name="kind" required>
+        <option value="">Selecciona…</option>
+        <option value="access">Acceso — confirmar y copiar mis datos</option>
+        <option value="export">Exportación / portabilidad — dame una copia en JSON</option>
+        <option value="correct">Corrección — arreglar datos inexactos</option>
+        <option value="delete">Eliminación — eliminar mi cuenta y datos</option>
+        <option value="restrict">Restricción — limitar el procesamiento</option>
+        <option value="object">Oposición — parar procesamiento por interés legítimo</option>
+        <option value="info_sharing">Información sobre compartir</option>
+        <option value="withdraw_consent">Retirar consentimiento (ej.: marketing)</option>
+        <option value="opt_out_sale">Opt-out de venta o compartir (CCPA)</option>
+        <option value="other">Otro (describir abajo)</option>
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label for="dsr-details">Detalles</label>
+      <textarea id="dsr-details" name="details" placeholder="Cualquier información que ayude a identificar los registros o procesar la solicitud. Para correcciones, indica qué campo y el nuevo valor."></textarea>
+    </div>
+
+    <div class="form-row">
+      <label for="dsr-on-behalf">¿Estás actuando en nombre de otra persona?</label>
+      <select id="dsr-on-behalf" name="on_behalf">
+        <option value="no">No, son mis propios datos</option>
+        <option value="agent">Sí, soy agente autorizado</option>
+        <option value="parent">Sí, como padre/tutor de un menor</option>
+      </select>
+    </div>
+
+    <div class="form-checkbox">
+      <input type="checkbox" id="dsr-truthful" name="truthful" required>
+      <label for="dsr-truthful">Confirmo que la información que proporcioné es verdadera a mi mejor saber, y entiendo que ATO puede pedir verificación de mi identidad antes de procesar la solicitud.</label>
+    </div>
+
+    <button type="submit" class="form-submit">Enviar solicitud</button>
+
+    <p class="form-note">Al enviar, también reconoces nuestra <a href="/legal/privacy-es.html">Política de Privacidad</a>. La envío en sí se procesa bajo la base legal &ldquo;obligación legal&rdquo; (GDPR Art.6(1)(c) / LGPD Art.7(II)) — atender tus solicitudes de derechos es obligatorio, independientemente del consentimiento que aplique a otros procesamientos.</p>
+  </form>
+
+</article>
+
+<script>
+function submitDsr(e) {
+  e.preventDefault();
+  var name = document.getElementById('dsr-name').value;
+  var email = document.getElementById('dsr-email').value;
+  var country = document.getElementById('dsr-country').value;
+  var kind = document.getElementById('dsr-kind').value;
+  var details = document.getElementById('dsr-details').value;
+  var onBehalf = document.getElementById('dsr-on-behalf').value;
+
+  var subject = encodeURIComponent('Solicitud de Titular — ' + kind);
+  var body = encodeURIComponent(
+    'Nombre: ' + name + '\n' +
+    'Correo: ' + email + '\n' +
+    'País de residencia: ' + country + '\n' +
+    'Tipo de solicitud: ' + kind + '\n' +
+    'Actuando en nombre de: ' + onBehalf + '\n\n' +
+    'Detalles:\n' + details + '\n\n' +
+    '---\n' +
+    'Enviado vía agentictool.ai/legal/data-request-es.html en ' + new Date().toISOString()
+  );
+
+  window.location.href = 'mailto:will@nigri.io?subject=' + subject + '&body=' + body;
+  return false;
+}
+</script>
+
+</body>
+</html>

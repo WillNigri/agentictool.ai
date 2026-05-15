@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sub-procesadores — ATO</title>
+<meta name="description" content="Lista de sub-procesadores de ATO. Cada entidad que procesa datos personales en nombre de ATO, con propósito, ubicación y enlace al DPA.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agentictool.ai/legal/subprocessors-es.html">
+<link rel="alternate" hreflang="en" href="https://agentictool.ai/legal/subprocessors.html">
+<link rel="alternate" hreflang="pt-BR" href="https://agentictool.ai/legal/subprocessors-pt.html">
+<link rel="alternate" hreflang="es" href="https://agentictool.ai/legal/subprocessors-es.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/index-es.html" class="post-back">&larr; agentictool.ai</a>
+    <span style="font-family:'JetBrains Mono',monospace;font-size:11px;">
+      <a href="/legal/subprocessors.html" style="color:var(--text-muted);">EN</a> /
+      <a href="/legal/subprocessors-pt.html" style="color:var(--text-muted);">PT</a> /
+      <a href="/legal/subprocessors-es.html" style="color:var(--accent-cyan);font-weight:700;">ES</a>
+    </span>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">Última actualización: 15/05/2026 &middot; Versión 1.0</div>
+
+  <h1>Sub-procesadores</h1>
+
+  <p>Esta página lista cada servicio de terceros que procesa datos personales en nombre de ATO para que podamos entregar el Servicio. Se publica y mantiene conforme a las expectativas de transparencia del GDPR art. 28 y la LGPD art. 39.</p>
+
+  <p>Para cada entrada a continuación identificamos al sub-procesador, el propósito, las categorías de datos personales compartidos, la ubicación del procesamiento y el respectivo Data Processing Agreement (DPA) o contrato equivalente.</p>
+
+  <p>Si deseas ser notificado de cambios en esta lista antes de que entren en vigor, escribe a <a href="mailto:will@nigri.io?subject=Notificaciones%20de%20sub-procesadores">will@nigri.io</a> con el asunto &ldquo;Notificaciones de sub-procesadores&rdquo;. Buscamos dar al menos 30 días de antelación sobre adiciones que afectan a usuarios de la UE/EEE/Reino Unido o Brasil.</p>
+
+  <h2>1. Sub-procesadores activos</h2>
+
+  <h3>Infraestructura</h3>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead><tr style="border-bottom: 1px solid rgba(255,255,255,0.12);"><th style="text-align:left; padding: 8px 12px;">Sub-procesador</th><th style="text-align:left; padding: 8px 12px;">Propósito</th><th style="text-align:left; padding: 8px 12px;">Datos compartidos</th><th style="text-align:left; padding: 8px 12px;">Ubicación</th><th style="text-align:left; padding: 8px 12px;">DPA</th></tr></thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Railway Corp.</strong></td>
+        <td style="padding:8px 12px;">Hosting de la aplicación (compute, PostgreSQL, almacenamiento de objetos) para el backend ato-cloud</td>
+        <td style="padding:8px 12px;">Todos los datos personales server-side: correo, nombre, hash de contraseña, metadatos de sesión, traces sincronizados del desktop</td>
+        <td style="padding:8px 12px;">Estados Unidos como principal</td>
+        <td style="padding:8px 12px;"><a href="https://railway.com/legal/dpa" target="_blank" rel="noopener">Link</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Comunicaciones</h3>
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead><tr style="border-bottom: 1px solid rgba(255,255,255,0.12);"><th style="text-align:left; padding: 8px 12px;">Sub-procesador</th><th style="text-align:left; padding: 8px 12px;">Propósito</th><th style="text-align:left; padding: 8px 12px;">Datos compartidos</th><th style="text-align:left; padding: 8px 12px;">Ubicación</th><th style="text-align:left; padding: 8px 12px;">DPA</th></tr></thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Proveedor de correo transaccional</strong> (por definir; esperado: Postmark o SendGrid)</td>
+        <td style="padding:8px 12px;">Verificación de correo, reseteo de contraseña, alertas de seguridad, notificaciones de cuenta, respuestas a solicitudes de titular</td>
+        <td style="padding:8px 12px;">Correo, nombre, contenido del mensaje</td>
+        <td style="padding:8px 12px;">EE.UU. o UE (según proveedor elegido)</td>
+        <td style="padding:8px 12px;">Por definir en la selección</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Proveedores de LLM (pass-through BYOK)</h3>
+  <p>Cuando envías prompts vía ATO a uno de estos proveedores usando tu propia clave de API o tu propia suscripción de CLI, ATO actúa como pass-through transitorio. Tú eres el controlador de los datos enviados; el proveedor es tu procesador bajo su propio DPA y términos. ATO no almacena el contenido del prompt o de la respuesta en nuestros servidores, a menos que habilites separadamente la sincronización de traces.</p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead><tr style="border-bottom: 1px solid rgba(255,255,255,0.12);"><th style="text-align:left; padding: 8px 12px;">Proveedor</th><th style="text-align:left; padding: 8px 12px;">Rol típico</th><th style="text-align:left; padding: 8px 12px;">DPA / Privacidad</th></tr></thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Anthropic, PBC</strong> (Claude / Claude Code)</td>
+        <td style="padding:8px 12px;">Tu procesador (BYOK / suscripción CLI)</td>
+        <td style="padding:8px 12px;"><a href="https://www.anthropic.com/legal/privacy" target="_blank" rel="noopener">Privacidad</a> &middot; <a href="https://www.anthropic.com/legal/commercial-terms" target="_blank" rel="noopener">Términos comerciales</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>OpenAI, L.L.C.</strong> (GPT / Codex)</td>
+        <td style="padding:8px 12px;">Tu procesador (BYOK / suscripción CLI)</td>
+        <td style="padding:8px 12px;"><a href="https://openai.com/policies/privacy-policy" target="_blank" rel="noopener">Privacidad</a> &middot; <a href="https://openai.com/policies/eu-data-processing-addendum" target="_blank" rel="noopener">DPA</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Google LLC</strong> (Gemini / Gemini CLI)</td>
+        <td style="padding:8px 12px;">Tu procesador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://cloud.google.com/terms/data-processing-addendum" target="_blank" rel="noopener">DPA</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>MiniMax</strong></td>
+        <td style="padding:8px 12px;">Tu procesador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://intl.minimaxi.com/privacy-policy" target="_blank" rel="noopener">Privacidad</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>xAI</strong> (Grok)</td>
+        <td style="padding:8px 12px;">Tu procesador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://x.ai/legal/privacy-policy" target="_blank" rel="noopener">Privacidad</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>DeepSeek</strong></td>
+        <td style="padding:8px 12px;">Tu procesador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://chat.deepseek.com/downloads/DeepSeek%20Privacy%20Policy.html" target="_blank" rel="noopener">Privacidad</a></td>
+      </tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);">
+        <td style="padding:8px 12px;"><strong>Alibaba Cloud</strong> (Qwen vía DashScope)</td>
+        <td style="padding:8px 12px;">Tu procesador (BYOK)</td>
+        <td style="padding:8px 12px;"><a href="https://www.alibabacloud.com/help/en/legal/" target="_blank" rel="noopener">Legal</a></td>
+      </tr>
+      <tr>
+        <td style="padding:8px 12px;"><strong>OpenRouter</strong></td>
+        <td style="padding:8px 12px;">Tu procesador (BYOK) &mdash; gateway multi-proveedor</td>
+        <td style="padding:8px 12px;"><a href="https://openrouter.ai/privacy" target="_blank" rel="noopener">Privacidad</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Si configuras proveedores adicionales de LLM en ATO que no están listados arriba, confirma directamente con ese proveedor que sus términos permiten tu uso previsto.</p>
+
+  <h2>2. Sub-sub-procesadores</h2>
+
+  <p>Nuestros sub-procesadores pueden, a su vez, contratar más sub-procesadores. Cuando lo exija su DPA, mantienen sus propias listas públicas de sub-procesadores.</p>
+
+  <h2>3. Sub-procesadores planificados (todavía no activos)</h2>
+
+  <p>Los siguientes están en nuestra roadmap. Ninguno está procesando datos de usuario aún:</p>
+  <ul>
+    <li><strong>Stripe, Inc.</strong> &mdash; procesamiento de pagos, cuando se lancen los planes pagos.</li>
+    <li><strong>Sentry, Inc.</strong> &mdash; tracking de errores, cuando agreguemos monitoreo server-side o client-side. Residencia de datos en UE configurada por defecto para usuarios de la UE.</li>
+    <li><strong>Analytics privacy-friendly</strong> &mdash; si agregamos analytics, la preferencia actual es Plausible Analytics OÜ (hosteado en la UE, sin cookies).</li>
+  </ul>
+
+  <p>Cada uno de estos se añadirá a la sección &ldquo;Activos&rdquo; arriba cuando comience a procesar datos, tras al menos 30 días de aviso previo a los suscriptores del cambio.</p>
+
+  <h2>4. Cómo ser notificado de cambios</h2>
+
+  <p>Envía correo a <a href="mailto:will@nigri.io?subject=Notificaciones%20de%20sub-procesadores">will@nigri.io</a> con el asunto &ldquo;Notificaciones de sub-procesadores&rdquo; para recibir aviso previo de adiciones o cambios materiales.</p>
+
+  <h2>5. Contacto</h2>
+
+  <p>Preguntas sobre un sub-procesador específico o sobre tus derechos relativos a transferencias: <a href="mailto:will@nigri.io">will@nigri.io</a>.</p>
+
+  <p>Ver también: <a href="/legal/privacy-es.html">Política de Privacidad</a> &middot; <a href="/legal/terms-es.html">Términos de Servicio</a> &middot; <a href="/legal/cookies-es.html">Política de Cookies</a> &middot; <a href="/legal/data-request-es.html">Solicitar acceso a tus datos</a></p>
+
+</article>
+
+</body>
+</html>

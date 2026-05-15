@@ -1,6 +1,6 @@
-# ATO — The local-first ops platform for multi-runtime AI agents (humans + agents both drive it)
+# ATO — Your local war room for humans and LLMs (humans + agents both drive it)
 
-> ATO is a free, open-source (MIT) **local-first operations platform** for managing AI agents across multiple runtimes. It is used by **humans (via desktop GUI) and their coding agents (via CLI and MCP)** together — both drive the same cockpit, share the same data, and see the same insights. It's the developer-workflow operations platform for Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, and Ollama — plus 16+ API providers. Built in Rust + React + Tauri.
+> ATO is a free, open-source (MIT) **local-first war room** for humans and LLMs to decide together, call real tools, and verify every outcome. It is used by **humans (via desktop GUI) and their coding agents (via CLI and MCP)** together — both drive the same cockpit, share the same data, and see the same audit trail. It works across Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, and Ollama — plus 16+ API providers. Built in Rust + React + Tauri.
 >
 > **Three actor surfaces:** GUI for humans, CLI (`ato <command>`) for shell-driven agents, MCP (stdio) for in-harness agents. Every meaningful operation reachable from all three.
 >

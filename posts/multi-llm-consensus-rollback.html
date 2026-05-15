@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karpathy's premise, gstack's skills, and the two-layer flow for decisions with LLMs — ATO</title>
+<meta name="description" content="Karpathy showed that a council of LLMs produces better answers than a single LLM. The premise works but the council still has biases — polite agreement, synthesis bias. gstack's skill pattern adds a second layer of structured review that catches what the debate doesn't. Notes on building ATO in public, using ATO.">
+<meta name="keywords" content="Karpathy llm-council, multi-LLM debate, gstack skills, plan-ceo-review, peer review LLM, polite agreement bias, synthesis bias, ATO, Claude Code, building in public, multi-runtime AI agents">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/multi-llm-consensus-rollback.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Karpathy's premise, gstack's skills, and the two-layer flow for decisions with LLMs">
+<meta property="og:description" content="Multiple LLMs debating produce better answers than one alone. But the council has its own biases. A specialist skill on top closes the gap.">
+<meta property="og:url" content="https://agentictool.ai/posts/multi-llm-consensus-rollback.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-14T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Karpathy's premise, gstack's skills, and the two-layer flow for decisions with LLMs">
+<meta name="twitter:description" content="The council pattern works, but the council has biases. Skills are the second layer.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Karpathy's premise, gstack's skills, and the two-layer flow for decisions with LLMs","description":"Multiple LLMs debating produce better answers than one alone. But the council still has biases. gstack's skill pattern is the second layer.","datePublished":"2026-05-14","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/multi-llm-consensus-rollback.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-14 &middot; Multi-LLM &middot; 10 min read</div>
+
+  <h1>Karpathy&rsquo;s premise, gstack&rsquo;s skills, and the two-layer flow for decisions with LLMs</h1>
+
+  <p>In November, Andrej Karpathy shipped a small repo called <a href="https://github.com/karpathy/llm-council" target="_blank" rel="noopener">llm-council</a>. The idea: instead of asking one LLM a hard question, you ask a council of them. Each model answers independently, they review each other&rsquo;s answers anonymously, and a final &ldquo;Chairman LLM&rdquo; compiles the answer.</p>
+
+  <p>18,695 stars. 3,616 forks. README note: <em>&ldquo;I&rsquo;m not going to support it in any way, it&rsquo;s provided here as is for other people&rsquo;s inspiration.&rdquo;</em></p>
+
+  <p>Karpathy was making a specific claim with this repo. Not &ldquo;here&rsquo;s a tool you should use&rdquo; &mdash; he wouldn&rsquo;t have walked away if it were that. The claim is about <em>the shape of LLM cognition</em>: a council of LLMs, arguing against each other in a shared context, produces more reliable answers than any single LLM in the council. This post is about what that premise actually buys you, where it falls short on its own, and why <a href="https://garryslist.org" target="_blank" rel="noopener">gstack&rsquo;s</a> skill pattern is the second half of the same loop.</p>
+
+  <h2>Why the council works at all</h2>
+
+  <p>The straightforward read is that LLMs in a council &ldquo;check each other&rsquo;s work,&rdquo; like reviewers on a paper. That&rsquo;s true but understates the mechanism.</p>
+
+  <p>Different frontier models are trained on different corpora, with different RLHF signals, different safety filters, different post-training recipes. The result is that their <em>error distributions</em> diverge. Where Claude is confident, Gemini might hedge. Where MiniMax over-indexes on the recent context, Claude might over-index on the system prompt. These aren&rsquo;t random differences; they&rsquo;re structural, and they show up consistently across many tasks.</p>
+
+  <p>When a single LLM answers a hard question, you get one error distribution &mdash; whatever that model is biased toward. When three LLMs answer the same question in a shared session, you get three error distributions. The intersection of three different biases is much smaller than any one bias on its own. The errors don&rsquo;t cancel out perfectly, but they&rsquo;re visibly harder to maintain in front of two other models who would have made the error differently.</p>
+
+  <p>This is also why the council needs to <em>see each other</em>. Karpathy&rsquo;s repo runs the LLMs in three sequential stages: first opinions independently, then anonymized cross-review, then a final synthesizer. The cross-review stage is where the catching happens &mdash; one LLM looks at another&rsquo;s answer and either flags issues, refines the framing, or pushes back. Without that step, you have three independent answers and no convergence; you have a fork in the road, not a decision.</p>
+
+  <p>The premise is sound. We&rsquo;ve been using a version of this pattern for two months and the difference compared to single-LLM consultation is consistent &mdash; not magic, but consistent.</p>
+
+  <h2>What the council doesn&rsquo;t catch</h2>
+
+  <p>The premise is sound. The pattern in its plain form is not enough.</p>
+
+  <p>Run a council debate for five rounds and you&rsquo;ll see two failure modes show up reliably.</p>
+
+  <p><strong>Polite-agreement bias.</strong> LLMs are trained on conversational data where humans signal agreement at the end of long debates. Around round 4-5, models start signaling closure even when one of them still has a substantive objection. They soften the objection into a caveat, the caveat into a footnote, the footnote into nothing. The signal-of-completion bias is hard to escape from inside the conversation.</p>
+
+  <p><strong>Synthesis bias.</strong> The model that proposes the closing answer is, by the structure of its turn, in synthesis mode. It&rsquo;s asking &ldquo;how do I tie this all together?&rdquo; The other models then evaluate the closing answer against the conversation. They check whether it captures what was said. They do <em>not</em> check whether it&rsquo;s better than the baseline that existed before the conversation started, because that baseline isn&rsquo;t in the conversation context. Synthesis mode is structurally bad at A/B comparison.</p>
+
+  <p>Both biases are real. We hit them both today.</p>
+
+  <h2>The case study, briefly</h2>
+
+  <p>We were consolidating five drifting positioning sentences in our own product docs into one mission statement. Founder bias would have picked whichever sentence we wrote last, so we ran the council pattern instead: five rounds, Claude as anchor, MiniMax as designated contrarian, Gemini as synthesizer. Total cost: $0.058. Tool calls into our own repo to verify claims. Audit trail in local SQLite.</p>
+
+  <p>Round 1 hit polite-agreement bias on the first bridge &mdash; Gemini conceded Claude&rsquo;s position cleanly and the bridge loop fired <code>[CONSENSUS]</code>. We forced Round 2 by dispatching to MiniMax with an explicit steelman of the contrarian view, which broke it open.</p>
+
+  <p>Rounds 3 and 4 produced real disagreement, real concession, and a falsifier rule for the live debate (a specific metric that would settle whichever question the debate couldn&rsquo;t resolve on its own). Round 5 closed with a tight synthesis memo from Claude, including a proposed new mission sentence. MiniMax and Gemini both signed <code>NO VETO</code> on it.</p>
+
+  <p>By every reasonable signal, the council had done its job. Three independent LLMs from three vendors had converged on the same sentence with explicit non-veto from both non-anchors. We wrote it into the strategy doc. Aligned six other files. Closed the task.</p>
+
+  <p>The sentence was wrong. We just didn&rsquo;t know it yet.</p>
+
+  <h2>gstack&rsquo;s skills, and why they&rsquo;re the second layer</h2>
+
+  <p>Before pushing, we ran <code>/plan-ceo-review</code> &mdash; a skill from <a href="https://garryslist.org" target="_blank" rel="noopener">gstack</a>, the tooling layer Garry Tan&rsquo;s team has been shipping. A skill in this sense is a structured persona: a prompt template with mandatory sections, embedded checklists, decision rules. You load it on top of any model and the model assumes that posture for the duration of the task.</p>
+
+  <p>The key insight took us a while to land: a skill is not a different LLM. It&rsquo;s the same LLM in a different task-posture. Same body, different hat.</p>
+
+  <p>That distinction matters because both the polite-agreement bias and the synthesis bias are <em>task-posture</em> phenomena, not model phenomena. They&rsquo;re a consequence of how the conversation has been framed and how the model interprets its current role. Loading a different persona breaks both biases without needing a different model.</p>
+
+  <p>The <code>/plan-ceo-review</code> skill has eleven sections of structured review. One of them &mdash; called &ldquo;0C-bis: Implementation Alternatives&rdquo; &mdash; is mandatory: before any final decision lands, the reviewer must produce 2-3 distinct alternative approaches with explicit pros, cons, and a recommendation comparing them. It&rsquo;s a checklist item the council debate never enforced on itself.</p>
+
+  <p>When we ran the CEO review on our session output, the skill produced:</p>
+
+  <ul>
+    <li><strong>Approach A</strong> &mdash; the synthesized sentence the war room had just committed to.</li>
+    <li><strong>Approach B</strong> &mdash; roll back to the prior sentence, keep the layered framework.</li>
+    <li><strong>Approach C</strong> &mdash; defer the sentence entirely, ship the falsifier instrumentation first, let data pick in 30 days.</li>
+  </ul>
+
+  <p>And then a recommendation: B. Reason given: the new sentence (Approach A) was <em>more abstract</em> than the sentence it was replacing. &ldquo;Platform&rdquo; is more abstract than &ldquo;decision cockpit.&rdquo; &ldquo;Multi-LLM work&rdquo; is more abstract than &ldquo;structured, tool-verified sessions.&rdquo; When a rewrite is thinner than the original, the rewrite is bad.</p>
+
+  <p>That observation is obvious in retrospect. The council had never done it because the council&rsquo;s task was &ldquo;produce a consolidated mission&rdquo; &mdash; not &ldquo;compare the proposed mission to the existing sentence on a concreteness axis.&rdquo; The skill&rsquo;s checklist forced the comparison that the debate&rsquo;s prompt had not.</p>
+
+  <p>We rolled back. The framework, SWOT, scope cuts, falsifier rule, and pricing recommendation all earned their keep &mdash; those were the war room&rsquo;s real artifacts. The replacement sentence didn&rsquo;t. We kept the prior mission sentence and the framework on top.</p>
+
+  <h2>The two layers, and why each catches what the other misses</h2>
+
+  <p>The pattern that came out of this:</p>
+
+  <ol>
+    <li><strong>Layer 1 &mdash; the council.</strong> Multiple LLMs as themselves, in a shared session, with tool access into your real repo. Catches the errors of individual LLM cognition because their error distributions diverge.</li>
+    <li><strong>Layer 2 &mdash; the specialist skill.</strong> One LLM, loaded with a structured review persona that runs a checklist the council didn&rsquo;t enforce on itself. Catches the errors of the council itself &mdash; the polite-agreement bias and the synthesis bias that the conversational format produces.</li>
+  </ol>
+
+  <p>These aren&rsquo;t redundant. They attack different failure modes. The council&rsquo;s job is to surface disagreement between models. The skill&rsquo;s job is to apply external structure to a conclusion the conversation has already reached. You need both because the failure modes are structurally different.</p>
+
+  <p>Each layer is independently cheap. A five-round multi-LLM debate cost us under ten cents. A skill-wrapped review is a single dispatch &mdash; another few cents at most. The audit trail of both lives in local SQLite. The whole flow runs on a laptop in a couple of hours.</p>
+
+  <h2>What we&rsquo;re building, and why</h2>
+
+  <p>We started <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" target="_blank" rel="noopener">ATO</a> because this kind of structured multi-LLM work is annoying to do otherwise. You can run llm-council, but it&rsquo;s OpenRouter-locked &mdash; if you already pay for Claude Max and Codex CLI, you pay a third time to use them through llm-council&rsquo;s gateway. You can write the loop yourself, but then you don&rsquo;t have a session abstraction, tool calls, or an audit trail. You can use LangChain, but it caducated.</p>
+
+  <p>ATO is the part that makes Layer 1 cheap: sticky multi-LLM sessions, tool calls into your repo, bridging between runtimes by <code>@&lt;runtime&gt;</code> mentions, audit trail in local SQLite, no cloud, MIT, bring your own keys or your existing CLI subscriptions. The pattern is Karpathy&rsquo;s; the maintained implementation is ours.</p>
+
+  <p>gstack is the part that makes Layer 2 cheap: a set of skills (<code>/plan-ceo-review</code>, <code>/plan-eng-review</code>, <code>/plan-design-review</code>, <code>/office-hours</code>, others) that load as personas inside whatever harness you&rsquo;re running &mdash; Claude Code, Cursor agent mode, Codex. The pattern is Garry&rsquo;s.</p>
+
+  <p>The combination is the loop we use. Today&rsquo;s decision is one example of it running in anger.</p>
+
+  <h2>Building ATO in public, using ATO</h2>
+
+  <p>We&rsquo;ve been making every strategic decision about ATO inside ATO itself. The positioning war room two weeks ago was inside ATO, recorded as live demo. Today&rsquo;s goal-consolidation session was inside ATO. Every config decision, every pricing-tier debate, every scope-cut argument has the session id and the cost in the audit log.</p>
+
+  <p>This isn&rsquo;t a marketing posture. It&rsquo;s a forcing function. If the product doesn&rsquo;t hold up under our own use, we&rsquo;d find out before any user did. If the multi-LLM debate pattern is real cognitive leverage, our own decisions should be visibly better with it than without it. If the gstack-skill layer catches things the debate misses, our own strategy doc should reflect those catches.</p>
+
+  <p>So far, both of those are true. Today&rsquo;s case is the cleanest example we&rsquo;ve had: the council produced a wrong answer, the skill caught it, the wrong answer didn&rsquo;t ship. Session id <code>2581c741-88cb-4cf1-b81a-7a942d7e557f</code> &mdash; lives in our local SQLite, retrievable any time, full transcript intact.</p>
+
+  <p>Karpathy showed the primitive. The maintained version is in ATO. The second layer is in gstack. The whole stack is open source, local-first, and yours to break, fork, or improve.</p>
+
+</article>
+
+</body>
+</html>

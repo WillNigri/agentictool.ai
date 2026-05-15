@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de Privacidade — ATO</title>
+<meta name="description" content="Política de Privacidade da ATO. Como coletamos, usamos, compartilhamos e protegemos dados pessoais. Seus direitos sob a LGPD, GDPR e leis de privacidade dos EUA. Local-first por padrão.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agentictool.ai/legal/privacy-pt.html">
+<link rel="alternate" hreflang="en" href="https://agentictool.ai/legal/privacy.html">
+<link rel="alternate" hreflang="pt-BR" href="https://agentictool.ai/legal/privacy-pt.html">
+<link rel="alternate" hreflang="es" href="https://agentictool.ai/legal/privacy-es.html">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/legal/privacy.html" class="post-cta">EN</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">Vigência: 15/05/2026 &middot; Versão 1.0</div>
+
+  <h1>Política de Privacidade</h1>
+
+  <p>Esta Política de Privacidade explica como a Agentic Tool Optimization (&ldquo;<strong>ATO</strong>,&rdquo; &ldquo;<strong>nós</strong>,&rdquo; ou &ldquo;<strong>nosso</strong>&rdquo;) coleta, usa, compartilha, retém e protege dados pessoais quando você visita <a href="https://agentictool.ai">agentictool.ai</a>, instala o aplicativo de desktop open source da ATO, ou cria uma conta no serviço em nuvem da ATO.</p>
+
+  <p>A ATO é <strong>local-first por padrão</strong>. A maior parte do que o produto faz acontece na sua própria máquina, em um banco de dados SQLite localizado em <code>~/.ato/local.db</code>. Nós só vemos seus dados quando você escolhe sincronizar com o serviço em nuvem opcional. Este documento explica essa distinção em detalhes.</p>
+
+  <p>Cumprimos a Lei Geral de Proteção de Dados — Lei nº 13.709/2018 (&ldquo;<strong>LGPD</strong>&rdquo;), o Regulamento Geral de Proteção de Dados europeu (GDPR, Regulamento (UE) 2016/679, e o GDPR do Reino Unido), o California Consumer Privacy Act / California Privacy Rights Act (CCPA/CPRA) e as leis de privacidade de outros estados norte-americanos quando aplicáveis.</p>
+
+  <h2>1. Quem somos (o controlador)</h2>
+
+  <p><strong>Controlador:</strong> Guilherme Nigri, atuando como editor da ATO e do agentictool.ai.</p>
+  <p><strong>Contato para privacidade:</strong> <a href="mailto:will@nigri.io">will@nigri.io</a></p>
+  <p><strong>Contato postal:</strong> disponível mediante solicitação pelo e-mail acima.</p>
+
+  <p>Atualmente não temos um Encarregado de Tratamento de Dados Pessoais (DPO) formalmente designado nos termos do art. 41 da LGPD, pois nosso volume de tratamento não exige. O contato de privacidade acima funciona como nosso ponto único de contato para todas as questões de proteção de dados. Designaremos um Encarregado formal quando a escala do tratamento exigir, e atualizaremos esta Política nesse momento.</p>
+
+  <h2>2. Resumo em linguagem simples</h2>
+
+  <ul>
+    <li><strong>O aplicativo de desktop guarda seus dados localmente no seu computador.</strong> Nós não vemos esses dados a menos que você crie conta na nuvem e ative a sincronização.</li>
+    <li><strong>Quando você cria uma conta,</strong> coletamos seu e-mail, uma senha hashada e seu nome. Isso é o que coletamos para a conta em si.</li>
+    <li><strong>Quando você usa o produto para enviar prompts a provedores de IA</strong> como Anthropic, OpenAI, Google ou MiniMax, seus prompts e quaisquer arquivos que o modelo leia via tool calls saem da sua máquina e vão para esse provedor. Nós não armazenamos o conteúdo do prompt em nossos servidores a menos que você opte por sincronizar os traces.</li>
+    <li><strong>Hoje não usamos cookies, analytics, rastreadores publicitários, nem session replay no nosso site.</strong> Quando adicionarmos algo desse tipo, esta Política será atualizada e (quando exigido) pediremos seu consentimento antes.</li>
+    <li><strong>Você tem direitos</strong> sobre seus dados: acesso, correção, eliminação, portabilidade, e outros. A Seção 11 explica como exercê-los.</li>
+  </ul>
+
+  <h2>3. Quais dados pessoais coletamos</h2>
+
+  <h3>3.1 Dados que você nos fornece diretamente</h3>
+  <p>Ao criar uma conta na nuvem da ATO, coletamos:</p>
+  <ul>
+    <li><strong>Endereço de e-mail</strong> &mdash; usado como identificador da sua conta, para login, recuperação de senha, notificações de segurança e comunicações obrigatórias de serviço.</li>
+    <li><strong>Senha</strong> &mdash; armazenada como hash bcrypt com fator de custo 12 ou superior. Nunca vemos, armazenamos ou registramos sua senha em texto claro.</li>
+    <li><strong>Nome de exibição</strong> &mdash; mostrado na interface do produto; pode ser editado ou removido.</li>
+    <li><strong>URL de avatar</strong> (opcional) &mdash; se você optar por definir um.</li>
+    <li><strong>Registros de consentimento</strong> &mdash; data/hora, versão da política e dos termos que você aceitou, e seu consentimento separado (opcional) para comunicações de marketing.</li>
+  </ul>
+
+  <p>Quando você nos contata por e-mail ou pelo formulário de solicitações, recebemos o que você enviar &mdash; tipicamente seu nome, e-mail e o conteúdo da mensagem.</p>
+
+  <h3>3.2 Dados que geramos quando você usa o serviço em nuvem</h3>
+  <ul>
+    <li><strong>Tentativas de login</strong> &mdash; e-mail em letras minúsculas, endereço IP, sucesso/falha, código de motivo. Usado para detectar e mitigar ataques de força bruta. Retido por 90 dias.</li>
+    <li><strong>Refresh tokens</strong> &mdash; hashados (não o token bruto), data de expiração, data de revogação.</li>
+    <li><strong>Metadados de sessão</strong> &mdash; quando você sincroniza sessões do desktop, recebemos contagens de tokens, identificadores de modelo, timestamps e valores agregados de custo. Não armazenamos o conteúdo de prompts ou respostas em nossos servidores a menos que você habilite explicitamente a sincronização de traces.</li>
+    <li><strong>Registros de uso</strong> &mdash; uso de tokens por requisição, para fins de faturamento e análises dentro da sua conta.</li>
+    <li><strong>Agent traces, alterações de configuração, snapshots de atribuição de arquivos, resumos de prompt, pipeline traces, embed keys, registros de mesh-relay, referências a chaves de provider</strong> &mdash; preenchidos apenas para usuários que optam pela sincronização desses recursos específicos.</li>
+  </ul>
+
+  <h3>3.3 Dados que permanecem na sua máquina</h3>
+  <p>O aplicativo de desktop da ATO armazena tudo abaixo no seu computador e não transmite a nós, a menos que você habilite a sincronização na nuvem:</p>
+  <ul>
+    <li>Histórico de dispatches, histórico de replays, prompts e respostas completos, definições de agentes, threads de chat, snapshots de atribuição de arquivos, ledger de alterações de configuração, automation workflows, agendamentos cron</li>
+    <li>Chaves de API de LLM que você fornece (criptografadas em repouso dentro do banco SQLite local)</li>
+    <li>Backups locais das suas configurações</li>
+  </ul>
+
+  <p>Você é o controlador desses dados locais. A ATO é uma ferramenta que você executa na sua máquina; nós não recebemos esses dados.</p>
+
+  <h3>3.4 Dados que NÃO coletamos atualmente</h3>
+  <ul>
+    <li>Nenhum analytics de site, rastreamento de pageviews ou identificadores de visitante</li>
+    <li>Nenhum rastreamento de erro ou session replay</li>
+    <li>Nenhum pixel de marketing, API de conversão ou retargeting</li>
+    <li>Nenhum cookie, rastreamento via localStorage ou fingerprinting em agentictool.ai (além do armazenamento puramente essencial que seu navegador possa usar para lembrar configurações de idioma)</li>
+    <li>Nenhuma informação de pagamento &mdash; a ATO atualmente não processa pagamentos</li>
+    <li>Nenhum dado de crianças &mdash; o produto não é direcionado a menores de 18 anos</li>
+  </ul>
+
+  <p>Se adicionarmos qualquer um desses itens no futuro, esta Política será atualizada <strong>antes</strong> da mudança entrar em vigor e, quando aplicável, pediremos seu consentimento (veja a Seção 12).</p>
+
+  <h2>4. Por que tratamos seus dados, e a base legal</h2>
+
+  <p>Conforme o art. 7 da LGPD / art. 6 do GDPR, todo tratamento deve se basear em uma base legal específica. Utilizamos as seguintes:</p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.12);">
+        <th style="text-align:left; padding: 8px 12px;">Atividade de tratamento</th>
+        <th style="text-align:left; padding: 8px 12px;">Finalidade</th>
+        <th style="text-align:left; padding: 8px 12px;">Base legal</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Criação de conta e autenticação</td><td style="padding:8px 12px;">Identificar você, autenticar login, garantir a segurança da conta</td><td style="padding:8px 12px;">Execução de contrato (LGPD art. 7, V / GDPR art. 6(1)(b))</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Registro de eventos de segurança (tentativas de login, IPs)</td><td style="padding:8px 12px;">Detectar e prevenir acessos não autorizados</td><td style="padding:8px 12px;">Legítimo interesse na segurança do serviço (LGPD art. 7, IX / GDPR art. 6(1)(f))</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Sincronização de sessões, traces, configurações (quando ativada)</td><td style="padding:8px 12px;">Permitir acesso multi-dispositivo aos seus próprios dados</td><td style="padding:8px 12px;">Execução de contrato (LGPD art. 7, V / GDPR art. 6(1)(b))</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Encaminhamento de seus prompts aos provedores de LLM que você seleciona</td><td style="padding:8px 12px;">Entregar a funcionalidade multi-runtime de dispatch que você solicitou</td><td style="padding:8px 12px;">Execução de contrato (LGPD art. 7, V / GDPR art. 6(1)(b)). Para configurações BYOK (chave própria), você permanece controlador da relação com o provedor de LLM; nós atuamos como operador transitório para a etapa de encaminhamento.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Notificações obrigatórias de serviço (verificação de e-mail, recuperação de senha, alertas de segurança)</td><td style="padding:8px 12px;">Operar o serviço com segurança</td><td style="padding:8px 12px;">Execução de contrato + obrigação legal (LGPD art. 7, V e II / GDPR art. 6(1)(b)(c))</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">E-mails de marketing sobre atualizações do produto ATO</td><td style="padding:8px 12px;">Compartilhar novidades com assinantes que optaram em receber</td><td style="padding:8px 12px;">Consentimento expresso (LGPD art. 7, I / GDPR art. 6(1)(a)). Opt-in separado no cadastro; revogável a qualquer momento.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Manutenção de registros exigidos por legislação fiscal e comercial brasileira</td><td style="padding:8px 12px;">Cumprir obrigações de retenção sobre registros fiscais</td><td style="padding:8px 12px;">Obrigação legal (LGPD art. 7, II / GDPR art. 6(1)(c)). Aplica-se a partir do início do faturamento.</td></tr>
+      <tr><td style="padding:8px 12px;">Atendimento de requisições de titulares, reclamações e demandas legais</td><td style="padding:8px 12px;">Cumprir nossos deveres com você e com autoridades</td><td style="padding:8px 12px;">Obrigação legal (LGPD art. 7, II / GDPR art. 6(1)(c))</td></tr>
+    </tbody>
+  </table>
+
+  <p>Não tratamos dados pessoais sensíveis (na acepção do art. 11 da LGPD ou do art. 9 do GDPR) na operação ordinária do serviço. Caso venhamos a introduzir alguma funcionalidade que trate tais dados, exigiremos consentimento expresso e separado, no padrão mais elevado que essas leis estabelecem.</p>
+
+  <h2>5. Com quem compartilhamos seus dados (destinatários e operadores)</h2>
+
+  <p>Compartilhamos dados pessoais apenas com partes que nos ajudam a operar o serviço, e apenas na medida necessária. <strong>Não vendemos dados pessoais.</strong> Não compartilhamos dados pessoais com anunciantes ou data brokers.</p>
+
+  <p>Destinatários atuais (operadores / subprocessors):</p>
+
+  <ul>
+    <li><strong>Railway Corp.</strong> &mdash; provedor de hospedagem para o backend ato-cloud (computação, PostgreSQL, armazenamento). Dados tratados: todos os dados pessoais server-side. DPA: <a href="https://railway.com/legal/dpa" target="_blank" rel="noopener">railway.com/legal/dpa</a>. Localização: Estados Unidos como primário, com opções regionais.</li>
+    <li><strong>Provedor de e-mail</strong> (a ser definido; será SendGrid, Postmark, ou similar) &mdash; envia e-mails de verificação, recuperação de senha e notificações. Dados tratados: seu endereço de e-mail, seu nome, conteúdo da mensagem.</li>
+    <li><strong>Provedores de LLM que você escolhe usar</strong> &mdash; quando você envia um prompt através da ATO para Anthropic, OpenAI (incluindo Codex), Google (Gemini), MiniMax, Grok, DeepSeek, Qwen, OpenRouter, ou qualquer outro provedor configurado, o conteúdo do prompt e quaisquer arquivos que o modelo leia via tool calls saem da sua máquina e vão para esse provedor. Se você fornece sua própria chave de API (BYOK), você é o controlador e o provedor é seu operador; nós somos um pass-through transitório. Se você usa uma chave de provedor fornecida pela ATO sob um futuro plano pago, nós somos o controlador da chamada e o provedor é nosso operador.</li>
+    <li><strong>Processador de pagamento futuro</strong> (Stripe, previsto): quando os planos pagos forem ativados, dados de cobrança fluirão para a Stripe. Dados sensíveis PCI (números de cartão) nunca chegam aos nossos servidores; apenas metadados de cobrança (estado da assinatura, IDs de fatura) ficam retidos do nosso lado.</li>
+  </ul>
+
+  <p>Uma lista atualizada de todos os operadores que usamos, com links para cada DPA, está publicada em <a href="/legal/subprocessors.html">/legal/subprocessors.html</a>. Atualizamos essa lista quando adicionamos um operador, e notificaremos usuários sobre alterações que afetam usuários da UE/EEE/Reino Unido ou Brasil com pelo menos 30 dias de antecedência, exceto em emergências.</p>
+
+  <h3>Como funcionam nossos acordos com operadores</h3>
+
+  <p>Para operadores em que a ATO é controladora e o fornecedor é nosso operador (como nosso provedor de hospedagem, fornecedor de e-mail, futuro processador de pagamento, e futuros provedores de monitoramento de erros e analytics), o contrato jurídico aplicável é o Data Processing Agreement (DPA) publicado pelo fornecedor. Aceitamos esse DPA quando aceitamos os Termos de Uso do fornecedor no cadastro, e mantemos uma cópia datada de cada DPA arquivada. Os links na página de Operadores apontam para a versão atualmente em vigor. Revisamos cada DPA anualmente e substituímos nossa cópia arquivada se o fornecedor publicar alteração material.</p>
+
+  <p>Para provedores de LLM utilizados no modo BYOK (chave própria) &mdash; isto é, quando você fornece sua própria chave de API ou sua própria assinatura de CLI &mdash; você tem relação contratual direta com esse provedor. A Política de Privacidade e os Termos desse provedor se aplicam aos seus prompts e respostas. A ATO não é parte dessa relação e atua como pass-through transitório para o dispatch. A página de Operadores lista a Política de Privacidade de cada provedor para sua referência, e não um DPA com a ATO, porque não há DPA-com-ATO que seja o contrato aplicável nesse arranjo.</p>
+
+  <h2>6. Transferências internacionais</h2>
+
+  <p>Dados da ATO são tratados em infraestrutura localizada nos Estados Unidos e (dependendo das suas seleções de runtime) nas regiões onde os provedores de LLM operam. Para usuários no Brasil, na UE/EEE ou no Reino Unido, isso significa que seus dados pessoais podem ser transferidos para fora da sua jurisdição de origem.</p>
+
+  <p>Para transferências do Brasil para destinatários no exterior, baseamo-nos nas cláusulas-padrão aprovadas pela Autoridade Nacional de Proteção de Dados (ANPD) sob o art. 33 da LGPD, ou na adesão do destinatário a um regime que a ANPD reconheça como adequado.</p>
+
+  <p>Para transferências da UE/EEE/Reino Unido para destinatários nos Estados Unidos ou outros países terceiros, baseamo-nos em:</p>
+  <ul>
+    <li>A decisão de adequação do EU-US Data Privacy Framework, quando o destinatário é auto-certificado (a maioria dos grandes provedores de LLM participa);</li>
+    <li>Cláusulas Contratuais Padrão (SCCs) emitidas pela Comissão Europeia, quando a adequação não se aplica;</li>
+    <li>O International Data Transfer Agreement (IDTA) do Reino Unido ou o UK Addendum às SCCs para transferências do Reino Unido.</li>
+  </ul>
+
+  <p>Cópias dos instrumentos de transferência relevantes estão disponíveis mediante solicitação em <a href="mailto:will@nigri.io">will@nigri.io</a>.</p>
+
+  <h2>7. Por quanto tempo retemos seus dados</h2>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead><tr style="border-bottom: 1px solid rgba(255,255,255,0.12);"><th style="text-align:left; padding: 8px 12px;">Dado</th><th style="text-align:left; padding: 8px 12px;">Retenção</th></tr></thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Cadastro de conta (e-mail, hash de senha, nome)</td><td style="padding:8px 12px;">Até a eliminação da conta, mais um período de carência de 30 dias em caso de exclusão acidental.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Sessões, registros de uso, traces, configurações (sincronizados para a nuvem)</td><td style="padding:8px 12px;">Até a eliminação da conta, ou até você apagar individualmente pelo produto.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Tentativas de login e logs de auditoria de segurança</td><td style="padding:8px 12px;">90 dias, então eliminados automaticamente.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Refresh tokens</td><td style="padding:8px 12px;">Até expiração ou revogação.</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Registros de consentimento</td><td style="padding:8px 12px;">Pela vida da conta, mais 5 anos após eliminação (para demonstrar base legal em caso de disputa).</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Registros de solicitação de titular</td><td style="padding:8px 12px;">5 anos (para demonstrar cumprimento dos direitos).</td></tr>
+      <tr style="border-bottom: 1px solid rgba(255,255,255,0.08);"><td style="padding:8px 12px;">Registros fiscais (quando o faturamento for iniciado)</td><td style="padding:8px 12px;">5 anos do encerramento do exercício fiscal correspondente (legislação brasileira).</td></tr>
+      <tr><td style="padding:8px 12px;">Correspondência de suporte por e-mail</td><td style="padding:8px 12px;">3 anos após a última interação, então eliminada salvo disputa não resolvida.</td></tr>
+    </tbody>
+  </table>
+
+  <p>Ao final do período de retenção, eliminamos ou anonimizamos irreversivelmente os dados.</p>
+
+  <h2>8. Segurança</h2>
+
+  <p>Usamos medidas técnicas e administrativas padrão de mercado para proteger seus dados, incluindo:</p>
+  <ul>
+    <li>Hash de senha com bcrypt e fator de trabalho 12+; nunca armazenamos senhas em texto claro.</li>
+    <li>TLS 1.2 ou superior em todas as conexões cliente-servidor.</li>
+    <li>Armazenamento criptografado de segredos (chaves de API, refresh tokens, embed keys) em repouso.</li>
+    <li>Queries SQL parametrizadas para prevenir injeção.</li>
+    <li>Validação de entrada com Zod em todos os endpoints.</li>
+    <li>Autenticação JWT com rotação a cada refresh.</li>
+    <li>Controle de acesso baseado em papel para endpoints administrativos.</li>
+    <li>Monitoramento contínuo de anomalias de autenticação.</li>
+  </ul>
+
+  <p>Nenhum sistema é impenetrável. Se descobrirmos um incidente de segurança que afete seus dados pessoais, notificaremos você e a autoridade competente (ANPD no Brasil, sua autoridade supervisora na UE/EEE/Reino Unido, ou autoridade estadual norte-americana aplicável) conforme exigido pela lei aplicável. O GDPR exige notificação à autoridade supervisora em até 72 horas após tomada de conhecimento, quando viável; seguimos esse prazo como padrão, independentemente da jurisdição.</p>
+
+  <h2>9. Cookies e tecnologias semelhantes</h2>
+
+  <p><strong>Atualmente não usamos cookies nem rastreamento via localStorage em agentictool.ai.</strong> Nenhum analytics. Nenhum rastreador publicitário. Nenhum fingerprinting. Nenhum session replay. Nenhum script de terceiros que escreva armazenamento no seu navegador.</p>
+
+  <p>Quando você faz login no produto em nuvem ou no aplicativo de desktop, emitimos um token de autenticação (JWT) que fica armazenado em memória ou no local storage do seu cliente. Esse armazenamento é estritamente necessário para o funcionamento do produto e não é usado para rastreamento.</p>
+
+  <p>Se adicionarmos no futuro analytics, publicidade, rastreamento de erros ou qualquer outra tecnologia que defina cookies ou rastreie você, nós:</p>
+  <ul>
+    <li>Atualizaremos esta Política e a Política de Cookies específica (<a href="/legal/cookies-pt.html">/legal/cookies-pt.html</a>);</li>
+    <li>Exibiremos um banner de consentimento que permite aceitar, rejeitar ou customizar suas escolhas, com rejeitar e customizar tendo proeminência equivalente ao aceitar;</li>
+    <li>Respeitaremos o sinal Global Privacy Control (GPC) para usuários em jurisdições onde é reconhecido;</li>
+    <li>Não dispararemos nenhum script não-essencial antes de você fazer uma escolha.</li>
+  </ul>
+
+  <h2>10. Crianças e adolescentes</h2>
+
+  <p>A ATO é uma ferramenta para profissionais adultos e não é direcionada a menores de 18 anos. Não coletamos conscientemente dados pessoais de crianças (art. 14 da LGPD), nem de menores de 13 anos em jurisdições onde essa é a idade-limite (COPPA, Estados Unidos), nem de menores de 16 anos sem consentimento parental na UE/EEE onde a idade de consentimento digital local é 16. Os Termos de Uso exigem que todos os usuários tenham 18 anos ou mais.</p>
+
+  <p>Se descobrirmos que coletamos dados pessoais de um menor abaixo do limite aplicável, eliminaremos. Pais e responsáveis legais que acreditem que seu filho forneceu dados pessoais à ATO devem entrar em contato em <a href="mailto:will@nigri.io">will@nigri.io</a>.</p>
+
+  <h2>11. Seus direitos</h2>
+
+  <p>Você tem os seguintes direitos sobre seus dados pessoais. Alguns são formulados de forma diferente sob a LGPD, o GDPR e as leis estaduais norte-americanas, mas se sobrepõem substancialmente; honramos cada direito sob a interpretação mais generosa.</p>
+
+  <ul>
+    <li><strong>Confirmação e acesso</strong> &mdash; você pode perguntar se tratamos seus dados pessoais e solicitar uma cópia.</li>
+    <li><strong>Correção</strong> &mdash; você pode pedir que corrijamos dados incompletos, inexatos ou desatualizados.</li>
+    <li><strong>Eliminação / anonimização</strong> (LGPD art. 18, VI; GDPR &ldquo;direito ao esquecimento&rdquo;) &mdash; você pode pedir que eliminemos seus dados pessoais. Faremos isso em até 30 dias, salvo onde a retenção seja exigida por lei (por exemplo, registros fiscais quando o faturamento for iniciado, ou os logs de auditoria da própria solicitação de eliminação).</li>
+    <li><strong>Portabilidade</strong> &mdash; você pode solicitar uma cópia dos seus dados pessoais em formato estruturado, comumente usado e legível por máquina (fornecemos em JSON).</li>
+    <li><strong>Informação sobre compartilhamento</strong> (LGPD art. 18, VII) &mdash; você pode pedir informação sobre com quem compartilhamos seus dados.</li>
+    <li><strong>Informação sobre consequências da negativa de consentimento</strong> (LGPD art. 18, VIII) &mdash; explicaremos o que muda se você negar ou revogar consentimento.</li>
+    <li><strong>Restrição de tratamento</strong> (GDPR) &mdash; você pode pedir limitação do tratamento em certas circunstâncias.</li>
+    <li><strong>Oposição</strong> (LGPD art. 18, § 2º; GDPR) &mdash; você pode se opor a tratamento baseado em legítimo interesse; pararemos a menos que demonstremos motivos legítimos preponderantes.</li>
+    <li><strong>Revogação de consentimento</strong> &mdash; para tratamento baseado em consentimento (por exemplo, e-mails de marketing), você pode revogar a qualquer momento.</li>
+    <li><strong>Opt-out de venda ou compartilhamento</strong> (CCPA/CPRA, VCDPA, CPA, CTDPA, UCPA, leis dos EUA) &mdash; não vendemos nem compartilhamos dados pessoais para publicidade comportamental entre contextos, mas se isso mudar, você poderá optar por não participar.</li>
+    <li><strong>Não-discriminação</strong> &mdash; não negaremos serviço, cobraremos preços diferentes nem forneceremos qualidade diferente por você ter exercido qualquer um desses direitos.</li>
+  </ul>
+
+  <h3>Como exercer seus direitos</h3>
+
+  <p>Se você tiver uma conta na nuvem da ATO, o caminho mais simples é dentro do produto: <strong>Configurações → Privacidade</strong> expõe exportação de dados, eliminação de conta e gerenciamento de consentimentos diretamente.</p>
+
+  <p>Caso contrário, submeta uma solicitação em <a href="/legal/data-request.html">/legal/data-request.html</a> ou por e-mail a <a href="mailto:will@nigri.io">will@nigri.io</a>. Responderemos em até 30 dias a contar do recebimento de uma solicitação verificável (LGPD art. 19; GDPR art. 12; leis estaduais norte-americanas aplicáveis).</p>
+
+  <p>Se você acredita que não tratamos seus dados corretamente, você pode apresentar reclamação à:</p>
+  <ul>
+    <li><strong>Brasil:</strong> Autoridade Nacional de Proteção de Dados (ANPD) &mdash; <a href="https://www.gov.br/anpd" target="_blank" rel="noopener">gov.br/anpd</a></li>
+    <li><strong>UE/EEE:</strong> sua autoridade supervisora local (lista em <a href="https://edpb.europa.eu/about-edpb/about-edpb/members_en" target="_blank" rel="noopener">edpb.europa.eu</a>)</li>
+    <li><strong>Reino Unido:</strong> Information Commissioner&rsquo;s Office (ICO) &mdash; <a href="https://ico.org.uk" target="_blank" rel="noopener">ico.org.uk</a></li>
+    <li><strong>Califórnia:</strong> California Privacy Protection Agency &mdash; <a href="https://cppa.ca.gov" target="_blank" rel="noopener">cppa.ca.gov</a></li>
+    <li><strong>Outros estados dos EUA:</strong> Procuradoria-Geral do seu estado</li>
+  </ul>
+
+  <p>Preferimos que você nos contate primeiro para que possamos resolver diretamente.</p>
+
+  <h2>12. Alterações nesta Política</h2>
+
+  <p>Podemos atualizar esta Política periodicamente. Em alterações materiais:</p>
+  <ul>
+    <li>Atualizaremos a data de vigência e o número de versão no topo;</li>
+    <li>Notificaremos usuários registrados por e-mail com pelo menos 30 dias de antecedência, salvo quando a alteração reduz nossas obrigações ou é exigida por lei para ter efeito imediato;</li>
+    <li>Em alterações que ampliam o escopo do tratamento, solicitaremos novo consentimento quando o tratamento original era baseado em consentimento.</li>
+  </ul>
+
+  <p>Versões anteriores estão disponíveis mediante solicitação.</p>
+
+  <h2>13. Contato</h2>
+
+  <p><strong>Contato para privacidade:</strong> <a href="mailto:will@nigri.io">will@nigri.io</a></p>
+  <p><strong>Formulário de solicitação de titular:</strong> <a href="/legal/data-request.html">/legal/data-request.html</a></p>
+  <p><strong>Lista de operadores:</strong> <a href="/legal/subprocessors.html">/legal/subprocessors.html</a></p>
+  <p><strong>Termos de Uso:</strong> <a href="/legal/terms-pt.html">/legal/terms-pt.html</a></p>
+  <p><strong>Política de Cookies:</strong> <a href="/legal/cookies-pt.html">/legal/cookies-pt.html</a></p>
+
+</article>
+
+</body>
+</html>

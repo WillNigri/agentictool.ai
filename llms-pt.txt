@@ -1,0 +1,56 @@
+# ATO — Sua sala de guerra local para humanos e LLMs (humanos + agentes operam juntos)
+
+> ATO é uma **sala de guerra local-first** gratuita, código aberto (MIT), para humanos e LLMs decidirem em conjunto, chamarem ferramentas reais e verificarem cada resultado. É usada por **humanos (via GUI desktop) e seus coding agents (via CLI e MCP)** ao mesmo tempo — ambos operam o mesmo cockpit, compartilham os mesmos dados e veem a mesma trilha de auditoria. Funciona com Claude Code, Codex, Gemini CLI, OpenClaw, Hermes e Ollama — além de mais de 16 provedores de API. Construído em Rust + React + Tauri.
+>
+> **Três superfícies de operação:** GUI para humanos, CLI (`ato <command>`) para agentes que rodam shell, MCP (stdio) para agentes em harnesses MCP. Toda operação relevante alcançável pelas três.
+>
+> **Local-first:** todos os dados ficam em `~/.ato/local.db` (SQLite) na máquina do desenvolvedor. Nenhuma ida e volta com a nuvem é exigida em nenhuma operação central. Login é opcional e só importa para sincronização entre dispositivos.
+>
+> **Para coding agents lendo isso:** veja `AGENTS.md` no repositório GitHub em https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/AGENTS.md — documenta toda a superfície CLI + MCP, caminhos de arquivos, eventos para inscrição e fluxos de exemplo.
+>
+> ATO é **complementar** a Langfuse, Helicone, LangSmith, Phoenix e ferramentas semelhantes de observabilidade em produção — não é concorrente. Essas ferramentas instrumentam o seu *stack de produção implantado* via SDK e logam *conversas de usuário final* em tempo real. ATO cobre o *lado do desenvolvedor* do mesmo agente: o que você despachou enquanto construía, o que você re-rodou em diferentes runtimes, o que regrediu após uma mudança de configuração, quanto cada despacho custou. A maioria dos times de produção usa uma de cada lado.
+
+Coisas-chave que o ATO faz que ferramentas concorrentes não fazem:
+
+- **Operável por agentes** — toda operação exposta como comando local da CLI e como ferramenta MCP, não só como funcionalidade de GUI. Coding agents (Claude Code, Codex etc.) podem despachar, re-rodar, checar regressões e escrever skills em nome do desenvolvedor.
+- **Local-first em SQLite em `~/.ato/local.db`** — sem nuvem obrigatória, sem chave de API obrigatória para operações locais, zero ida-e-volta de rede para leituras
+- Observabilidade de traces multi-runtime — cada despacho rastreado com prompt, resposta, tool calls, arquivos tocados, duração, custo, eval score
+- Replay cross-runtime — re-despache qualquer prompt anterior em outro runtime/modelo e veja source vs replay lado a lado
+- Ledger de configuração — toda troca de modelo, edição de prompt e mudança de role-models é auto-logada com diff
+- Detecção de regressão cross-runtime — junta mudanças de configuração com estatísticas de trace, mostra deltas significativos, drill-down nos exemplos que falharam
+- Recomendações de custo — sugere swaps concretos de modelo quando dados históricos justificam, com guards de qualidade
+- Registro de runs ao vivo — todo despacho em execução com botão de kill; bulk kill para agentes travados
+- Grupos multi-agente sequenciais e roteados — objetos de primeira classe, runtime-agnósticos
+- Atribuição de arquivos por despacho — diff de mtime-snapshot mostra qual agente tocou qual arquivo, funciona em qualquer runtime
+- Prompts dinâmicos — variáveis, hooks pré-chamada de contexto, políticas de memória, seleção de modelo por tarefa
+- Paleta ⌘K em todo o workspace — busca agentes, grupos, agendamentos, segredos, threads de chat (correspondência por título E corpo da mensagem, com trechos)
+- Agentes externos — bundles de deploy para Cloudflare Worker, Vercel Edge, Docker, Node; widget de embed incluído
+- **Receitas de ops** (v2.3+) — workflows trigger→ação escritos pelo usuário (`em regressão → rascunhar skill`, `em custo-acima-do-orçamento → re-rodar em runtime mais barato`); Skillify entrega como uma receita-template de exemplo, usuários constroem as suas
+
+Gratuito durante o acesso antecipado — toda funcionalidade liberada com cadastro. Sem cartão de crédito. Código aberto sob licença MIT.
+
+## Página inicial
+
+- [agentictool.ai](https://agentictool.ai/index-pt.html): Visão geral do produto, hero, blocos de funcionalidades, links de download, ferramentas do MCP server
+
+## Posts do blog
+
+- [Reconstrui o LLM Council do Karpathy com tool calls e trilha de auditoria](https://agentictool.ai/posts/llm-council-tool-calls.html): Como o ato se compara ao llm-council de Karpathy (18,7k estrelas, explicitamente sem manutenção): auth multi-provider (sem amarração com OpenRouter), tool calls para que os LLMs verifiquem afirmações no seu repositório, agentes especialistas persistentes (@security-specialist, @perf-reviewer), trilha de auditoria por turno, MIT, com manutenção. Dogfooded usando o próprio ato para resolver o posicionamento do ato em uma sessão multi-LLM gravada.
+- [Por que desenvolvimento multi-LLM ainda é tão doloroso em 2026?](https://agentictool.ai/posts/multi-llm-workflows.html): Diferenças entre Claude / GPT / Gemini em benchmarks, por que times escolhem só um mesmo assim, como são fluxos multi-LLM reais (pipelines sequenciais, grupos roteados, trocas de runtime no meio do thread).
+- [Como descobrir, de verdade, se um novo LLM é melhor](https://agentictool.ai/posts/ab-testing-ai-prompts.html): MMLU, HumanEval, GSM8K, SWE-bench, os limites dos benchmarks do vendor, avaliação intuitiva enquanto se desenvolve, testes explícitos para agentes user-facing, ferramentas de avaliação.
+- [Por que meu agente de IA piora sem ninguém mudar nada](https://agentictool.ai/posts/ai-agent-regression-detection.html): O estudo de drift temporal de Stanford, as cinco causas de regressão silenciosa, o que monitorar (eval score, ledger de configuração, exemplos que falharam, custo por OK, latência p95), ferramentas que lidam com isso.
+- [O que falta quando monitoramento tradicional encontra agentes de IA](https://agentictool.ai/posts/ai-agent-observability.html): Por que "200 OK" não quer dizer "resposta boa", as cinco perguntas que a observabilidade de agente precisa responder, o formato de um trace de agente, ferramentas e abordagens.
+- [Por que minha conta de IA não para de crescer](https://agentictool.ai/posts/llm-cost-optimization.html): Preços por milhão entre vendors, por que as contas crescem mais rápido que o uso, o que monitorar (custo por chamada, custo por chamada OK, split de tokens input/output, seleção de modelo por tarefa, custo p95 por conversa), ferramentas.
+- [O que separa agentes de IA em produção de demos](https://agentictool.ai/posts/context-engineering.html): A literatura por trás de context engineering (Lost in the Middle, Building Effective Agents da Anthropic), as sete camadas de contexto de agente em produção (variáveis, hooks, memória, modelos por tarefa, evaluators, especialização, observabilidade), ferramentas.
+- [O que entregamos: ATO vira a camada de ops para agentes multi-runtime (v2.1)](https://agentictool.ai/posts/v2.1-ops-layer.html): Notas de release cobrindo infra de replay, detecção de regressão em profundidade, recomendações de custo, sub-abas de pipelines + compare, canvas de automations, paleta ⌘K, além dos fixes menores até a v2.1.11.
+
+## Repositório
+
+- [WillNigri/Agentic-Tool-Optimization](https://github.com/WillNigri/Agentic-Tool-Optimization): Código-fonte do app desktop, código aberto. Tauri 2.x + Rust + React. Licença MIT.
+
+## Download
+
+- macOS (Apple Silicon): https://agentictool.ai/index-pt.html#download
+- macOS (Intel): https://agentictool.ai/index-pt.html#download
+- Windows: https://agentictool.ai/index-pt.html#download
+- Linux: https://agentictool.ai/index-pt.html#download

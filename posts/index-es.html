@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Blog — ATO</title>
+<meta name="description" content="Ensayos sobre desarrollo multi-LLM, observabilidad de agentes de IA, detección de regresiones, optimización de costos e ingeniería de contexto. Por el equipo que construye ATO.">
+<meta name="keywords" content="blog ATO, desarrollo multi-LLM, observabilidad agentes IA, evaluación LLM, optimización de costos IA, ingeniería de contexto">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/index-es.html">
+<link rel="alternate" hreflang="en" href="https://agentictool.ai/posts/">
+<link rel="alternate" hreflang="pt-BR" href="https://agentictool.ai/posts/index-pt.html">
+<link rel="alternate" hreflang="es" href="https://agentictool.ai/posts/index-es.html">
+<link rel="alternate" hreflang="x-default" href="https://agentictool.ai/posts/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Blog — ATO">
+<meta property="og:description" content="Ensayos sobre desarrollo multi-LLM, observabilidad de agentes de IA, detección de regresiones, optimización de costos e ingeniería de contexto.">
+<meta property="og:url" content="https://agentictool.ai/posts/index-es.html">
+<meta property="og:site_name" content="ATO">
+<meta property="og:locale" content="es">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Blog — ATO">
+<meta name="twitter:description" content="Ensayos sobre desarrollo multi-LLM, observabilidad de agentes de IA, detección de regresiones, optimización de costos e ingeniería de contexto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+<style>
+  .post-list { list-style: none; margin: 0; padding: 0; }
+  .post-list li { padding: 28px 0; border-bottom: 1px solid var(--border); margin: 0; }
+  .post-list li:last-child { border-bottom: 0; }
+  .post-list a { color: var(--text-primary); display: block; transition: color 0.2s; }
+  .post-list a:hover { text-decoration: none; color: var(--accent-cyan); }
+  .post-list h2 { margin: 0 0 8px; font-size: clamp(1.2rem, 2vw, 1.6rem); line-height: 1.25; }
+  .post-list .post-list-meta {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 6px;
+  }
+  .post-list .post-list-excerpt { font-size: 0.98rem; color: var(--text-secondary); margin: 6px 0 0; }
+  .blog-intro { font-size: 1.05rem; color: var(--text-secondary); margin-bottom: 48px; max-width: 680px; }
+  .lang-switch { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .lang-switch a { color: var(--text-muted); }
+  .lang-switch .current { color: var(--accent-cyan); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/index-es.html" class="post-back">&larr; agentictool.ai</a>
+    <span class="lang-switch">
+      <a href="/posts/">EN</a> / <a href="/posts/index-pt.html">PT</a> / <a href="/posts/index-es.html" class="current">ES</a>
+    </span>
+    <a href="/index-es.html#download" class="post-cta">Descargar &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">Blog</div>
+  <h1>Ensayos</h1>
+  <p class="blog-intro">Sobre desarrollo multi-LLM, observabilidad de agentes de IA, detección de regresiones, optimización de costos e ingeniería de contexto. Escritos, en general, mientras depuramos agentes en producción y notamos patrones. Por el equipo que construye ATO.</p>
+
+  <div style="background:rgba(255,181,71,0.08);border:1px solid rgba(255,181,71,0.2);padding:12px 16px;border-radius:6px;margin-bottom:32px;font-family:'JetBrains Mono',monospace;font-size:12px;color:#ffb547;">
+    El contenido completo de los posts sigue en inglés &mdash; traducción en curso. Para leer ahora, abre la versión en inglés de cada artículo en el enlace de abajo.
+  </div>
+
+  <ul class="post-list">
+
+    <li>
+      <a href="/posts/llm-council-tool-calls.html">
+        <div class="post-list-meta">2026-05-13 &middot; Multi-LLM &middot; 8 min de lectura &middot; en inglés</div>
+        <h2>Reconstruí el LLM Council de Karpathy con tool calls y registro de auditoría</h2>
+        <p class="post-list-excerpt">Karpathy publicó llm-council en noviembre del año pasado &mdash; 18,7k estrellas, y luego se retiró explícitamente (&ldquo;no voy a darle soporte&rdquo;). Misma primitiva, forma distinta: auth multi-proveedor (sin atadura con OpenRouter), tool calls para que los LLMs verifiquen afirmaciones en tu repositorio, agentes especialistas persistentes, y un registro de auditoría que sale en markdown listo para pegar en tu PR.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/multi-llm-workflows.html">
+        <div class="post-list-meta">2026-05-10 &middot; Multi-LLM &middot; 9 min de lectura &middot; en inglés</div>
+        <h2>¿Por qué el desarrollo multi-LLM sigue siendo tan doloroso en 2026?</h2>
+        <p class="post-list-excerpt">Modelos distintos lideran en tareas distintas &mdash; los benchmarks lo muestran claramente. Entonces, ¿por qué la mayoría de los equipos siguen eligiendo uno y usándolo para todo? Una mirada a las diferencias de SWE-bench / MMLU / HumanEval, la brecha de tooling, y cómo son los flujos multi-LLM reales.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/ab-testing-ai-prompts.html">
+        <div class="post-list-meta">2026-05-10 &middot; Evaluación de LLM &middot; 9 min de lectura &middot; en inglés</div>
+        <h2>Cómo entender, de verdad, si un nuevo LLM es mejor</h2>
+        <p class="post-list-excerpt">Los proveedores publican scores de benchmarks. Esos scores te dicen algo, pero no todo lo que necesitas. Un recorrido por MMLU, HumanEval, GSM8K, tu propia intuición mientras desarrollas, y qué hacer cuando ya tienes usuarios reales usando tu agente.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/ai-agent-regression-detection.html">
+        <div class="post-list-meta">2026-05-10 &middot; Evaluación de LLM &middot; 9 min de lectura &middot; en inglés</div>
+        <h2>¿Por qué mi agente de IA empeora sin que nadie cambie nada?</h2>
+        <p class="post-list-excerpt">Los modelos cambian. Los prompts cambian. El contexto cambia. La calidad va derivando y te enteras por la queja de un usuario dos semanas después. El estudio de drift temporal de Stanford, las cinco causas de regresión silenciosa, qué monitorear de verdad, y los thresholds que importan.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/ai-agent-observability.html">
+        <div class="post-list-meta">2026-05-10 &middot; AI Engineering &middot; 8 min de lectura &middot; en inglés</div>
+        <h2>Qué falta cuando el monitoreo tradicional se encuentra con los agentes de IA</h2>
+        <p class="post-list-excerpt">El APM tradicional te dice que la API tuvo éxito. La observabilidad de agentes de IA tiene que decirte si la respuesta fue correcta, qué agente tocó qué archivo, y cómo detener al que está atascado. Las cinco preguntas que el APM no responde.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/llm-cost-optimization.html">
+        <div class="post-list-meta">2026-05-10 &middot; Costos LLM &middot; 8 min de lectura &middot; en inglés</div>
+        <h2>¿Por qué mi cuenta de IA no para de crecer?</h2>
+        <p class="post-list-excerpt">El costo de los LLMs parece arbitrario porque la mayoría de los equipos no lo instrumentan. Un recorrido por los precios publicados por millón de tokens, por qué las cuentas crecen más rápido que el uso, y qué monitorear antes de que el CFO pregunte.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/context-engineering.html">
+        <div class="post-list-meta">2026-05-10 &middot; Arquitectura de IA &middot; 9 min de lectura &middot; en inglés</div>
+        <h2>¿Qué separa a los agentes de IA en producción de los demos?</h2>
+        <p class="post-list-excerpt">Un agente de demo tiene un prompt. Un agente de producción tiene variables, hooks de contexto, políticas de memoria, evaluators y modelos por tarea. La migración de prompt engineering hacia context engineering, con la literatura detrás (Lost in the Middle, Building Effective Agents de Anthropic).</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/v2.1-ops-layer.html">
+        <div class="post-list-meta">2026-05-10 &middot; Producto / Release &middot; 6 min de lectura &middot; en inglés</div>
+        <h2>Lo que entregamos: ATO se convierte en la capa de ops para agentes multi-runtime</h2>
+        <p class="post-list-excerpt">Doce releases en dos días. Replay de cualquier prompt en otro runtime, regresiones detectadas antes de que las vea el usuario, costos recortados sin perder calidad. Las notas de release de la v2.1 de ATO.</p>
+      </a>
+    </li>
+
+  </ul>
+
+</article>
+
+</body>
+</html>
