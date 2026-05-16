@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<style>
+  /* OG image at the standard 1200x630 size. Rendered via headless
+   * Chrome → /og.png. Source kept in the repo so the next regenerate
+   * is one shell command: see scripts/regen-og.sh (not yet shipped). */
+  @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    width: 1200px;
+    height: 630px;
+    overflow: hidden;
+  }
+
+  body {
+    background: radial-gradient(ellipse at top right, rgba(0,255,178,0.10) 0%, rgba(10,10,15,1) 60%), #0a0a0f;
+    color: #fff;
+    font-family: 'Space Grotesk', sans-serif;
+    padding: 60px 70px;
+    position: relative;
+  }
+
+  .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: #00FFB2;
+    margin-bottom: 50px;
+  }
+  .brand-mark {
+    width: 36px; height: 36px;
+    background: #00FFB2; color: #0a0a0f;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 22px;
+    font-family: 'Space Grotesk', sans-serif;
+  }
+  .brand-text { letter-spacing: 2px; }
+
+  .kicker {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px; font-weight: 400;
+    color: rgba(255,255,255,0.55);
+    letter-spacing: 0.5px;
+    margin-bottom: 18px;
+  }
+
+  .headline {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 110px;
+    line-height: 0.95;
+    letter-spacing: -3px;
+    text-transform: uppercase;
+    margin-bottom: 36px;
+  }
+  .headline .line { display: block; }
+  .headline .bracket { color: rgba(255,255,255,0.30); }
+  .headline .highlight { color: #00FFB2; }
+  .headline .underscore { color: rgba(255,255,255,0.30); }
+
+  .sub {
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 500;
+    font-size: 28px;
+    line-height: 1.30;
+    color: rgba(255,255,255,0.88);
+    max-width: 920px;
+  }
+  .sub .accent { color: #00FFB2; }
+
+  .receipts {
+    position: absolute;
+    bottom: 60px; left: 70px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    color: rgba(255,255,255,0.50);
+    letter-spacing: 0.3px;
+  }
+  .install {
+    position: absolute;
+    bottom: 60px; right: 70px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 18px;
+    color: #00FFB2;
+    text-align: right;
+  }
+  .install .cmd {
+    background: rgba(0,255,178,0.08);
+    border: 1px solid rgba(0,255,178,0.30);
+    padding: 8px 14px;
+    display: inline-block;
+    margin-bottom: 6px;
+  }
+  .install .domain {
+    color: rgba(255,255,255,0.50);
+    font-size: 14px;
+  }
+</style>
+</head>
+<body>
+  <div class="brand">
+    <span class="brand-mark">A</span>
+    <span class="brand-text">ATO_</span>
+  </div>
+
+  <div class="kicker">// compare any AI &middot; keep the receipts &darr;</div>
+
+  <h1 class="headline">
+    <span class="line">LOCAL</span>
+    <span class="line"><span class="bracket">[</span><span class="highlight">WAR</span><span class="bracket">]</span></span>
+    <span class="line">ROOM<span class="underscore">_</span></span>
+  </h1>
+
+  <p class="sub">
+    Run any AI on your actual task &mdash; see which one solved it
+    <span class="accent">cheapest and best, with receipts</span>.
+  </p>
+
+  <div class="receipts">N&nbsp;LLMs &middot; 20+ runtimes &middot; signed audit trail &middot; MIT</div>
+  <div class="install">
+    <div class="cmd">brew install willnigri/ato/ato</div>
+    <div class="domain">agentictool.ai</div>
+  </div>
+</body>
+</html>
