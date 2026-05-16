@@ -55,6 +55,28 @@
 
   <!-- Blog posts — EN canonical (PT-BR and ES translations of bodies are Phase 2/3) -->
   <url>
+    <loc>https://agentictool.ai/posts/compare-claude-codex-gemini.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://agentictool.ai/posts/compare-claude-codex-gemini.html"/>
+    <xhtml:link rel="alternate" hreflang="pt-BR" href="https://agentictool.ai/posts/compare-claude-codex-gemini-pt.html"/>
+    <xhtml:link rel="alternate" hreflang="es" href="https://agentictool.ai/posts/compare-claude-codex-gemini-es.html"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://agentictool.ai/posts/compare-claude-codex-gemini.html"/>
+  </url>
+  <url>
+    <loc>https://agentictool.ai/posts/compare-claude-codex-gemini-pt.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://agentictool.ai/posts/compare-claude-codex-gemini-es.html</loc>
+    <lastmod>2026-05-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
     <loc>https://agentictool.ai/posts/multi-llm-consensus-rollback.html</loc>
     <lastmod>2026-05-14</lastmod>
     <changefreq>monthly</changefreq>

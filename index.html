@@ -44,7 +44,7 @@
             "priceCurrency": "USD"
         },
         "description": "Free, open-source desktop app + CLI for multi-LLM debate sessions with tool calls and an audit trail. Drop Claude, GPT, Gemini, Grok, MiniMax — or any of 20+ supported runtimes — into one session; the LLMs see each other's findings via history replay, call function-calling tools (read_file, grep, git_log) to verify claims in your repo, and produce a signed audit trail ready to paste into a PR. Six native runtimes (Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama) plus 15+ API providers. Local-first, MIT licensed.",
-        "softwareVersion": "2.4.6",
+        "softwareVersion": "2.6.1",
         "downloadUrl": "https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest",
         "featureList": [
             "Multi-LLM debate sessions (ato review) with tool-call audit",
@@ -94,6 +94,7 @@
         "name": "ATO Blog",
         "description": "Essays on multi-LLM development, AI agent observability, regression detection, cost optimization, and context engineering.",
         "blogPost": [
+            {"@type": "BlogPosting", "headline": "Same prompt, three AIs, real receipts: comparing Claude vs Codex vs Gemini on a real PR", "url": "https://agentictool.ai/posts/compare-claude-codex-gemini.html"},
             {"@type": "BlogPosting", "headline": "I rebuilt Karpathy's LLM Council with tool calls and an audit trail", "url": "https://agentictool.ai/posts/llm-council-tool-calls.html"},
             {"@type": "BlogPosting", "headline": "Why is multi-LLM development still so painful in 2026?", "url": "https://agentictool.ai/posts/multi-llm-workflows.html"},
             {"@type": "BlogPosting", "headline": "How can we actually understand whether a new LLM is better", "url": "https://agentictool.ai/posts/ab-testing-ai-prompts.html"},
@@ -144,7 +145,7 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-top">
-                <a href="/posts/llm-council-tool-calls.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.4 &middot; Multi-LLM war room with tool calls &middot; Read what&rsquo;s new &rarr;</a>
+                <a href="/posts/compare-claude-codex-gemini.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.6 &middot; Same prompt, three AIs, real receipts &middot; Read the comparison &rarr;</a>
                 <h1 class="hero-title">
                     <span class="line">LOCAL</span>
                     <span class="line"><span class="bracket">[</span><span class="highlight">WAR</span><span class="bracket">]</span></span>
@@ -153,7 +154,7 @@
             </div>
             <div class="hero-bottom">
                 <div class="hero-content">
-                    <p class="hero-subtitle">Drop any of your LLMs &mdash; <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">GPT</span>, <span style="color:#3b82f6">Gemini</span>, Grok, MiniMax, or any of 20+ supported runtimes &mdash; into <strong style="color:var(--accent-cyan)">one shared session</strong>. They see each other&rsquo;s findings via history replay, call <strong style="color:var(--accent-cyan)">real tools</strong> (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) to verify claims in your repo, and you walk out with a <strong style="color:var(--accent-cyan)">signed audit trail</strong> to paste into your PR. Drive it from a <strong>GUI</strong>, a <strong>CLI</strong>, or your coding agent over <strong>MCP</strong> &mdash; same data, same audit trail. Local-first. MIT. Bring your own keys.</p>
+                    <p class="hero-subtitle">Run any AI on your actual task &mdash; <strong style="color:var(--accent-cyan)">see which one solved it cheapest and best, with receipts</strong>. One command across <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, Grok, MiniMax, or any of 20+ supported runtimes. They run the same prompt in <strong style="color:var(--accent-cyan)">one shared session</strong>, call <strong style="color:var(--accent-cyan)">real tools</strong> (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) to verify claims in your repo, and produce a <strong style="color:var(--accent-cyan)">signed audit trail</strong> with cost, tokens, and tool-call receipts. Drive it from a <strong>GUI</strong>, a <strong>CLI</strong>, or your coding agent over <strong>MCP</strong> &mdash; same data, same audit trail. Local-first. MIT. Bring your own keys.</p>
                     <div class="hero-stats">
                         <div class="hero-stat">
                             <div class="hero-stat-value">N</div>
@@ -221,7 +222,7 @@
             <!-- NEW IN v1.5.5 -->
             <div class="feature-block fade-in" style="margin-bottom: 3rem;">
                 <div class="feature-info">
-                    <h3 style="color: var(--accent-cyan);">New in v2.4 &mdash; Multi-LLM war room with tool calls</h3>
+                    <h3 style="color: var(--accent-cyan);">New in v2.6 &mdash; Compare any AI on your actual task</h3>
                     <p><code class="mono">ato review --reviewer @security-specialist --reviewer @perf-reviewer --reviewer claude --reviewer minimax</code> &bull; Function-calling tools (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) &bull; Persistent specialist agents with system prompts &bull; Per-turn audit trail in the GUI &mdash; verified-via-N-tool-calls vs prompt-only badges &bull; Lean mode forces the LLMs to walk the live repo</p>
                     <ul class="feature-bullets">
                         <li><strong>Live runs panel</strong> &mdash; See every in-flight dispatch with agent slug, runtime, workspace, and elapsed time. Kill stuck dispatches with one click &mdash; no more reading every terminal buffer to find the runaway. Shows up the moment you fire something via Quick Test, the chat pane, scheduled cron, or MCP <code class="mono">run_agent</code>.</li>

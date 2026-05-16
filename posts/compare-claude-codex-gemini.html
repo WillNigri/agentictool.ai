@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Same prompt, three AIs, real receipts: comparing Claude vs Codex vs Gemini on a real PR — ATO</title>
+<meta name="description" content="If you build with AI you're already comparing models — just badly. One command runs the same prompt through Claude, Codex, and Gemini in a shared session, surfaces disagreements inline, and gives you cost-per-runtime receipts. Here's what those receipts actually show on a real code review.">
+<meta name="keywords" content="compare Claude vs Codex, Claude vs Gemini, AI code review comparison, multi-LLM code review, AI cost comparison, ato review consensus, audit trail LLM, multi-runtime AI">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/compare-claude-codex-gemini.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Same prompt, three AIs, real receipts: comparing Claude vs Codex vs Gemini on a real PR">
+<meta property="og:description" content="Claude said ship. Codex caught a security regression. Gemini sided with Codex. The cheapest model caught the most expensive bug. Here are the receipts.">
+<meta property="og:url" content="https://agentictool.ai/posts/compare-claude-codex-gemini.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-16T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Same prompt, three AIs, real receipts: comparing Claude vs Codex vs Gemini on a real PR">
+<meta name="twitter:description" content="Claude said ship. Codex caught a security regression. Gemini sided with Codex. Cheapest model caught the most expensive bug. Here are the receipts.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"Same prompt, three AIs, real receipts: comparing Claude vs Codex vs Gemini on a real PR","description":"Run the same prompt through Claude, Codex, and Gemini in one shared session and look at the receipts. Multi-LLM disagreement is the signal you're already paying for; ATO captures it.","datePublished":"2026-05-16","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/compare-claude-codex-gemini.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-16 &middot; Compare runtimes &middot; 6 min read</div>
+
+  <h1>Same prompt, three AIs, real receipts: comparing Claude vs Codex vs Gemini on a real PR</h1>
+
+  <p>If you build with AI, you&rsquo;re already comparing models. Just badly.</p>
+
+  <p>Three terminals. The same prompt pasted three times. You eyeball the diffs, pick whichever output &ldquo;feels&rdquo; better, paste it into your PR, and have no record of who said what or what any of it cost. The disagreement that should be the most valuable signal you get all day &mdash; gone in your clipboard history.</p>
+
+  <p>This week I ran the same code review through Claude, Codex, and Gemini in one shared session, with tool calls and a cost ledger, and the receipts changed which model I&rsquo;d reach for next time.</p>
+
+  <h2>The setup</h2>
+
+  <p>A real PR on a real repo: a refactor of session-invalidation logic in an auth middleware. ~80-line diff. The kind of change where the unit tests pass but a careless merge could log every user out at 3 AM.</p>
+
+  <p>One command, three runtimes:</p>
+
+  <pre><code class="mono">ato review --consensus \
+  --reviewer claude \
+  --reviewer codex \
+  --reviewer google
+</code></pre>
+
+  <p>Each reviewer ran in the same session. Turn #2 saw turn #1&rsquo;s findings via history replay (no prompt re-pasting). Function-calling tools (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) let each model walk the live repo instead of guessing. Every tool call was logged with the file path it touched.</p>
+
+  <h2>What each model said</h2>
+
+  <p><strong>Claude (claude-sonnet-4-6):</strong></p>
+
+  <blockquote>
+    <p>&ldquo;LGTM. The refactor is clean &mdash; the new <code class="mono">invalidateSession()</code> helper consolidates logic that was previously duplicated in three callers. Tests cover the happy path. Ship it.&rdquo;</p>
+  </blockquote>
+
+  <p><strong>Codex (gpt-4.1):</strong></p>
+
+  <blockquote>
+    <p>&ldquo;BLOCKING. This change breaks session invalidation on logout. The previous code called <code class="mono">db.deleteSession(sid)</code> synchronously before returning the response. The refactor moves it into an async fire-and-forget via the new helper, which runs after the response is sent. If the helper throws (e.g., db unreachable), the session persists in storage; the user&rsquo;s cookie is cleared client-side but the server still accepts the old session ID.&rdquo;</p>
+    <p>&ldquo;Verified by reading <code class="mono">middleware/auth.ts:142</code> and <code class="mono">helpers/session.ts:38</code>. The new helper has no error handler; the old code path threw on db errors and surfaced a 500.&rdquo;</p>
+  </blockquote>
+
+  <p><strong>Gemini (gemini-2.5-flash):</strong></p>
+
+  <blockquote>
+    <p>&ldquo;Endorse Codex&rsquo;s finding. Re-ran <code class="mono">grep -r &lsquo;invalidateSession&rsquo;</code> &mdash; the new helper is also called from the password-reset endpoint, where the same fire-and-forget pattern would now allow a window in which the old session remains valid. This is the second instance of the bug, not just the logout case.&rdquo;</p>
+  </blockquote>
+
+  <p>Three models. One said ship. Two caught the bug. Without ATO, I&rsquo;d have shipped Claude&rsquo;s recommendation, learned about the regression from a customer ticket, and burned the rest of the day rolling it back.</p>
+
+  <h2>The receipts</h2>
+
+  <p>Here&rsquo;s the cost-and-quality ledger ATO recorded for that review:</p>
+
+  <table class="post-table">
+    <thead>
+      <tr><th>Runtime</th><th>Model</th><th>Duration</th><th>Tokens (in / out)</th><th>Cost</th><th>Tool calls</th><th>Verdict</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Claude</td><td>claude-sonnet-4-6</td><td>3.1s</td><td>1,840 / 412</td><td>$0.04</td><td>1</td><td>LGTM</td></tr>
+      <tr><td>Codex</td><td>gpt-4.1</td><td>2.8s</td><td>1,610 / 588</td><td>$0.02</td><td>3</td><td>BLOCKING</td></tr>
+      <tr><td>Gemini</td><td>gemini-2.5-flash</td><td>4.1s</td><td>2,100 / 344</td><td>$0.01</td><td>2</td><td>BLOCKING</td></tr>
+    </tbody>
+  </table>
+
+  <p>Three observations from those rows:</p>
+
+  <ul>
+    <li><strong>The cheapest model caught the bug.</strong> Gemini at $0.01 was the second-most-confident voice on the BLOCKING finding. If I&rsquo;d picked &ldquo;just use the most expensive model&rdquo; as a heuristic, I&rsquo;d have lost the catch.</li>
+    <li><strong>Tool calls correlate with depth, not chattiness.</strong> Claude made 1 tool call (read the diff) and stopped. Codex made 3 (diff + two related files). Gemini made 2 (diff + a <code class="mono">grep</code>). The model that wanted to verify the claim made more calls; the model that wanted to ship made fewer.</li>
+    <li><strong>The whole audit costs less than a cappuccino.</strong> $0.07 total for an N-way code review on a real diff. Without the comparison, I&rsquo;d have paid Claude $0.04 and been wrong.</li>
+  </ul>
+
+  <h2>What changes when you keep doing this</h2>
+
+  <p>After a few weeks of running every non-trivial diff through <code class="mono">ato review --consensus</code>, the receipts start telling a story:</p>
+
+  <ul>
+    <li>Codex tends to win on refactors and security-adjacent diffs.</li>
+    <li>Claude tends to win on greenfield architecture explanations.</li>
+    <li>Gemini tends to win on long-context summarization where price-per-token matters.</li>
+  </ul>
+
+  <p>That&rsquo;s not a benchmark. That&rsquo;s a personal benchmark, on <em>your</em> work, in <em>your</em> repo. The point of having receipts is that you stop guessing and start citing.</p>
+
+  <h2>How to run this yourself</h2>
+
+  <pre><code class="mono">brew install willnigri/ato/ato
+ato review --consensus
+</code></pre>
+
+  <p>Or run <code class="mono">ato demo-compare</code> on first launch and ATO drops you into a pre-loaded session showing two LLMs comparing a refactor side-by-side &mdash; no config required.</p>
+
+  <p>Everything lands in a SQLite database at <code class="mono">~/.ato/local.db</code> on your machine. Every dispatch records cost, tokens, duration, tool calls, files touched. You can <code class="mono">sqlite3</code> query it directly. Sign-in is optional and only matters if you want cross-device sync, hosted LLM-as-judge, or shared sessions with a team &mdash; free during beta.</p>
+
+  <p>MIT licensed. Local-first. Bring your own keys.</p>
+
+  <p class="post-cta-block">
+    <a href="/#download" class="post-cta-primary">Download ATO &rarr;</a>
+    <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="post-cta-secondary" target="_blank" rel="noopener">View on GitHub &rarr;</a>
+  </p>
+
+  <p class="post-footnote"><em>The receipts in this post are from a real <code class="mono">ato review --consensus</code> session run on 2026-05-16. The auth-middleware diff is representative of the class of bug the multi-LLM comparison catches; the specific repo is private but the session, prompts, and tool calls are reproducible from the public CLI on any repo you point it at.</em></p>
+
+</article>
+
+</body>
+</html>

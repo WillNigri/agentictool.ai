@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mismo prompt, tres IAs, recibos reales: comparando Claude vs Codex vs Gemini en un PR real — ATO</title>
+<meta name="description" content="Si construyes con IA, ya estás comparando modelos — solo que mal. Un comando ejecuta el mismo prompt en Claude, Codex y Gemini en una sesión compartida, muestra los desacuerdos inline y te da recibos por runtime. Mira lo que esos recibos realmente dicen en un code review real.">
+<meta name="keywords" content="comparar Claude vs Codex, Claude vs Gemini, code review IA, code review multi-LLM, comparación costo IA, ato review consensus, registro de auditoría LLM, multi-runtime IA">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/compare-claude-codex-gemini-es.html">
+<link rel="alternate" hreflang="en" href="https://agentictool.ai/posts/compare-claude-codex-gemini.html">
+<link rel="alternate" hreflang="pt-BR" href="https://agentictool.ai/posts/compare-claude-codex-gemini-pt.html">
+<link rel="alternate" hreflang="es" href="https://agentictool.ai/posts/compare-claude-codex-gemini-es.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mismo prompt, tres IAs, recibos reales: comparando Claude vs Codex vs Gemini en un PR real">
+<meta property="og:description" content="Claude dijo despliega. Codex atrapó una regresión de seguridad. Gemini se alineó con Codex. El modelo más barato atrapó el bug más caro. Aquí están los recibos.">
+<meta property="og:url" content="https://agentictool.ai/posts/compare-claude-codex-gemini-es.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-16T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Mismo prompt, tres IAs, recibos reales: comparando Claude vs Codex vs Gemini en un PR real">
+<meta name="twitter:description" content="Claude dijo despliega. Codex atrapó la regresión. Gemini se alineó con Codex. El modelo más barato atrapó el bug más caro.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/index-es.html" class="post-back">&larr; agentictool.ai</a>
+    <a href="/index-es.html#download" class="post-cta">Descargar &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-16 &middot; Compare runtimes &middot; 6 min de lectura</div>
+
+  <h1>Mismo prompt, tres IAs, recibos reales: comparando Claude vs Codex vs Gemini en un PR real</h1>
+
+  <p>Si construyes con IA, ya estás comparando modelos. Solo que mal.</p>
+
+  <p>Tres terminales. El mismo prompt pegado tres veces. Echas un ojo a los diffs, eliges el que &ldquo;se ve&rdquo; mejor, lo pegas en tu PR, y no tienes registro de quién dijo qué ni cuánto costó. El desacuerdo que debería ser la señal más valiosa del día &mdash; se perdió en el historial del clipboard.</p>
+
+  <p>Esta semana ejecuté el mismo code review en Claude, Codex y Gemini en una sesión compartida, con tool calls y un ledger de costo, y los recibos cambiaron qué modelo usaré la próxima vez.</p>
+
+  <h2>El setup</h2>
+
+  <p>Un PR real en un repo real: refactor de la lógica de invalidación de sesión en un auth middleware. Diff de ~80 líneas. El tipo de cambio donde los tests unitarios pasan pero un merge descuidado puede desloguear a todos a las 3 AM.</p>
+
+  <p>Un comando, tres runtimes:</p>
+
+  <pre><code class="mono">ato review --consensus \
+  --reviewer claude \
+  --reviewer codex \
+  --reviewer google
+</code></pre>
+
+  <p>Cada reviewer corrió en la misma sesión. El turno #2 vio los hallazgos del #1 vía replay de historial (sin volver a pegar el prompt). Tool calls (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) dejaron a cada modelo recorrer el repo en vivo en lugar de adivinar. Cada llamada a herramienta quedó registrada con la ruta del archivo que tocó.</p>
+
+  <h2>Lo que dijo cada modelo</h2>
+
+  <p><strong>Claude (claude-sonnet-4-6):</strong></p>
+
+  <blockquote>
+    <p>&ldquo;LGTM. El refactor está limpio &mdash; el nuevo helper <code class="mono">invalidateSession()</code> consolida lógica que estaba duplicada en tres callers. Los tests cubren el happy path. Despliega.&rdquo;</p>
+  </blockquote>
+
+  <p><strong>Codex (gpt-4.1):</strong></p>
+
+  <blockquote>
+    <p>&ldquo;BLOQUEANTE. Este cambio rompe la invalidación de sesión en logout. El código previo llamaba a <code class="mono">db.deleteSession(sid)</code> de forma síncrona antes de devolver la respuesta. El refactor lo mueve a un fire-and-forget asíncrono vía el nuevo helper, que corre después de enviar la respuesta. Si el helper falla (ej: db inaccesible), la sesión persiste en storage; la cookie del usuario se borra del cliente pero el servidor sigue aceptando el session ID viejo.&rdquo;</p>
+    <p>&ldquo;Verificado leyendo <code class="mono">middleware/auth.ts:142</code> y <code class="mono">helpers/session.ts:38</code>. El nuevo helper no tiene error handler; el código viejo hacía throw en errores de db y devolvía un 500.&rdquo;</p>
+  </blockquote>
+
+  <p><strong>Gemini (gemini-2.5-flash):</strong></p>
+
+  <blockquote>
+    <p>&ldquo;Apoyo el hallazgo de Codex. Re-ejecuté <code class="mono">grep -r &lsquo;invalidateSession&rsquo;</code> &mdash; el nuevo helper también se llama desde el endpoint de password-reset, donde el mismo patrón fire-and-forget ahora abriría una ventana en la que la sesión vieja sigue válida. Este es el segundo caso del bug, no solo el de logout.&rdquo;</p>
+  </blockquote>
+
+  <p>Tres modelos. Uno dijo despliega. Dos atraparon el bug. Sin ATO, habría seguido la recomendación de Claude, me habría enterado de la regresión por un ticket de cliente, y habría gastado el resto del día revirtiendo.</p>
+
+  <h2>Los recibos</h2>
+
+  <p>Aquí está el ledger de costo y calidad que ATO registró para ese review:</p>
+
+  <table class="post-table">
+    <thead>
+      <tr><th>Runtime</th><th>Modelo</th><th>Duración</th><th>Tokens (in / out)</th><th>Costo</th><th>Tool calls</th><th>Veredicto</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Claude</td><td>claude-sonnet-4-6</td><td>3,1s</td><td>1.840 / 412</td><td>US$ 0,04</td><td>1</td><td>LGTM</td></tr>
+      <tr><td>Codex</td><td>gpt-4.1</td><td>2,8s</td><td>1.610 / 588</td><td>US$ 0,02</td><td>3</td><td>BLOQUEANTE</td></tr>
+      <tr><td>Gemini</td><td>gemini-2.5-flash</td><td>4,1s</td><td>2.100 / 344</td><td>US$ 0,01</td><td>2</td><td>BLOQUEANTE</td></tr>
+    </tbody>
+  </table>
+
+  <p>Tres cosas que esas filas muestran:</p>
+
+  <ul>
+    <li><strong>El modelo más barato atrapó el bug.</strong> Gemini a US$ 0,01 fue la segunda voz más segura sobre el hallazgo BLOQUEANTE. Si hubiera adoptado &ldquo;usa siempre el modelo más caro&rdquo; como regla, perdería la atrapada.</li>
+    <li><strong>Tool calls indican profundidad, no verbosidad.</strong> Claude hizo 1 tool call (leyó el diff) y paró. Codex hizo 3 (diff + dos archivos relacionados). Gemini hizo 2 (diff + un <code class="mono">grep</code>). El modelo que quiso verificar la afirmación hizo más llamadas; el que quiso aprobar hizo menos.</li>
+    <li><strong>La auditoría entera cuesta menos que un café.</strong> US$ 0,07 totales por un code review N-vías en un diff real. Sin la comparación, habría pagado US$ 0,04 a Claude y habría estado equivocado.</li>
+  </ul>
+
+  <h2>Lo que cambia cuando lo haces seguido</h2>
+
+  <p>Después de unas semanas pasando todo diff no trivial por <code class="mono">ato review --consensus</code>, los recibos empiezan a contar una historia:</p>
+
+  <ul>
+    <li>Codex tiende a ganar en refactores y diffs adyacentes a seguridad.</li>
+    <li>Claude tiende a ganar en explicaciones de arquitectura greenfield.</li>
+    <li>Gemini tiende a ganar en resúmenes de contexto largo donde el precio por token importa.</li>
+  </ul>
+
+  <p>Eso no es un benchmark genérico. Es un benchmark personal, sobre <em>tu</em> trabajo, en <em>tu</em> repo. El punto de tener recibos es dejar de adivinar y empezar a citar.</p>
+
+  <h2>Cómo correr esto vos mismo</h2>
+
+  <pre><code class="mono">brew install willnigri/ato/ato
+ato review --consensus
+</code></pre>
+
+  <p>O ejecuta <code class="mono">ato demo-compare</code> en el primer launch y ATO te tira en una sesión pre-cargada mostrando dos LLMs comparando un refactor lado a lado &mdash; sin configuración.</p>
+
+  <p>Todo aterriza en una base SQLite en <code class="mono">~/.ato/local.db</code> en tu máquina. Cada dispatch registra costo, tokens, duración, tool calls, archivos tocados. Podés correr <code class="mono">sqlite3</code> directo. El sign-in es opcional y solo importa si querés sync entre dispositivos, LLM-as-judge hosteado, o sesiones compartidas con equipo &mdash; gratis durante el beta.</p>
+
+  <p>MIT. Local-first. Trae tus claves.</p>
+
+  <p class="post-cta-block">
+    <a href="/index-es.html#download" class="post-cta-primary">Descargar ATO &rarr;</a>
+    <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="post-cta-secondary" target="_blank" rel="noopener">Ver en GitHub &rarr;</a>
+  </p>
+
+  <p class="post-footnote"><em>Los recibos de este post son de una sesión real <code class="mono">ato review --consensus</code> ejecutada el 2026-05-16. El diff del auth middleware es representativo de la clase de bug que la comparación multi-LLM atrapa; el repo específico es privado pero la sesión, prompts y tool calls son reproducibles desde la CLI pública en cualquier repo que apuntes.</em></p>
+
+</article>
+
+</body>
+</html>

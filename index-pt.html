@@ -47,7 +47,7 @@
             "priceCurrency": "USD"
         },
         "description": "Free, open-source desktop app + CLI for multi-LLM debate sessions with tool calls and an audit trail. Drop Claude, GPT, Gemini, Grok, MiniMax — or any of 20+ supported runtimes — into one session; the LLMs see each other's findings via history replay, call function-calling tools (read_file, grep, git_log) to verify claims in your repo, and produce a signed audit trail ready to paste into a PR. Six native runtimes (Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama) plus 15+ API providers. Local-first, MIT licensed.",
-        "softwareVersion": "2.4.6",
+        "softwareVersion": "2.6.1",
         "downloadUrl": "https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest",
         "featureList": [
             "Multi-LLM debate sessions (ato review) with tool-call audit",
@@ -97,6 +97,7 @@
         "name": "ATO Blog",
         "description": "Essays on multi-LLM development, AI agent observability, regression detection, cost optimization, and context engineering.",
         "blogPost": [
+            {"@type": "BlogPosting", "headline": "Mesmo prompt, três IAs, recibos reais: comparando Claude vs Codex vs Gemini num PR real", "url": "https://agentictool.ai/posts/compare-claude-codex-gemini-pt.html"},
             {"@type": "BlogPosting", "headline": "I rebuilt Karpathy's LLM Council with tool calls and an audit trail", "url": "https://agentictool.ai/posts/llm-council-tool-calls.html"},
             {"@type": "BlogPosting", "headline": "Why is multi-LLM development still so painful in 2026?", "url": "https://agentictool.ai/posts/multi-llm-workflows.html"},
             {"@type": "BlogPosting", "headline": "How can we actually understand whether a new LLM is better", "url": "https://agentictool.ai/posts/ab-testing-ai-prompts.html"},
@@ -147,7 +148,7 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-top">
-                <a href="/posts/llm-council-tool-calls.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.4 &middot; Sala de guerra multi-LLM com tool calls &middot; Veja as novidades &rarr;</a>
+                <a href="/posts/compare-claude-codex-gemini-pt.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.6 &middot; Mesmo prompt, três IAs, recibos reais &middot; Ler a comparação &rarr;</a>
                 <h1 class="hero-title">
                     <span class="line">LOCAL</span>
                     <span class="line"><span class="bracket">[</span><span class="highlight">WAR</span><span class="bracket">]</span></span>
@@ -156,7 +157,7 @@
             </div>
             <div class="hero-bottom">
                 <div class="hero-content">
-                    <p class="hero-subtitle">Coloque qualquer um dos seus LLMs &mdash; <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">GPT</span>, <span style="color:#3b82f6">Gemini</span>, Grok, MiniMax ou qualquer um dos mais de 20 runtimes suportados &mdash; em <strong style="color:var(--accent-cyan)">uma sessão compartilhada</strong>. Eles veem o raciocínio uns dos outros via replay de histórico, chamam <strong style="color:var(--accent-cyan)">ferramentas reais</strong> (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) para verificar afirmações no seu repositório, e você sai com uma <strong style="color:var(--accent-cyan)">trilha de auditoria assinada</strong> pronta para colar no seu PR. Use pela <strong>GUI</strong>, pela <strong>CLI</strong> ou pelo seu coding agent via <strong>MCP</strong> &mdash; mesmos dados, mesma trilha de auditoria. Local-first. MIT. Traga suas próprias chaves.</p>
+                    <p class="hero-subtitle">Rode qualquer IA na sua tarefa real &mdash; <strong style="color:var(--accent-cyan)">veja qual resolveu mais barato e melhor, com recibos</strong>. Um comando para <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, Grok, MiniMax ou qualquer um dos mais de 20 runtimes suportados. Eles rodam o mesmo prompt em <strong style="color:var(--accent-cyan)">uma sessão compartilhada</strong>, chamam <strong style="color:var(--accent-cyan)">ferramentas reais</strong> (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) para verificar afirmações no seu repositório, e produzem uma <strong style="color:var(--accent-cyan)">trilha de auditoria assinada</strong> com custo, tokens e recibos de cada chamada de ferramenta. Use pela <strong>GUI</strong>, pela <strong>CLI</strong> ou pelo seu coding agent via <strong>MCP</strong> &mdash; mesmos dados, mesma trilha de auditoria. Local-first. MIT. Traga suas próprias chaves.</p>
                     <div class="hero-stats">
                         <div class="hero-stat">
                             <div class="hero-stat-value">N</div>
@@ -224,7 +225,7 @@
             <!-- NEW IN v1.5.5 -->
             <div class="feature-block fade-in" style="margin-bottom: 3rem;">
                 <div class="feature-info">
-                    <h3 style="color: var(--accent-cyan);">Novidade na v2.4 &mdash; Sala de guerra multi-LLM com tool calls</h3>
+                    <h3 style="color: var(--accent-cyan);">Novidade na v2.6 &mdash; Compare qualquer IA na sua tarefa real</h3>
                     <p><code class="mono">ato review --reviewer @security-specialist --reviewer @perf-reviewer --reviewer claude --reviewer minimax</code> &bull; Function-calling tools (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) &bull; Agentes especialistas persistentes com system prompts &bull; Trilha de auditoria por turno na GUI &mdash; badges &ldquo;verificado-via-N-tool-calls&rdquo; vs &ldquo;só pelo prompt&rdquo; &bull; Modo lean força os LLMs a navegarem o repositório de verdade</p>
                     <ul class="feature-bullets">
                         <li><strong>Painel de runs ao vivo</strong> &mdash; Veja cada despacho em execução com slug do agente, runtime, workspace e tempo decorrido. Mate despachos travados em um clique &mdash; sem precisar ler todos os buffers de terminal para achar o problema. Aparece no momento em que você dispara algo via Quick Test, painel de chat, cron agendado ou MCP <code class="mono">run_agent</code>.</li>
