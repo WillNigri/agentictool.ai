@@ -217,6 +217,23 @@
             border-radius: 0;
         }
 
+        /* Round 6 kicker — small code-comment line above the giant
+         * headline. Sets the read order so a visitor sees the
+         * compare-runtimes pitch before the war-room visual identity.
+         * Per Designer seat 2026-05-16: subordinate to subtitle in
+         * weight + color, monospace to match the terminal aesthetic,
+         * tight margin to the headline so it reads as a kicker not
+         * an orphan. */
+        .hero-kicker {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: clamp(0.72rem, 1vw, 0.88rem);
+            font-weight: 400;
+            color: var(--text-muted);
+            letter-spacing: 0.5px;
+            margin: 12px 0 10px 0;
+            opacity: 0.9;
+        }
+
         .hero-title {
             font-family: 'Space Grotesk', sans-serif;
             /* Bigger than the original 5.5rem cap to take advantage
