@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ATO — Your local war room for humans and LLMs.</title>
-    <meta name="description" content="Multi-LLM debate sessions with tool calls and an audit trail. Drop Claude, GPT, Gemini, Grok, MiniMax — or any of 20+ runtimes — into one session, push back on each other, cite the files they checked. Local-first, MIT. Bring your own keys.">
+    <title>ATO — Which AI actually wins? Compare Claude, Codex, Gemini on your code.</title>
+    <meta name="description" content="Same prompt, 16 runtimes, one cost table with quality scores. ATO runs your AI tasks across Claude, Codex, Gemini and more — tells you which one won cheapest and best. Free, local-first, MIT licensed.">
     <meta name="keywords" content="ato, agentic tool optimization, LLM war room, multi-LLM debate, multi-LLM code review, tool-calling LLMs, AI code review, multi-runtime agents, Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama, audit trail, local-first AI, agent ops, MCP, multi-provider LLM, decision sessions LLM">
 
     <meta property="og:type" content="website">
@@ -152,29 +152,62 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-top">
-                <a href="/posts/compare-claude-codex-gemini.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.6 &middot; Same prompt, three AIs, real receipts &middot; Read the comparison &rarr;</a>
-                <p class="hero-kicker">// compare any AI &middot; keep the receipts &darr;</p>
+                <a href="/posts/compare-claude-codex-gemini.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.8 &middot; Same prompt, three AIs, real receipts &middot; Read the comparison &rarr;</a>
+                <p class="hero-kicker">// your agents are on the wrong model &darr;</p>
                 <h1 class="hero-title">
-                    <span class="line">LOCAL</span>
-                    <span class="line"><span class="bracket">[</span><span class="highlight">WAR</span><span class="bracket">]</span></span>
-                    <span class="line">ROOM<span class="underscore">_</span></span>
+                    <span class="line" style="font-size:0.7em;">WHICH AI</span>
+                    <span class="line"><span class="highlight">ACTUALLY</span></span>
+                    <span class="line">WINS<span class="underscore">?</span></span>
                 </h1>
             </div>
             <div class="hero-bottom">
                 <div class="hero-content">
-                    <p class="hero-subtitle">Run any AI on your actual task &mdash; <strong style="color:var(--accent-cyan)">see which one solved it cheapest and best, with receipts</strong>. One command across <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, Grok, MiniMax, or any of 20+ supported runtimes. They run the same prompt in <strong style="color:var(--accent-cyan)">one shared session</strong>, call <strong style="color:var(--accent-cyan)">real tools</strong> (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) to verify claims in your repo, and produce a <strong style="color:var(--accent-cyan)">signed audit trail</strong> with cost, tokens, and tool-call receipts. Drive it from a <strong>GUI</strong>, a <strong>CLI</strong>, or your coding agent over <strong>MCP</strong> &mdash; same data, same audit trail. Local-first. MIT. Bring your own keys.</p>
+                    <p class="hero-subtitle">Same prompt across <span style="color:var(--accent-cyan)">Claude</span>, <span style="color:#22c55e">Codex</span>, <span style="color:#3b82f6">Gemini</span>, and 16 runtimes. <strong style="color:var(--accent-cyan)">ATO tells you which one solved it cheapest and best &mdash; with receipts.</strong></p>
+
+                    <!-- LIVE DEMO: the receipt that sells -->
+                    <div style="background:rgba(0,0,0,0.4); border:1px solid var(--border); border-radius:8px; padding:20px; margin:24px 0; font-family:'JetBrains Mono',monospace; font-size:13px; line-height:1.6;">
+                        <div style="color:var(--text-muted); margin-bottom:12px;">$ ato demo-compare</div>
+                        <table style="width:100%; border-collapse:collapse; color:var(--text-primary);">
+                            <tr style="color:var(--text-muted); border-bottom:1px solid var(--border);">
+                                <th style="text-align:left; padding:4px 12px 4px 0;">Runtime</th>
+                                <th style="text-align:right; padding:4px 8px;">Duration</th>
+                                <th style="text-align:right; padding:4px 8px;">Cost</th>
+                                <th style="text-align:right; padding:4px 8px;">Quality</th>
+                            </tr>
+                            <tr>
+                                <td style="padding:6px 12px 6px 0; color:#3b82f6;">google</td>
+                                <td style="text-align:right; padding:6px 8px;">1.8s</td>
+                                <td style="text-align:right; padding:6px 8px; color:var(--accent-cyan);">$0.001</td>
+                                <td style="text-align:right; padding:6px 8px; color:#22c55e;">&check; pass</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:6px 12px 6px 0; color:#22c55e;">codex</td>
+                                <td style="text-align:right; padding:6px 8px;">2.1s</td>
+                                <td style="text-align:right; padding:6px 8px;">$0.004</td>
+                                <td style="text-align:right; padding:6px 8px; color:#22c55e;">&check; pass</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:6px 12px 6px 0; color:var(--accent-cyan);">claude</td>
+                                <td style="text-align:right; padding:6px 8px;">3.2s</td>
+                                <td style="text-align:right; padding:6px 8px;">$0.024</td>
+                                <td style="text-align:right; padding:6px 8px; color:#22c55e;">&check; pass</td>
+                            </tr>
+                        </table>
+                        <div style="color:var(--accent-cyan); margin-top:12px; font-size:14px;">&rarr; All passed. google solved it <strong>22&times; cheaper</strong>.</div>
+                    </div>
+
                     <div class="hero-stats">
                         <div class="hero-stat">
-                            <div class="hero-stat-value">N</div>
-                            <div class="hero-stat-label">LLMs per session</div>
-                        </div>
-                        <div class="hero-stat">
-                            <div class="hero-stat-value">20+</div>
+                            <div class="hero-stat-value">16</div>
                             <div class="hero-stat-label">Runtimes</div>
                         </div>
                         <div class="hero-stat">
-                            <div class="hero-stat-value">Signed</div>
-                            <div class="hero-stat-label">Audit trail</div>
+                            <div class="hero-stat-value">85%</div>
+                            <div class="hero-stat-label">Avg savings found</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div class="hero-stat-value">Local</div>
+                            <div class="hero-stat-label">Your code stays on your machine</div>
                         </div>
                         <div class="hero-stat">
                             <div class="hero-stat-value">MIT</div>
@@ -184,10 +217,10 @@
                 </div>
                 <div class="hero-bottom-right">
                     <div class="hero-ctas">
-                        <a href="#" data-ato-download="auto" class="btn-primary">Download for Mac / Win / Linux &rarr;</a>
-                        <a href="https://app.agentictool.ai" class="btn-outline" target="_blank" rel="noopener">Sign up free &rarr;</a>
-                        <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="btn-outline" target="_blank" rel="noopener">View on GitHub</a>
+                        <a href="#" data-ato-download="auto" class="btn-primary">Download free &mdash; first comparison in 30s &rarr;</a>
+                        <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" class="btn-outline" target="_blank" rel="noopener">View on GitHub &middot; MIT Licensed</a>
                     </div>
+                    <p style="color:var(--text-muted); font-size:12px; margin-top:12px;">Free forever for individuals. <a href="#pricing" style="color:var(--accent-cyan);">Pro ($29/mo)</a> automates it while you sleep.</p>
                 </div>
             </div>
         </div>
@@ -886,6 +919,63 @@
                 <div class="i18n-badge">English <span>EN</span></div>
                 <div class="i18n-badge">Portugu&ecirc;s <span>PT</span></div>
                 <div class="i18n-badge">Espa&ntilde;ol <span>ES</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="features" id="pricing" style="border-top:1px solid var(--border);">
+        <div class="container">
+            <div class="section-label fade-in">Pricing</div>
+            <h2 class="section-title fade-in">Free forever. Pro when you need it.</h2>
+            <p class="section-subtitle fade-in" style="margin:0 auto 48px auto;">Everything local is free. Pro adds cloud-powered automation.</p>
+            <div style="max-width:700px; margin:0 auto;" class="fade-in">
+                <table style="width:100%; border-collapse:collapse; font-size:0.95rem; color:var(--text-primary);">
+                    <thead>
+                        <tr style="border-bottom:2px solid var(--border);">
+                            <th style="text-align:left; padding:12px 16px 12px 0; color:var(--text-muted);"></th>
+                            <th style="text-align:center; padding:12px 16px; color:var(--text-primary); font-size:1.1rem;">Free</th>
+                            <th style="text-align:center; padding:12px 16px; background:rgba(0,255,178,0.05); border-radius:8px 8px 0 0; color:var(--accent-cyan); font-size:1.1rem;">Pro <span style="font-weight:400; font-size:0.8rem;">$29/mo</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:10px 16px 10px 0;">Dispatch + compare across runtimes</td>
+                            <td style="text-align:center; padding:10px 16px; color:#22c55e;">&check;</td>
+                            <td style="text-align:center; padding:10px 16px; background:rgba(0,255,178,0.03); color:#22c55e;">&check;</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:10px 16px 10px 0;">Agent creation + war rooms + sessions</td>
+                            <td style="text-align:center; padding:10px 16px; color:#22c55e;">&check;</td>
+                            <td style="text-align:center; padding:10px 16px; background:rgba(0,255,178,0.03); color:#22c55e;">&check;</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:10px 16px 10px 0;">Quality checks (heuristic pass/fail)</td>
+                            <td style="text-align:center; padding:10px 16px; color:#22c55e;">&check;</td>
+                            <td style="text-align:center; padding:10px 16px; background:rgba(0,255,178,0.03); color:#22c55e;">+ LLM judge</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:10px 16px 10px 0;">Cost optimization recommendations</td>
+                            <td style="text-align:center; padding:10px 16px; color:var(--text-muted);">manual</td>
+                            <td style="text-align:center; padding:10px 16px; background:rgba(0,255,178,0.03); color:var(--accent-cyan);"><strong>automated</strong></td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:10px 16px 10px 0;">Cloud traces + regression detection</td>
+                            <td style="text-align:center; padding:10px 16px; color:var(--text-muted);">&mdash;</td>
+                            <td style="text-align:center; padding:10px 16px; background:rgba(0,255,178,0.03); color:var(--accent-cyan);">30-day cross-device</td>
+                        </tr>
+                        <tr style="border-bottom:1px solid var(--border);">
+                            <td style="padding:10px 16px 10px 0;">Scheduled evaluators</td>
+                            <td style="text-align:center; padding:10px 16px; color:var(--text-muted);">&mdash;</td>
+                            <td style="text-align:center; padding:10px 16px; background:rgba(0,255,178,0.03); color:var(--accent-cyan);">hourly / daily / weekly</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="text-align:center; margin-top:32px;">
+                    <p style="color:var(--text-muted); font-size:0.9rem; margin-bottom:16px;"><strong style="color:var(--text-primary);">Free</strong> = you drive. <strong style="color:var(--accent-cyan);">Pro</strong> = ATO replays your prompts overnight, scores quality on our API key, and tells you what to switch.</p>
+                    <a href="#" data-ato-download="auto" class="btn-primary">Start free &rarr;</a>
+                    <a href="https://agentictool.ai/pro" class="btn-outline" style="margin-left:8px;">Learn about Pro &rarr;</a>
+                </div>
             </div>
         </div>
     </section>
