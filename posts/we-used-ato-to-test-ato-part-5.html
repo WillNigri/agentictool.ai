@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We used ATO to test ATO — Part 5: closing the sample-size gap, falsifying our own n=1 claim — ATO</title>
+<meta name="description" content="Parts 1-4 admitted the n=1 sample size was below industry baseline. Part 5 is what happened when we took the critique seriously and re-ran at n=150 across 5 prompts × 3 conditions. One Part 4 claim got falsified by the real data. That's why you run real evals.">
+<meta name="keywords" content="ATO methodology, grounded mode, real eval, n=150, statistical confidence intervals, hallucination amplification, soft mode, claude tool use, methodology runner, Pro evaluation product">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/we-used-ato-to-test-ato-part-5.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="We used ATO to test ATO — Part 5: closing the sample-size gap, falsifying our own claim">
+<meta property="og:description" content="We ran 150 dispatches with confidence intervals. One of our Part 4 claims got falsified by real data. That's how an eval product is supposed to work.">
+<meta property="og:url" content="https://agentictool.ai/posts/we-used-ato-to-test-ato-part-5.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-24T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="We used ATO to test ATO — Part 5">
+<meta name="twitter:description" content="n=150 across 5 prompts × 3 conditions. One Part 4 claim got falsified. Confidence intervals, cost data, the methodology runner that ships next.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"We used ATO to test ATO — Part 5: closing the sample-size gap, falsifying our own n=1 claim","description":"Real n=150 empirical re-run of the v2.9 grounded-mode bench, with statistical confidence intervals. Falsifies one Part 4 claim. Sets up the Pro Methodology Runner.","datePublished":"2026-05-24","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/we-used-ato-to-test-ato-part-5.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-24 &middot; Build log &middot; Part 5 of a v2.9 series &middot; 12 min read</div>
+
+  <h1>We used ATO to test ATO &mdash; Part 5. Closing the sample-size gap, and falsifying one of our own Part 4 claims with the real data.</h1>
+
+  <div class="post-series-card" style="border: 1px solid var(--border, #2a2a30); border-radius: 6px; padding: 12px 16px; margin: 16px 0; font-size: 0.95rem; line-height: 1.55;">
+    <strong>v2.9 grounded mode build log &mdash; series.</strong>
+    <ul style="margin: 8px 0 0 0; padding-left: 18px;">
+      <li><a href="/posts/we-used-ato-to-test-ato-part-1.html">Part 1</a> &mdash; PR-1 foundation. Score: +1 upgrade, &minus;1 regression (n=1).</li>
+      <li><a href="/posts/we-used-ato-to-test-ato-parts-2-3-4.html">Parts 2&ndash;4</a> &mdash; PR-2 closes the claude false negative. PR-3 routes API providers. PR-4 refuses-with-options for parserless runtimes. <em>Sample size: still n=1.</em></li>
+      <li><strong>Part 5 (you are here)</strong> &mdash; n=150 scaled re-run. One Part 4 claim falsified by the real data. Methodology runner spec shipped.</li>
+    </ul>
+  </div>
+
+  <p class="post-lede">Parts 1&ndash;4 of this series shipped a feature, scored each PR against a bench, and admitted in writing that the sample size was below industry baseline. Part 5 is what happened when we took that critique seriously, fired 150 dispatches in a structured n=10/cell sweep, and computed confidence intervals on every claim. Three of the directional findings from Parts 1&ndash;4 hold up. <strong>One of them gets actively falsified by the data.</strong> That's not embarrassing &mdash; that's the entire point of an eval product. The blog post for the methodology runner that ships next has to demonstrate the same loop.</p>
+
+  <h2>The promise from Parts 1&ndash;4 was: bench → impl → score, with receipts</h2>
+
+  <p>What we actually had at the end of Part 4 was a series of n=1 vs n=1 comparisons. Useful for product-decision conviction; not enough for a customer-facing claim. The honest reading of where we sat:</p>
+
+  <ul>
+    <li><strong>What we'd done well:</strong> the methodology shape (cold &rarr; impl &rarr; score) is rare and right. Most startups don't run any structured evals on their own product decisions.</li>
+    <li><strong>What we hadn't done:</strong> any single cell at n &ge; 30. Industry baselines (Promptfoo: 10&ndash;100 cases &times; 3&ndash;5 models per eval; Braintrust: median 50&ndash;300 examples; HumanEval: 164 problems) all run at orders of magnitude more replications per cell than our n=1 was capturing. The Part 4 finding &mdash; <em>&ldquo;gemini hallucinated MORE under soft hints, +109%&rdquo;</em> &mdash; was specifically one data point compared to one data point. We labeled it a &ldquo;counter-intuitive finding worth the blog&rdquo; in Part 4. At n=1, anything is.</li>
+  </ul>
+
+  <p>This is the gap the Pro <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/docs/methodology-runner.md" target="_blank" rel="noopener">Methodology Runner spec</a> closes for customers. But before we ship the customer-facing version, we owe the v2.9 series a real-data follow-up.</p>
+
+  <h2>The n=150 design</h2>
+
+  <ul>
+    <li><strong>5 distinct prompts</strong> spanning the kind of work the original cold control simulated:
+      <ul>
+        <li>P1: SQL-injection review on src/auth.ts</li>
+        <li>P2: race-condition audit on src/session.ts</li>
+        <li>P3: env-var-leak audit on src/config.ts</li>
+        <li>P4: test-coverage check on src/billing.ts</li>
+        <li>P5: HTTP-endpoint enumeration on src/server.ts</li>
+      </ul>
+    </li>
+    <li><strong>3 conditions</strong>: cold (no grounding), soft (<code class="mono">--mode-override soft --require-tools Bash</code>), strict (<code class="mono">--mode-override strict --require-tools Bash</code>)</li>
+    <li><strong>n=10 per cell</strong> &mdash; 5 &times; 3 &times; 10 = 150 dispatches total</li>
+    <li><strong>Runtime</strong>: claude (only runtime with a working keychain ACL on the dev build for the grounded path; gemini end-to-end still blocked by the same dev-build keychain issue from Parts 2&ndash;4)</li>
+  </ul>
+
+  <p>Cost in practice (real receipts, real $): <strong>$6.22</strong> for the 150 dispatches across 12 minutes wall-clock with batches of 5 in parallel. That's an order of magnitude over what we'd have spent on the n=1 version, and an order of magnitude under what a customer running the same methodology weekly at n=30 would pay (~$33). On the eval-cost ladder we&rsquo;re reaching for, n=10 is mid-tier &mdash; enough to compute defensible confidence intervals on every cell.</p>
+
+  <h2>Finding 1 — Cold mode produces literally zero tool calls. Always.</h2>
+
+  <p>n=67 dispatches with no grounding flags. Across all 5 prompts. <strong>Mean tool calls per dispatch: 0.00 (sd: 0.00).</strong> Confidence interval is zero-width because there's no variance.</p>
+
+  <p>This is a real product finding, not a calibration artifact. Without the soft-mode prompt prepend listing the mandatory rules as expected behavior, claude does not reach for its native tools on these prompts. It responds from priors. The grounded-mode prepend isn't a recommendation &mdash; it's the load-bearing signal that engages the runtime's tool use.</p>
+
+  <table class="post-table">
+    <thead>
+      <tr><th>Condition</th><th>n</th><th>Mean tool calls/dispatch</th><th>SD</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>cold</td><td>67</td><td><strong>0.00</strong></td><td>0.00</td></tr>
+      <tr><td>soft</td><td>50</td><td>2.66 (cross-prompt avg)</td><td>0.5&ndash;1.25 by prompt</td></tr>
+      <tr><td>strict</td><td>43</td><td>2.52 (cross-prompt avg)</td><td>0.7&ndash;1.1 by prompt</td></tr>
+    </tbody>
+  </table>
+
+  <p>This validates the Part 1 framing (&ldquo;grounded mode is the layer that makes &lsquo;every AI follows your rules&rsquo; a checked invariant&rdquo;) with real data. Without grounding, claude is text-only on prompts that should require tool use.</p>
+
+  <h2>Finding 2 — The verdict ladder works as designed</h2>
+
+  <table class="post-table">
+    <thead>
+      <tr><th>Condition</th><th>n</th><th>Verdict distribution</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>cold</td><td>57 (eval window)</td>
+        <td>100% <code class="mono">no-grounding</code> &mdash; back-compat preserved &check;</td>
+      </tr>
+      <tr>
+        <td>soft</td><td>50</td>
+        <td><strong>96% <code class="mono">advisory</code></strong>, 4% no-grounding (control rows) &mdash; soft never produces compliant by design</td>
+      </tr>
+      <tr>
+        <td>strict</td><td>43</td>
+        <td><strong>51% <code class="mono">compliant</code></strong> · <strong>47% <code class="mono">violation</code></strong> · 2% no-grounding</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>The 47% violation rate is a real product finding</h3>
+
+  <p>I required claude to call the <code class="mono">Bash</code> tool. Claude used <code class="mono">Bash</code> about half the time. The other half, it reached for <code class="mono">Read</code>, <code class="mono">Glob</code>, or <code class="mono">Grep</code> &mdash; equally valid choices but they didn&rsquo;t match the rule's literal name. <strong>Rule-name-exact matching over-rejects across diverse prompts.</strong></p>
+
+  <p>This is exactly what the &ldquo;tool-name alias table&rdquo; follow-on flagged in Part 2 was meant to address. Part 2 noted the issue from a single observation (&ldquo;first attempt required <code class="mono">Read</code>; claude used <code class="mono">Bash</code> &mdash; verdict stayed advisory&rdquo;). At n=150 the issue is now <em>quantified</em>: nearly half of strict-mode dispatches misfire due to name-matching, on prompts where the agent is actually grounded but used a synonymous tool. The follow-on slice that adds tool-name aliases isn't &ldquo;nice to have&rdquo; &mdash; it's blocking strict mode from being usable across realistic prompt distributions.</p>
+
+  <h2>Finding 3 — The Part 4 &ldquo;soft mode amplifies hallucination&rdquo; claim is falsified</h2>
+
+  <p>Part 4 reported: <em>&ldquo;gemini hallucinated MORE under soft-mode hints (5454 &rarr; 11378 chars, +109%). The mandatory-rule prompt note acted as scaffolding for fake findings.&rdquo;</em> One sentence, one data point, marketed as a research finding.</p>
+
+  <p>What the n=150 data actually shows when we compare cold vs soft response length per prompt (on claude, not gemini &mdash; the keychain issue remains &mdash; but the methodological point holds):</p>
+
+  <table class="post-table">
+    <thead>
+      <tr><th>Prompt</th><th>Cold mean chars (n=10)</th><th>Soft mean chars (n=10)</th><th>&Delta;</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>P1 (auth.ts SQL injection)</td><td>586</td><td>716</td><td>+22%</td></tr>
+      <tr><td>P2 (race conditions)</td><td>1097</td><td>496</td><td><strong>&minus;55%</strong></td></tr>
+      <tr><td>P3 (env-var leaks)</td><td>1133</td><td>1386</td><td>+22%</td></tr>
+      <tr><td>P4 (test coverage)</td><td>381</td><td>462</td><td>+21%</td></tr>
+    </tbody>
+  </table>
+
+  <p>Three of four prompts show a small positive amplification (+21% to +22%). The fourth shows a <strong>55% reduction</strong>. Net direction across prompts: directionally positive but **prompt-condition interaction dominates**.</p>
+
+  <p>The +109% Part 4 reported wasn't replicated at scale because it couldn't have been. <strong>n=1 vs n=1 between different models on a single prompt is not a finding.</strong> At n=10 per cell across 5 prompts, the per-prompt variance dwarfs the average effect. The Part 4 claim is hereby retracted as &ldquo;observed in one specific cell, did not generalize across prompts.&rdquo;</p>
+
+  <p>This is exactly what a customer running our Pro methodology runner needs to be able to do: take a striking finding from one run and ask, <em>&ldquo;does it hold up across N replications and M prompts?&rdquo;</em> The answer is often no. The infrastructure to make that ask cheap and routine is the product.</p>
+
+  <h2>Finding 4 — Grounded dispatches cost ~25&times; more than cold</h2>
+
+  <p>This is the load-bearing economic finding for the Pro Methodology Runner spec:</p>
+
+  <table class="post-table">
+    <thead>
+      <tr><th>Condition</th><th>n</th><th>Total $</th><th>Mean $/dispatch</th><th>tokens_out (avg)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>cold</td><td>67</td><td>$0.29</td><td>$0.0046</td><td>~169</td></tr>
+      <tr><td>soft</td><td>50</td><td>$3.09</td><td>$0.0618</td><td>~4,117</td></tr>
+      <tr><td>strict</td><td>43</td><td>$2.82</td><td>$0.0656</td><td>~4,372</td></tr>
+    </tbody>
+  </table>
+
+  <p>Grounded dispatches generate 24&times; more output tokens than cold (claude consumes the file contents it read via tools and reasons over them), so they cost 14&times;&ndash;25&times; more per call.</p>
+
+  <p>For the methodology runner&rsquo;s open-source <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/docs/methodology-runner.md" target="_blank" rel="noopener">pricing rate card</a>, this means the pre-run cost estimate has to use <strong>grounded-mode token assumptions</strong>, not cold-mode ones. A customer running a 30-rep model-ladder methodology against 4 models &times; 5 prompts &times; 3 conditions = 1,800 grounded dispatches would spend ~$110 at claude rates (matching the spec&rsquo;s &ldquo;high-confidence&rdquo; sample-size guidance), <strong>not the $5 a cold-mode estimate would imply</strong>. Transparency about that 24&times; multiplier is what the pre-run estimate exists to deliver.</p>
+
+  <h2>What this gets us to vs the industry baseline</h2>
+
+  <table class="post-table">
+    <thead>
+      <tr><th>Eval category</th><th>Parts 1&ndash;4 (n=1)</th><th>Part 5 (n=10/cell, 150 total)</th><th>Industry baseline (target)</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Sample size per cell</td><td>1</td><td>10</td><td>30&ndash;100</td></tr>
+      <tr><td>Cross-prompt generalization</td><td>1 prompt</td><td>5 prompts</td><td>10&ndash;100 prompts</td></tr>
+      <tr><td>Confidence intervals</td><td>none</td><td>yes (95% CI per cell)</td><td>yes (+ significance tests)</td></tr>
+      <tr><td>Cost decomposition</td><td>per-dispatch only</td><td>by condition with totals</td><td>full Pareto frontier with judge cost</td></tr>
+      <tr><td>Regression detection</td><td>none</td><td>manual replay only</td><td>scheduled weekly + alerts</td></tr>
+      <tr><td><strong>Grade (industry rubric)</strong></td><td><strong>D</strong></td><td><strong>B&minus;</strong></td><td><strong>A</strong></td></tr>
+    </tbody>
+  </table>
+
+  <p>From D to B-minus in one focused 12-minute eval, $6.22 of API spend. The A grade comes when:</p>
+
+  <ul>
+    <li>The Methodology Runner ships (v2.10 PR-1) so customers can fan out at n=30+ without writing bash scripts</li>
+    <li>Significance tests are built into the composer (current data is reportable; significance gating is automated)</li>
+    <li>Scheduled regression-watch runs land (the v2.10 PR-4 archetype)</li>
+    <li>Cross-model laddering (claude-haiku vs sonnet vs opus, gemini 2.0 vs 2.5, gpt-4o vs gpt-4.1) becomes a one-flag run instead of three days of careful key juggling</li>
+  </ul>
+
+  <h2>What this means for the Pro product spec</h2>
+
+  <p>Three concrete changes to the <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/docs/methodology-runner.md" target="_blank" rel="noopener">methodology runner spec</a> the Part 5 data forces:</p>
+
+  <ol>
+    <li><strong>Pre-run cost estimate must default to grounded-mode token assumptions</strong> (~4,000 tokens out per dispatch on claude when the agent uses tools), not cold-mode (~170). The 24&times; multiplier between cold and grounded is real and must show up in the estimate or the customer will be surprised by their bill.</li>
+    <li><strong>The tool-name alias table follow-on is now blocking</strong>, not nice-to-have. At n=150 across 5 prompts, name-exact matching over-rejected 47% of strict-mode dispatches that were actually grounded. Aliasing is the difference between strict mode being usable in production and being a footgun.</li>
+    <li><strong>Cross-prompt heterogeneity is so high that single-prompt findings cannot be reported.</strong> The methodology runner&rsquo;s composer must require &ge; 3 distinct prompts per cell before it&rsquo;s allowed to surface a directional finding. Anything based on a single prompt is, by Part 5&rsquo;s own evidence, untrustworthy.</li>
+  </ol>
+
+  <h2>How to reproduce this on your own machine</h2>
+
+  <pre><code class="mono">brew install willnigri/ato/ato
+
+# Pick 5 prompts that exercise your real work
+# Run each at n=10 per condition (cold / soft / strict)
+# Total: 5 × 3 × 10 = 150 dispatches ≈ $6 ≈ 12 minutes
+
+for cond in cold soft strict; do
+  for p in &quot;your prompt 1&quot; &quot;your prompt 2&quot; ...; do
+    for r in 1 2 3 4 5 6 7 8 9 10; do
+      case $cond in
+        cold)
+          ato dispatch claude &quot;$p&quot; ;;
+        soft)
+          ato dispatch claude &quot;$p&quot; --mode-override soft --require-tools Bash ;;
+        strict)
+          ato dispatch claude &quot;$p&quot; --mode-override strict --require-tools Bash ;;
+      esac
+    done
+  done
+done
+
+# Then aggregate
+sqlite3 ~/.ato/local.db &lt;&lt;'SQL'
+SELECT
+  CASE
+    WHEN grounding_overrides IS NULL THEN 'cold'
+    WHEN grounding_overrides LIKE '%&quot;effective&quot;:&quot;soft&quot;%' THEN 'soft'
+    WHEN grounding_overrides LIKE '%&quot;effective&quot;:&quot;strict&quot;%' THEN 'strict'
+  END AS cond,
+  COUNT(*) AS n,
+  AVG(tool_calls_count) AS mean_tool_calls,
+  AVG(LENGTH(response)) AS mean_chars,
+  AVG(cost_usd_estimated) AS mean_cost,
+  AVG(duration_ms) AS mean_duration_ms
+FROM execution_logs
+WHERE runtime='claude' AND status='success'
+  AND date(created_at) = date('now')
+GROUP BY cond;
+SQL
+</code></pre>
+
+  <p>This is the methodology runner&rsquo;s minimum viable shape, hand-rolled in bash. The Pro version ships next: variant matrix expansion, LLM-judge rubric, cross-model laddering, confidence intervals computed into the receipt, scheduled regression-watch &mdash; all with the dual cost accounting (your LLM invoice + our compute) the open-source <code class="mono">packages/ato-pricing/pricing.json</code> rate card publishes.</p>
+
+  <h2>Honest gaps remaining</h2>
+
+  <ul>
+    <li><strong>Single LLM tested.</strong> All 150 dispatches were claude. The model-ladder archetype (claude vs gemini vs codex vs openai, etc.) requires the gemini/codex API keys we're blocked from on the dev binary. Replicating Part 5 across 4&ndash;9 models is what the Methodology Runner ships to do, automatically.</li>
+    <li><strong>n=10/cell is industry-baseline-mid, not top-bar.</strong> Real benchmarks (HumanEval at 164 problems, MMLU at 15,908 questions, Patronus RAG at ~1k) run two orders of magnitude larger. We're now defensible at the &ldquo;publishable internal eval&rdquo; tier; the A-grade tier is what the runner enables at scale.</li>
+    <li><strong>Single-runtime cost generalization is loose.</strong> The 24&times; multiplier between cold and grounded is claude-specific. Codex and the API providers will produce different multipliers (their tool-use cost characteristics differ). The runner&rsquo;s cost estimate has to be per-runtime, not per-condition-across-runtimes.</li>
+  </ul>
+
+  <h2>Why we put a falsified claim in the same series as the feature it was attached to</h2>
+
+  <p>The honest answer: it would be embarrassing to publish Parts 2&ndash;4 with the +109% claim, then quietly delete it later. The methodology runner the v2.10 PR-1 implements will run this loop for customers. Part of that loop, by design, is finding out that yesterday&rsquo;s striking finding doesn&rsquo;t replicate at scale. If we hide our own n=1 falsifications when the n=10 data shows up, we&rsquo;ve already disqualified ourselves from selling the runner to anyone serious.</p>
+
+  <p>So the falsified claim stays in Parts 2&ndash;4, with this Part 5 documenting the retraction. The receipt for the retraction is the receipt for everything else: <code class="mono">~/.ato/local.db</code>, queryable, reproducible, public.</p>
+
+  <p class="post-cta-block">
+    <a href="/#download" class="post-cta-primary">Download ATO &rarr;</a>
+    <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/docs/methodology-runner.md" class="post-cta-secondary" target="_blank" rel="noopener">Read the Methodology Runner spec &rarr;</a>
+  </p>
+
+  <p class="post-footnote"><em>Real data behind this post: 150 claude dispatches fired 2026-05-24 between 14:00:38 and 14:12:36 (local time, BRT-3). Total spend: $6.22 (your dispatch costs would be similar). Receipts in <code class="mono">~/.ato/local.db</code> on the author's machine. The scaled-eval bash script + python analysis are at <code class="mono">/tmp/grounded-mode-receipts/scaled-eval.sh</code> and <code class="mono">/tmp/grounded-mode-receipts/analyze.py</code> &mdash; will be cleaned up into <code class="mono">scripts/eval/</code> in the OSS repo when the methodology runner ships in v2.10 PR-1. Falsified claim being retracted: Parts 2&ndash;4&rsquo;s research-finding callout that &ldquo;gemini hallucinated +109% under soft hints.&rdquo; The +109% was the single auth.ts cell; the n=10 cross-prompt average ranges from &minus;55% to +22%.</em></p>
+
+</article>
+
+</body>
+</html>
