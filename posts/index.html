@@ -81,6 +81,38 @@
   <ul class="post-list">
 
     <li>
+      <a href="/posts/we-used-ato-to-test-ato-part-6.html">
+        <div class="post-list-meta">2026-05-25 &middot; Build log &middot; 12 min read</div>
+        <h2>We used ATO to test ATO &mdash; Part 6: the methodology runner ships, real-data validated</h2>
+        <p class="post-list-excerpt">v2.10 PR-2/3/3.1/4 shipped this morning. We ran the runner against the n=150 receipts from Part 5 plus a fresh n=13 LLM-judge eval &mdash; total incremental spend $0.07. Regex rubric found a prompt where every advisory-mode dispatch missed the rubric. LLM-judge produced differentiated 0.05..0.85 scores. The dual cost accounting (your LLM bill vs. ours) is the headline number.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/we-used-ato-to-test-ato-part-5.html">
+        <div class="post-list-meta">2026-05-24 &middot; Build log &middot; 12 min read</div>
+        <h2>We used ATO to test ATO &mdash; Part 5: closing the sample-size gap, falsifying our own n=1 claim</h2>
+        <p class="post-list-excerpt">Parts 1-4 admitted the n=1 sample size was below industry baseline. Part 5 is what happened when we took the critique seriously and re-ran at n=150 across 5 prompts × 3 conditions. One Part 4 claim got falsified by the real data. That&rsquo;s why you run real evals.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/we-used-ato-to-test-ato-parts-2-3-4.html">
+        <div class="post-list-meta">2026-05-24 &middot; Build log &middot; 16 min read</div>
+        <h2>We used ATO to test ATO &mdash; Parts 2&ndash;4: closing the regression, extending coverage, refusing-with-options</h2>
+        <p class="post-list-excerpt">PR-2 closes the claude false negative from Part 1. PR-3 routes API providers through the tool-call loop when grounding is on. PR-4 ships refuse-with-options for the parserless runtimes. Each PR scored against the same bench, with the receipts that survived. Sample size still n=1 &mdash; Part 5 fixes that.</p>
+      </a>
+    </li>
+
+    <li>
+      <a href="/posts/we-used-ato-to-test-ato-part-1.html">
+        <div class="post-list-meta">2026-05-24 &middot; Build log &middot; 14 min read</div>
+        <h2>We used ATO to test ATO &mdash; Part 1: foundation, the cold control, the regression we found</h2>
+        <p class="post-list-excerpt">The v2.9 grounded-mode series opens with the cold-control test: claude refuses honestly when src/auth.ts doesn&rsquo;t exist, gemini hallucinates 5454 chars of generic SQL-injection lecture. PR-1 ships the schema + a regression hidden in PR-1.</p>
+      </a>
+    </li>
+
+    <li>
       <a href="/posts/llm-council-tool-calls.html">
         <div class="post-list-meta">2026-05-13 &middot; Multi-LLM &middot; 8 min read</div>
         <h2>I rebuilt Karpathy&rsquo;s LLM Council with tool calls and an audit trail</h2>

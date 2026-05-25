@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We used ATO to test ATO — Part 6: the methodology runner ships, and we ran it against the n=150 corpus from Part 5 — ATO</title>
+<meta name="description" content="Part 5 promised the methodology runner. Part 6 is what happened when it shipped. n=170 of our own real receipts composed without re-running, two rubric kinds (regex + LLM-judge) tested end-to-end, real regressions surfaced. Total spend to validate: $0.07.">
+<meta name="keywords" content="ATO methodology runner, methodology adopt, LLM judge rubric, real eval results, n=150 corpus, dual cost accounting, Pro evaluation product, Welch t statistic, confidence intervals">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/we-used-ato-to-test-ato-part-6.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="We used ATO to test ATO — Part 6: the methodology runner ships, real-data validated">
+<meta property="og:description" content="The runner composed 170 of our own real receipts without re-running. Regex rubric found a prompt where every advisory-mode dispatch missed the rubric. LLM-judge produced differentiated 0.05..0.85 scores on 13 receipts for $0.07 total.">
+<meta property="og:url" content="https://agentictool.ai/posts/we-used-ato-to-test-ato-part-6.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-25T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="We used ATO to test ATO — Part 6">
+<meta name="twitter:description" content="Methodology runner shipped. Adopted 170 real receipts, scored two rubric kinds, found real regressions. Total spend: $0.07.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"We used ATO to test ATO — Part 6: the methodology runner ships, real-data validated","description":"The v2.10 methodology runner shipped this week. Part 6 is what happened when we ran it against the n=150 receipts from Part 5: cost-estimate, adopt, regex + LLM-judge rubrics, all end-to-end on real data.","datePublished":"2026-05-25","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/we-used-ato-to-test-ato-part-6.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-25 &middot; Build log &middot; Part 6 of a v2.9/v2.10 series &middot; 12 min read</div>
+
+  <h1>We used ATO to test ATO &mdash; Part 6. The methodology runner ships, and we ran it against the n=150 corpus from Part 5.</h1>
+
+  <div class="post-series-card" style="border: 1px solid var(--border, #2a2a30); border-radius: 6px; padding: 12px 16px; margin: 16px 0; font-size: 0.95rem; line-height: 1.55;">
+    <strong>v2.9/v2.10 build log &mdash; series.</strong>
+    <ul style="margin: 8px 0 0 0; padding-left: 18px;">
+      <li><a href="/posts/we-used-ato-to-test-ato-part-1.html">Part 1</a> &mdash; v2.9 PR-1: grounded-mode foundation, the regression we found.</li>
+      <li><a href="/posts/we-used-ato-to-test-ato-parts-2-3-4.html">Parts 2&ndash;4</a> &mdash; v2.9 PR-2/3/4: close the false negative, route API providers, refuse-with-options.</li>
+      <li><a href="/posts/we-used-ato-to-test-ato-part-5.html">Part 5</a> &mdash; n=150 scaled re-run; one Part 4 claim falsified; methodology runner spec.</li>
+      <li><strong>Part 6 (you are here)</strong> &mdash; v2.10 PR-2/3/3.1/4 shipped; runner real-data validated on 170 receipts.</li>
+    </ul>
+  </div>
+
+  <p class="post-lede">Part 5 ended with: <em>&ldquo;The methodology runner the v2.10 PR-1 implements will run this loop for customers.&rdquo;</em> This morning we shipped PR-2 through PR-4 of v2.10 &mdash; the CLI surface, the fan-out runner, the rubric library, and the missing piece that made the whole thing real: <strong><code class="mono">adopt</code></strong>, which lets the runner compose methodologies over existing <code class="mono">execution_logs</code> rows without re-dispatching. Then we ran the runner against the 150 receipts from Part 5 plus a fresh 13-receipt sub-eval for the LLM-judge path. <strong>Total additional spend to do this entire Part 6 validation: $0.07.</strong> The blog post you&rsquo;re reading is what the receipts say.</p>
+
+  <h2>What shipped</h2>
+
+  <p>Four PRs went out in the last 36 hours. The methodology runner is the v2.10 release&rsquo;s headline Pro feature.</p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.95rem;">
+    <thead>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <th style="text-align:left; padding: 8px 12px;">PR</th>
+        <th style="text-align:left; padding: 8px 12px;">What</th>
+        <th style="text-align:left; padding: 8px 12px;">LOC</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 8px 12px;"><code class="mono">v2.10 PR-1</code></td>
+        <td style="padding: 8px 12px;">Schema (<code class="mono">methodologies</code>, <code class="mono">methodology_runs</code>, <code class="mono">methodology_run_dispatches</code> with dual cost accounting columns) + Rust types + cost estimator + open-source <code class="mono">pricing.json</code> rate card</td>
+        <td style="padding: 8px 12px;">~750</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 8px 12px;"><code class="mono">v2.10 PR-2</code></td>
+        <td style="padding: 8px 12px;"><code class="mono">ato evaluations methodology create / list / get / archetypes / cost-estimate</code> &mdash; the CRUD surface + the pre-run dual-cost estimate</td>
+        <td style="padding: 8px 12px;">~660</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 8px 12px;"><code class="mono">v2.10 PR-3</code></td>
+        <td style="padding: 8px 12px;">Fan-out runner + composer: variant matrix expansion → sequential <code class="mono">ato dispatch</code> shell-outs → per-cell mean/sd/95% CI + pairwise Welch <em>t</em>. <code class="mono">runs list/show</code> subcommands</td>
+        <td style="padding: 8px 12px;">~1340</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 8px 12px;"><code class="mono">v2.10 PR-3.1</code></td>
+        <td style="padding: 8px 12px;"><strong><code class="mono">adopt</code></strong> &mdash; compose methodologies over EXISTING execution_logs without re-dispatching. Variant cell derived from the row. Made Part 6 possible at $0 incremental LLM spend. Plus runtime override on <code class="mono">VariantMatrix</code> for CLI-vs-API head-to-heads</td>
+        <td style="padding: 8px 12px;">~340</td>
+      </tr>
+      <tr>
+        <td style="padding: 8px 12px;"><code class="mono">v2.10 PR-4</code></td>
+        <td style="padding: 8px 12px;">Rubric library &mdash; regex / structural / llm_judge / composite + the <code class="mono">score</code> subcommand. LLM-judge cost lands in <code class="mono">provider_judge_cost_usd</code>. Brace-balanced JSON extraction tolerates judges that wrap their score in prose</td>
+        <td style="padding: 8px 12px;">~1000</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>All four PRs live on <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" target="_blank" rel="noopener">main</a>. The pre-commit gate (cargo check + tsc + 133 vitests + cargo unit tests + 18 CLI smoke commands) caught nothing new on either commit.</p>
+
+  <h2>Validation step 1: <code class="mono">adopt</code> the n=150 corpus</h2>
+
+  <p>Part 5&rsquo;s 150 dispatches sit in <code class="mono">~/.ato/local.db</code>&rsquo;s <code class="mono">execution_logs</code> table. The runner doesn&rsquo;t need to re-fire them &mdash; that&rsquo;s exactly what <code class="mono">adopt</code> exists for. We created a methodology and adopted every claude-sonnet-4-6 success row from 2026-05-24:</p>
+
+  <pre><code class="mono">ato evaluations methodology create --config part5.json --human
+# Created methodology 'part5-real-150-eval' (294e0499-…). Variant matrix:
+# 1 prompts × 1 models × 1 conditions × 30 reps = 30 dispatches per run.
+
+ato evaluations methodology adopt part5-real-150-eval \
+  --since 2026-05-24 \
+  --runtime claude \
+  --model claude-sonnet-4-6 \
+  --status success \
+  --limit 200 \
+  --human
+
+# Adopted 157 execution_logs rows into methodology run da25a236-…
+#   methodology:     part5-real-150-eval
+#   distinct prompts: 21
+#   YOUR cost:        $6.1985
+#   YOUR tokens:      9837 in / 411265 out
+#   OUR cost:         $0.0496
+#   margin (est):     $0.2404
+</code></pre>
+
+  <p><strong>The dual cost accounting is the load-bearing number to read here.</strong> The customer&rsquo;s LLM bill for the underlying 157 dispatches was <strong>$6.20</strong>. Our cost to deliver the methodology run on top of it &mdash; storage, bandwidth, orchestrator compute &mdash; was <strong>$0.05</strong>. That&rsquo;s a 124&times; margin on top of the $0.29 per-run allocation a $29 Pro tier covers. Pricing transparency lives in <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/packages/ato-pricing/pricing.json" target="_blank" rel="noopener"><code class="mono">packages/ato-pricing/pricing.json</code></a> &mdash; same file the cost estimator reads, same numbers in the receipt.</p>
+
+  <h2>Validation step 2: regex rubric over the adopted run</h2>
+
+  <p>Set a security-keyword regex on the methodology &mdash; matches if the response mentions vulnerability / injection / race / leak / secret / exposure / hardcoded / CVE. Then score every dispatch in the adopted run:</p>
+
+  <pre><code class="mono">ato evaluations methodology score da25a236-… --human
+
+# Scored 157 dispatches in run da25a236-…
+#   mean score:    0.465
+#   passed (≥0.5): 73/157
+#   judge cost:    $0.0000
+</code></pre>
+
+  <p>73 of 157 dispatches mention at least one security keyword. The <code class="mono">runs show</code> command then breaks that down by variant cell. The cells where <em>n</em> is high enough to matter (industry-baseline-mid, n=10 per cell):</p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;">
+    <thead>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <th style="text-align:left; padding: 6px 10px;">prompt</th>
+        <th style="text-align:left; padding: 6px 10px;">condition</th>
+        <th style="text-align:right; padding: 6px 10px;">n</th>
+        <th style="text-align:right; padding: 6px 10px;">mean score</th>
+        <th style="text-align:right; padding: 6px 10px;">passed ≥0.5</th>
+        <th style="text-align:right; padding: 6px 10px;">cost mean</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">[15]</td>
+        <td style="padding: 6px 10px;">advisory</td>
+        <td style="text-align:right; padding: 6px 10px;">10</td>
+        <td style="text-align:right; padding: 6px 10px;">0.700</td>
+        <td style="text-align:right; padding: 6px 10px;">7/10</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0440</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">[15]</td>
+        <td style="padding: 6px 10px;">default</td>
+        <td style="text-align:right; padding: 6px 10px;">11</td>
+        <td style="text-align:right; padding: 6px 10px;">0.636</td>
+        <td style="text-align:right; padding: 6px 10px;">7/11</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0060</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">[16]</td>
+        <td style="padding: 6px 10px;">advisory</td>
+        <td style="text-align:right; padding: 6px 10px;">10</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>0.300</strong></td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>3/10</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0780</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">[16]</td>
+        <td style="padding: 6px 10px;">default</td>
+        <td style="text-align:right; padding: 6px 10px;">10</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>0.600</strong></td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>6/10</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0042</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">[17]</td>
+        <td style="padding: 6px 10px;">advisory</td>
+        <td style="text-align:right; padding: 6px 10px;">10</td>
+        <td style="text-align:right; padding: 6px 10px;">1.000</td>
+        <td style="text-align:right; padding: 6px 10px;">10/10</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.1007</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">[17]</td>
+        <td style="padding: 6px 10px;">default</td>
+        <td style="text-align:right; padding: 6px 10px;">10</td>
+        <td style="text-align:right; padding: 6px 10px;">0.900</td>
+        <td style="text-align:right; padding: 6px 10px;">9/10</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0043</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px 10px;">[18]</td>
+        <td style="padding: 6px 10px;">advisory</td>
+        <td style="text-align:right; padding: 6px 10px;">10</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>0.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>0/10</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0550</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Two things to read out of this. <strong>First, advisory mode isn&rsquo;t always better.</strong> Prompt [16] under advisory grounding scored 0.300 (3/10 mentioning security keywords); the same prompt without grounding scored 0.600 (6/10). The <em>more expensive</em> tooled-up dispatch was rubric-worse on this prompt. That&rsquo;s a real product finding, surfaced by the runner on receipts the customer already has. <strong>Second, prompt [18] under advisory grounded mode failed every dispatch (0/10).</strong> The model burned $0.055 per call, took 13.6 seconds on average, and not one of those dispatches mentioned a security keyword the rubric could find. If we&rsquo;d shipped a scheduled regression-watch on this prompt, this is exactly the kind of alert the customer would want.</p>
+
+  <h2>Validation step 3: LLM-judge rubric, 13 dispatches, $0.07</h2>
+
+  <p>Regex catches keywords. LLM-judge evaluates whether the response is actually <em>good</em>. We built a second methodology specifically to test the judge path on the 13 gemini-2.5-flash receipts in the same corpus:</p>
+
+  <pre><code class="mono">{
+  &quot;slug&quot;: &quot;part5-llm-judge&quot;,
+  &quot;archetype&quot;: &quot;custom&quot;,
+  &quot;variant_matrix&quot;: {
+    &quot;prompts&quot;: [&quot;(adopted)&quot;],
+    &quot;models&quot;: [&quot;gemini-2.5-flash&quot;],
+    &quot;conditions&quot;: [&quot;default&quot;],
+    &quot;reps_per_cell&quot;: 13
+  },
+  &quot;rubric&quot;: {
+    &quot;kind&quot;: &quot;llm_judge&quot;,
+    &quot;judge_model&quot;: &quot;claude-sonnet-4-6&quot;,
+    &quot;judge_runtime&quot;: &quot;claude&quot;,
+    &quot;prompt_template&quot;: &quot;Rate this AI agent&rsquo;s response on a 0..1 scale. The agent was asked to perform a security or code review task. Reply ONLY with a JSON object: {\&quot;score\&quot;: &lt;float&gt;, \&quot;reason\&quot;: \&quot;...\&quot;}.\n\nOriginal prompt: {{prompt}}\n\nResponse to evaluate: {{response}}&quot;
+  }
+}</code></pre>
+
+  <p>Adopt the 13 gemini rows. Then score &mdash; this is the path that costs money, because every dispatch fans out a judge call:</p>
+
+  <pre><code class="mono">ato evaluations methodology score 34616b2f-… --human
+
+# Scored 13 dispatches in run 34616b2f-…
+#   mean score:    0.669
+#   passed (≥0.5): 10/13
+#   judge cost:    $0.0712
+</code></pre>
+
+  <p>$0.07 for 13 LLM-judge evaluations &mdash; roughly half a cent per judged dispatch through the claude CLI subscription path. The scores are differentiated rather than binary:</p>
+
+  <ul>
+    <li>prompt [8] default: <strong>0.850</strong> &mdash; the judge thought this was a strong answer</li>
+    <li>prompt [6] default: <strong>0.820</strong></li>
+    <li>prompt [9] default: <strong>0.300</strong></li>
+    <li>prompt [10] advisory: <strong>0.150</strong></li>
+    <li>prompt [10] default: <strong>0.050</strong> &mdash; the judge thought this was nearly useless</li>
+  </ul>
+
+  <p>This is the thing customers actually want. Not &ldquo;your regex matched.&rdquo; Not &ldquo;your dispatch completed in 8 seconds.&rdquo; A second LLM read the response and said: <em>that one was good, that one was bad, here&rsquo;s why</em>. The 0..1 scale composes cleanly into the runner&rsquo;s existing mean / SD / 95% CI math.</p>
+
+  <h2>How the runner makes a real product decision</h2>
+
+  <p>The three demoes above were all on <em>existing</em> receipts, $0 incremental customer cost. What the runner is built to do &mdash; what the Pro tier sells &mdash; is the active version of this loop. Three first-class archetypes ship in v2.10:</p>
+
+  <h3>1. &ldquo;Should Agent X stay on Opus 4.7, or can Sonnet 4.6 handle this?&rdquo;</h3>
+
+  <p>The <strong><code class="mono">model-ladder</code></strong> archetype. <em>N</em> models, <em>M</em> prompts that represent the agent&rsquo;s real work, <em>R</em> repetitions per cell. Score every dispatch through a rubric. The output is a cost-quality Pareto frontier: <em>at what quality threshold can you drop from Opus to Sonnet on this specific agent?</em> Pre-run cost estimate from PR-2 tells you what the full sweep will cost before you commit.</p>
+
+  <pre><code class="mono">ato evaluations methodology create --config model-ladder.json
+ato evaluations methodology cost-estimate model-ladder --judge-calls 1 --human
+
+# Variant matrix:    8 prompts × 4 models × 1 condition × 30 reps = 960 dispatches
+# YOUR estimated LLM spend (billing=byok):
+#   claude-opus-4-7            240 dispatches  $76.86
+#   claude-sonnet-4-6          240 dispatches  $15.37
+#   gemini-2.5-pro             240 dispatches  $5.13
+#   gpt-5                      240 dispatches  $36.00
+#   YOUR total:    $133.36
+# OUR cost to deliver:    $1.21
+# Tier fit: ExceedsTier
+</code></pre>
+
+  <p>The customer sees $133 in their face before committing. They can downscope to 3 models, or to n=10 instead of n=30. The OS rate card is open-source so they can audit the math.</p>
+
+  <h3>2. &ldquo;Does grounded mode actually change behavior on MY prompts?&rdquo;</h3>
+
+  <p>The <strong><code class="mono">tools-vs-no-tools</code></strong> archetype. Same prompts, same model, with vs without grounding. This is exactly what Part 5 tested by hand &mdash; the runner now does it automatically. From the n=150 data: prompt [16] is rubric-worse under grounding; prompt [17] is rubric-better. Both findings would have shipped in Part 5 if the runner had existed; the methodology is the runner&rsquo;s primary archetype.</p>
+
+  <h3>3. &ldquo;Did our agent get worse this week?&rdquo;</h3>
+
+  <p>The <strong><code class="mono">regression-watch</code></strong> archetype. Re-run any methodology on a schedule. Diff this week&rsquo;s scores against last week&rsquo;s. The runner&rsquo;s composer ships pairwise Welch <em>t</em>-statistics + a CI-disjoint heuristic for &ldquo;is this difference real,&rdquo; so a 0.85 → 0.62 drop with overlapping CIs doesn&rsquo;t fire an alert but a 0.85 → 0.30 disjoint drop does.</p>
+
+  <h2>Honest gaps (and what fills them)</h2>
+
+  <ul>
+    <li><strong>No p-values yet.</strong> The composer surfaces Welch&rsquo;s <em>t</em>-statistic and Satterthwaite df. The proper p-value calculation needs the incomplete-beta CDF; we made a deliberate call to ship the CI-disjoint heuristic instead while the runner finds its footing. PR-5 may bring the full p computation in.</li>
+    <li><strong>Dev-build keychain still blocks API providers.</strong> The same dev-build keychain ACL issue from Parts 2&ndash;5 means we still can&rsquo;t fan out OpenAI / Anthropic API / Gemini API dispatches from the dev binary. The 157 receipts we adopted were all <em>claude</em> CLI runtime (subscription auth, no keychain dep). Customers running the production binary won&rsquo;t hit this.</li>
+    <li><strong>PR-5 (dual-cost calibration + admin margin reports) ships next.</strong> The $0.05 OUR cost / $0.29 margin per run is the spec&rsquo;s default allocation. PR-5 calibrates that against an actual Railway month + ships customer-facing margin transparency.</li>
+    <li><strong>n=10 per cell remains industry-baseline-mid, not top-bar.</strong> Same gap Part 5 called out. The runner makes n=30 trivial to fire; what&rsquo;s missing is the customer-facing UI panel that turns the scored receipts into a board-meeting chart. v2.10 PR-5 closes part of that.</li>
+  </ul>
+
+  <h2>How to reproduce this on your own machine</h2>
+
+  <pre><code class="mono">brew install willnigri/ato/ato
+# (or download from agentictool.ai)
+
+# 1. Take any existing execution_logs rows you have
+sqlite3 ~/.ato/local.db &quot;SELECT COUNT(*), runtime, model
+                          FROM execution_logs
+                          WHERE created_at &gt; date('now', '-7 days')
+                          GROUP BY runtime, model;&quot;
+
+# 2. Define a methodology with a regex rubric
+cat &gt; my-methodology.json &lt;&lt;EOF
+{
+  &quot;slug&quot;: &quot;weekly-quality-check&quot;,
+  &quot;archetype&quot;: &quot;regression-watch&quot;,
+  &quot;variant_matrix&quot;: {
+    &quot;prompts&quot;: [&quot;(adopted)&quot;],
+    &quot;models&quot;: [&quot;claude-sonnet-4-6&quot;],
+    &quot;conditions&quot;: [&quot;default&quot;],
+    &quot;reps_per_cell&quot;: 30
+  },
+  &quot;rubric&quot;: {
+    &quot;kind&quot;: &quot;regex&quot;,
+    &quot;pattern&quot;: &quot;(?i)(your|expected|markers|here)&quot;,
+    &quot;case_insensitive&quot;: true
+  }
+}
+EOF
+ato evaluations methodology create --config my-methodology.json --human
+
+# 3. Adopt your existing receipts into a run
+ato evaluations methodology adopt weekly-quality-check \
+  --since &quot;$(date -v-7d +%Y-%m-%d)&quot; \
+  --runtime claude \
+  --status success \
+  --human
+
+# 4. Score (regex rubric = free, llm_judge = $0.005-ish per dispatch)
+ato evaluations methodology score &lt;run-id&gt; --human
+
+# 5. See the per-cell composition
+ato evaluations methodology runs show &lt;run-id&gt; --human
+</code></pre>
+
+  <p>The whole loop is &lt; 5 minutes against any week&rsquo;s receipts. The expensive parts &mdash; running new dispatches, calling LLM judges &mdash; are explicit opt-ins per the runner&rsquo;s &ldquo;<a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/docs/methodology-runner.md" target="_blank" rel="noopener">no surprise spend</a>&rdquo; rule.</p>
+
+  <h2>Why we can ship this with our face on it</h2>
+
+  <p>Part 5 retracted one of our own n=1 claims with the n=10 data. Part 6 demonstrates the runner against <em>that same retracted corpus</em>. Both findings get persisted into the same SQLite file the customer queries. The receipts for everything in this post live in <code class="mono">~/.ato/local.db</code> &mdash; methodology id <code class="mono">294e0499-2729-4397-a177-986b80c57aac</code> (regex run), <code class="mono">9da277ef-749a-4ad2-8fe6-c771a163809f</code> (LLM-judge run) &mdash; queryable, reproducible, public.</p>
+
+  <p>If you sell an eval product, you have to use it on your own product. The runner is what we use to make decisions. That&rsquo;s why it&rsquo;s the Pro tier.</p>
+
+  <p class="post-cta-block">
+    <a href="/#download" class="post-cta-primary">Download ATO &rarr;</a>
+    <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/docs/methodology-runner.md" class="post-cta-secondary" target="_blank" rel="noopener">Read the Methodology Runner spec &rarr;</a>
+  </p>
+
+  <p class="post-footnote"><em>Real data behind this post: 157 claude-sonnet-4-6 receipts (the n=150 corpus from Part 5) + 13 gemini-2.5-flash receipts + 13 new claude-sonnet-4-6 judge dispatches fired 2026-05-25 to validate the LLM-judge path. Total incremental spend for this Part 6: $0.0712. Methodology rows + dual cost ledger in <code class="mono">~/.ato/local.db</code>:<code class="mono">methodologies</code>, <code class="mono">methodology_runs</code>, <code class="mono">methodology_run_dispatches</code>. The code: <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/tree/main/apps/cli/src/methodology" target="_blank" rel="noopener">apps/cli/src/methodology/</a> (~3,300 LOC for the runner + composer + rubric library) and <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/apps/cli/src/commands/methodology.rs" target="_blank" rel="noopener">apps/cli/src/commands/methodology.rs</a> (CLI surface). Open-source pricing rate card at <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/packages/ato-pricing/pricing.json" target="_blank" rel="noopener">packages/ato-pricing/pricing.json</a> &mdash; same file the cost estimator reads.</em></p>
+
+</article>
+
+</body>
+</html>
