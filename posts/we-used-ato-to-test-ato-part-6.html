@@ -284,6 +284,78 @@ ato evaluations methodology cost-estimate model-ladder --judge-calls 1 --human
 
   <p>The <strong><code class="mono">regression-watch</code></strong> archetype. Re-run any methodology on a schedule. Diff this week&rsquo;s scores against last week&rsquo;s. The runner&rsquo;s composer ships pairwise Welch <em>t</em>-statistics + a CI-disjoint heuristic for &ldquo;is this difference real,&rdquo; so a 0.85 → 0.62 drop with overlapping CIs doesn&rsquo;t fire an alert but a 0.85 → 0.30 disjoint drop does.</p>
 
+  <h2 id="cross-model-update">Update 2026-05-25 PM &mdash; cross-model data (now we have it)</h2>
+
+  <p>The original Part 6 above was claude-only. Reason: a dev-binary keychain ACL on macOS prevented the methodology runner from decrypting stored API provider keys, so we ran everything through claude CLI runtime (which uses Claude Code&rsquo;s own session, not ATO&rsquo;s keychain). I wrote that off as &ldquo;documented limitation&rdquo; in earlier drafts. Will read this and corrected it: the prod app bundle&rsquo;s keychain works fine; the runner just needed to be told to delegate to the prod binary.</p>
+
+  <p>v2.11 PR-12.6 ships the fix &mdash; an <code class="mono">ATO_CLI_PATH</code> env override that points the methodology runner&rsquo;s shell-out at any installed <code class="mono">ato</code> binary (mirroring the Tauri cron module&rsquo;s pattern that already worked). One line of env, and a dev-build ATO reaches every API provider through the prod-app-bundle&rsquo;s keychain. Same fix unblocks the diagnose dispatch + the LLM-judge rubric.</p>
+
+  <p>Then we re-fired the Part 5 prompts through gemini-2.5-flash for $0.13. Side-by-side numbers:</p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;">
+    <thead>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <th style="text-align:left; padding: 6px 10px;">Prompt</th>
+        <th style="text-align:right; padding: 6px 10px;">claude (n=30) score</th>
+        <th style="text-align:right; padding: 6px 10px;">gemini-flash (n=6) score</th>
+        <th style="text-align:right; padding: 6px 10px;">claude $</th>
+        <th style="text-align:right; padding: 6px 10px;">gemini $</th>
+        <th style="text-align:right; padding: 6px 10px;">$ ratio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">src/auth.ts SQL injection</td>
+        <td style="text-align:right; padding: 6px 10px;">0.533</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.031</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0045</td>
+        <td style="text-align:right; padding: 6px 10px;">6.9&times;</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">src/session.ts race conditions</td>
+        <td style="text-align:right; padding: 6px 10px;">0.467</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.054</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0074</td>
+        <td style="text-align:right; padding: 6px 10px;">7.2&times;</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">src/billing.ts test coverage</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.038</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0019</td>
+        <td style="text-align:right; padding: 6px 10px;">20&times;</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">src/config.ts env leaks</td>
+        <td style="text-align:right; padding: 6px 10px;">0.900</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.063</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0051</td>
+        <td style="text-align:right; padding: 6px 10px;">12&times;</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px 10px;">src/server.ts HTTP endpoints</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.009</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0024</td>
+        <td style="text-align:right; padding: 6px 10px;">3.8&times;</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Two real findings come out of this that Part 6 didn&rsquo;t have:</p>
+
+  <ol>
+    <li><strong>Gemini-2.5-flash scores 1.000 on every real security prompt at 7-12&times; lower cost than claude-sonnet-4-6.</strong> On <em>this rubric, on these prompts</em>, gemini-flash is the Pareto-better choice. That&rsquo;s the kind of cost-quality call the methodology runner is built to surface, and it&rsquo;s genuinely surprising &mdash; the conventional wisdom is &ldquo;claude is the higher-quality model.&rdquo; The data on these five prompts under this rubric says otherwise. <em>The sample sizes aren&rsquo;t matched yet</em> &mdash; claude is n=30 (from Part 5); gemini is n=6 (we ran a smaller pilot to keep the test cheap). Scaling gemini to n=30 would cost ~$0.74. Doing it next.</li>
+    <li><strong>The two Goodhart&rsquo;s-law cells (billing.ts, server.ts) fail on BOTH models with identical 0.000 score.</strong> This is the cleanest confirmation possible that the failure mode is the <em>rubric</em>, not the agent. The diagnose pass we ran in <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/memory/project_v2_11_learning_loop_experiment.md" target="_blank" rel="noopener">Part 7</a> flagged this in <code class="mono">risks_flagged</code> back when we only had claude data; now we have cross-model evidence it was right.</li>
+  </ol>
+
+  <p>The transparency move worth flagging: the original Part 6 had only claude data because I hadn&rsquo;t plumbed the keychain workaround through. Will caught it, the fix is one new module + four call-site swaps, the updated data is in the table above, and the methodology runner code that produced both columns ships in <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/commit/c774584" target="_blank" rel="noopener">commit c774584</a>. <em>That</em> is what we mean by &ldquo;the receipts are real.&rdquo;</p>
+
   <h2>Honest gaps (and what fills them)</h2>
 
   <ul>
