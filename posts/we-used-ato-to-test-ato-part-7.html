@@ -165,11 +165,11 @@
 
   <h2>How to reproduce this on your data</h2>
 
-  <p>This whole post ran via the FREE <code class="mono">ato evaluations methodology run</code> primitive &mdash; customer&rsquo;s API keys pay, customer&rsquo;s machine runs the fan-out, no cloud roundtrip. Replicating the test on YOUR five most-used prompts:</p>
+  <p>Full disclosure: the 150 receipts behind this post were fired through our Pro orchestrator (<code class="mono">ato evaluations methodology run</code>) because that&rsquo;s what we use ourselves. <strong>You don&rsquo;t need it.</strong> The capability is free &mdash; customer&rsquo;s API keys pay, customer&rsquo;s machine runs the dispatches, no cloud roundtrip. The Pro tier just collapses the by-hand recipe below into one command + ledger + schedule. Here&rsquo;s both paths, side by side, so you can choose.</p>
 
   <h2>The free way: by hand with <code class="mono">ato dispatch</code></h2>
 
-  <p>The orchestration in this post (the fan-out, the per-cell stats, the cost ledger) is the Pro tier. The <strong>capability</strong> is free: <code class="mono">ato dispatch</code> ships in the OSS binary and gives you everything you need to reproduce the study. Here&rsquo;s the by-hand recipe.</p>
+  <p>The orchestration in this post (the fan-out, the per-cell stats, the cost ledger) is the Pro tier. The <strong>capability</strong> is free: <code class="mono">ato dispatch</code> ships in the OSS binary and gives you everything you need to reproduce the study. A few more lines of bash; same numbers at the end. Here&rsquo;s the recipe.</p>
 
   <pre><code class="mono"># Install the free OSS binary
 brew install willnigri/ato/ato
