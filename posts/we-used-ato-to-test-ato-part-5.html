@@ -89,14 +89,16 @@
 
   <table class="post-table">
     <thead>
-      <tr><th>Condition</th><th>n</th><th>Mean tool calls/dispatch</th><th>SD</th></tr>
+      <tr><th>Condition</th><th>n</th><th>Mean tool calls/dispatch (cross-prompt avg)</th><th>Per-prompt SD range (5 prompts)</th></tr>
     </thead>
     <tbody>
       <tr><td>cold</td><td>67</td><td><strong>0.00</strong></td><td>0.00</td></tr>
-      <tr><td>soft</td><td>50</td><td>2.66 (cross-prompt avg)</td><td>0.5&ndash;1.25 by prompt</td></tr>
-      <tr><td>strict</td><td>43</td><td>2.52 (cross-prompt avg)</td><td>0.7&ndash;1.1 by prompt</td></tr>
+      <tr><td>soft</td><td>50</td><td>2.66</td><td>0.5&ndash;1.25 tool calls</td></tr>
+      <tr><td>strict</td><td>43</td><td>2.52</td><td>0.7&ndash;1.1 tool calls</td></tr>
     </tbody>
   </table>
+
+  <p><em>Note: these numbers are <strong>tool-call counts per dispatch</strong>, not rubric pass rates. The 0.7&ndash;1.1 SD range under &ldquo;strict&rdquo; is how much the per-prompt mean tool-call count varies across the 5 prompts. The 0&ndash;1 rubric pass-rate scores ( <strong>0.533, 0.467, 0.900</strong>, etc.) live in the Cross-model footer below and in <a href="we-used-ato-to-test-ato-part-7.html">Part 7</a>, computed on the same prompts but with the n=30 cross-model corpus.</em></p>
 
   <p>This validates the Part 1 framing (&ldquo;grounded mode is the layer that makes &lsquo;every AI follows your rules&rsquo; a checked invariant&rdquo;) with real data. Without grounding, claude is text-only on prompts that should require tool use.</p>
 
