@@ -251,10 +251,72 @@ SQL
 
   <p>This is the methodology runner&rsquo;s minimum viable shape, hand-rolled in bash. The Pro version ships next: variant matrix expansion, LLM-judge rubric, cross-model laddering, confidence intervals computed into the receipt, scheduled regression-watch &mdash; all with the dual cost accounting (your LLM invoice + our compute) the open-source <code class="mono">packages/ato-pricing/pricing.json</code> rate card publishes.</p>
 
+  <h2 id="cross-model-update">Update 2026-05-25 PM &mdash; the cross-model n=30 data</h2>
+
+  <p>The "single LLM tested" gap below has been closed. After v2.11 PR-12.6 shipped the <code class="mono">ATO_CLI_PATH</code> env override that lets a dev binary delegate to the prod app-bundle&rsquo;s keychain, we re-fired the same five Part 5 prompts through gemini-2.5-flash at n=30 per prompt. Cost: $0.56 customer / $0.11 ours / 84 minutes via the free <code class="mono">ato evaluations methodology run</code> primitive. Same rubric (regex match on security keywords) as the original claude run.</p>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;">
+    <thead>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <th style="text-align:left; padding: 6px 10px;">Prompt</th>
+        <th style="text-align:right; padding: 6px 10px;">claude-sonnet-4-6 n=30 score</th>
+        <th style="text-align:right; padding: 6px 10px;">gemini-2.5-flash n=27-30 score</th>
+        <th style="text-align:right; padding: 6px 10px;">$/call claude</th>
+        <th style="text-align:right; padding: 6px 10px;">$/call gemini</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">src/auth.ts SQL injection</td>
+        <td style="text-align:right; padding: 6px 10px;">0.533</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0311</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0042</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">src/session.ts race conditions</td>
+        <td style="text-align:right; padding: 6px 10px;">0.467</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0539</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0072</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">src/billing.ts test coverage</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0382</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0016</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">src/config.ts env leaks</td>
+        <td style="text-align:right; padding: 6px 10px;">0.900</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0632</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0047</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px 10px;">src/server.ts HTTP endpoints</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0090</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0018</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Two findings that Part 5 couldn&rsquo;t produce (and that compose nicely on top of its grounded-mode story):</p>
+
+  <ol>
+    <li><strong>Gemini-2.5-flash scored 1.000 on every real security prompt at 7-13&times; lower cost than claude-sonnet-4-6.</strong> Zero variance in score across n=27-30 dispatches per cell. Statistically locked. The conventional &ldquo;claude is the higher-quality model&rdquo; wisdom doesn&rsquo;t hold for this workload at this price point. <em>For these prompts under this rubric</em> &mdash; the methodology-runner-shaped caveat that should follow every claim of this shape.</li>
+    <li><strong>The two Goodhart&rsquo;s-law cells (billing.ts, server.ts) fail on BOTH models with identical 0.000 score.</strong> Cleanest possible confirmation that the failure mode is the <em>rubric</em>, not the agent &mdash; these prompts aren&rsquo;t security questions, so neither agent volunteers security keywords. Same rubric mismatch the v2.9 + v2.10 work tagged as a known limitation; cross-model evidence is now in.</li>
+  </ol>
+
+  <p>This whole follow-up ran via the FREE <code class="mono">ato evaluations methodology run</code> primitive &mdash; the customer&rsquo;s API keys pay; no ATO cloud roundtrip. Pro &amp; Team tier adds the codified automation on top (scheduled re-runs, learning-loop diagnose, auto-revert on regression) but the cross-model receipts above are everyone&rsquo;s to produce. See <a href="/posts/we-used-ato-to-test-ato-part-6.html">Part 6</a> for the methodology runner architecture + the same data with deeper cuts.</p>
+
   <h2>Honest gaps remaining</h2>
 
   <ul>
-    <li><strong>Single LLM tested.</strong> All 150 dispatches were claude. The model-ladder archetype (claude vs gemini vs codex vs openai, etc.) requires the gemini/codex API keys we're blocked from on the dev binary. Replicating Part 5 across 4&ndash;9 models is what the Methodology Runner ships to do, automatically.</li>
+    <li><strong>Single LLM tested in this Part 5 (now closed — see update above).</strong> The original Part 5 ran all 150 dispatches against claude only. The 2026-05-25 PM update fires the same prompts against gemini-2.5-flash for proper cross-model comparison. The grounded-mode AXIS (cold / soft / strict) is still claude-only because grounded mode is implemented at the runtime level for the claude CLI; replicating it across gemini's tool-use surface is a separate experiment.</li>
     <li><strong>n=10/cell is industry-baseline-mid, not top-bar.</strong> Real benchmarks (HumanEval at 164 problems, MMLU at 15,908 questions, Patronus RAG at ~1k) run two orders of magnitude larger. We're now defensible at the &ldquo;publishable internal eval&rdquo; tier; the A-grade tier is what the runner enables at scale.</li>
     <li><strong>Single-runtime cost generalization is loose.</strong> The 24&times; multiplier between cold and grounded is claude-specific. Codex and the API providers will produce different multipliers (their tool-use cost characteristics differ). The runner&rsquo;s cost estimate has to be per-runtime, not per-condition-across-runtimes.</li>
   </ul>
