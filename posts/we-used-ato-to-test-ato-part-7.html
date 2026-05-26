@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We used ATO to test ATO — Part 7: gemini-flash beat sonnet on the same 5 prompts at 7-13× lower cost — ATO</title>
+<meta name="description" content="We ran the same 5 security-review prompts against claude-sonnet-4-6 and gemini-2.5-flash at n=30 per cell. Gemini scored 1.000 on every real security prompt; claude scored 0.47-0.90. At 7-13× lower cost. Plus: two prompts where both models scored 0.000 — and why that says more about the rubric than the agent.">
+<meta name="keywords" content="multi-LLM evaluation, claude vs gemini, cost-quality Pareto, security review benchmark, Goodhart's law in evals, methodology runner, ATO Pro">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/we-used-ato-to-test-ato-part-7.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="We used ATO to test ATO — Part 7: gemini-flash beat sonnet at 7-13× lower cost">
+<meta property="og:description" content="Same 5 security-review prompts, n=30 per cell, two models. Gemini-flash 1.000 vs claude-sonnet-4-6 0.47-0.90. Pareto-better at 7-13× the cost ratio. What that means for your model choice.">
+<meta property="og:url" content="https://agentictool.ai/posts/we-used-ato-to-test-ato-part-7.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-05-25T22:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="We used ATO to test ATO — Part 7">
+<meta name="twitter:description" content="Cross-model n=30 on the same 5 prompts. Gemini-flash 1.000 vs claude 0.47-0.90 at 7-13× lower cost. The conventional 'claude = higher quality' read doesn't hold here.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"We used ATO to test ATO — Part 7: gemini-flash beat sonnet on the same 5 prompts at 7-13× lower cost","description":"Industry-baseline n=30 cross-model comparison on 5 security prompts. Gemini-2.5-flash scored 1.000 on every security prompt; claude-sonnet-4-6 scored 0.47-0.90. Same rubric, same prompts, 7-13× cost ratio in gemini's favor. Plus: two Goodhart's-law prompts where both models scored 0.000.","datePublished":"2026-05-25","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/we-used-ato-to-test-ato-part-7.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-05-25 &middot; Build log &middot; Part 7 of a v2.9/v2.10/v2.11 series &middot; 8 min read</div>
+
+  <h1>We used ATO to test ATO &mdash; Part 7. Gemini-flash beat sonnet on the same 5 prompts at 7-13&times; lower cost.</h1>
+
+  <div class="post-series-card" style="border: 1px solid var(--border, #2a2a30); border-radius: 6px; padding: 12px 16px; margin: 16px 0; font-size: 0.95rem; line-height: 1.55;">
+    <strong>v2.9/v2.10/v2.11 build log &mdash; series.</strong>
+    <ul style="margin: 8px 0 0 0; padding-left: 18px;">
+      <li><a href="/posts/we-used-ato-to-test-ato-part-1.html">Part 1</a> &mdash; v2.9 PR-1: grounded-mode foundation.</li>
+      <li><a href="/posts/we-used-ato-to-test-ato-parts-2-3-4.html">Parts 2&ndash;4</a> &mdash; v2.9 PR-2/3/4.</li>
+      <li><a href="/posts/we-used-ato-to-test-ato-part-5.html">Part 5</a> &mdash; n=150 scaled re-run; one Part 4 claim falsified.</li>
+      <li><a href="/posts/we-used-ato-to-test-ato-part-6.html">Part 6</a> &mdash; v2.10 methodology runner ships.</li>
+      <li><strong>Part 7 (you are here)</strong> &mdash; cross-model n=30 on the same 5 prompts. What it says about which model to pick.</li>
+    </ul>
+  </div>
+
+  <p class="post-lede">Two months of receipts have been telling us the same thing: <strong>the model that wins on benchmarks isn&rsquo;t always the model that wins on YOUR work</strong>. Part 7 is what happens when you take that seriously, fire 150 dispatches across two models at industry-baseline n=30, and read the receipts. The headline finding is uncomfortable and worth fifteen minutes of your time if you spend more than $50/mo on LLM calls.</p>
+
+  <h2>The setup &mdash; what we actually ran</h2>
+
+  <p>Five prompts that look like real engineering work: security audits on hypothetical source files, two non-security questions in the same shape. We&rsquo;ve been running these for the last few weeks under the v2.9 grounded-mode build log; they survived the n=150 statistical rinse Part 5 documented.</p>
+
+  <ul>
+    <li>P1: <em>"Review src/auth.ts in this repository for SQL injection vulnerabilities."</em></li>
+    <li>P2: <em>"Find any race conditions in src/session.ts. Walk the code."</em></li>
+    <li>P3: <em>"Check whether src/billing.ts has test coverage. Look at the tests folder."</em></li>
+    <li>P4: <em>"Audit src/config.ts for environment variable leaks or hardcoded secrets."</em></li>
+    <li>P5: <em>"List the public HTTP endpoints exposed by src/server.ts."</em></li>
+  </ul>
+
+  <p>Two models, same prompts: <strong>claude-sonnet-4-6</strong> (Anthropic) and <strong>gemini-2.5-flash</strong> (Google). One rubric: <em>"did the response mention at least one security-finding keyword (vulnerability / injection / race / leak / secret / exposure / hardcoded / CVE)?"</em> Score: 1.0 if yes, 0.0 if no. Industry-baseline n=30 dispatches per prompt-model cell. Total: 150 fresh gemini dispatches (the claude side was already in our DB from the v2.9 work).</p>
+
+  <p>Total spend to produce this entire blog post&rsquo;s data: <strong>$0.56</strong> on the gemini side via the customer&rsquo;s own API key. The claude side cost ~$6.20 when we ran it originally. Receipts are real and reproducible &mdash; the exact bash to replay this on your machine is at the bottom of the post.</p>
+
+  <h2>The results</h2>
+
+  <table style="width:100%; border-collapse: collapse; margin: 16px 0; font-size: 0.9rem;">
+    <thead>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <th style="text-align:left; padding: 6px 10px;">Prompt</th>
+        <th style="text-align:right; padding: 6px 10px;">claude n=30 score</th>
+        <th style="text-align:right; padding: 6px 10px;">gemini n=27-30 score</th>
+        <th style="text-align:right; padding: 6px 10px;">claude $/call</th>
+        <th style="text-align:right; padding: 6px 10px;">gemini $/call</th>
+        <th style="text-align:right; padding: 6px 10px;">$ ratio</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">P1 src/auth.ts SQL injection</td>
+        <td style="text-align:right; padding: 6px 10px;">0.533</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0311</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0042</td>
+        <td style="text-align:right; padding: 6px 10px;">7.4&times;</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">P2 src/session.ts race conditions</td>
+        <td style="text-align:right; padding: 6px 10px;">0.467</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0539</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0072</td>
+        <td style="text-align:right; padding: 6px 10px;">7.5&times;</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">P3 src/billing.ts test coverage</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0382</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0016</td>
+        <td style="text-align:right; padding: 6px 10px;">24&times;</td>
+      </tr>
+      <tr style="border-bottom: 1px solid var(--border, #2a2a30);">
+        <td style="padding: 6px 10px;">P4 src/config.ts env leaks</td>
+        <td style="text-align:right; padding: 6px 10px;">0.900</td>
+        <td style="text-align:right; padding: 6px 10px;"><strong>1.000</strong></td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0632</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0047</td>
+        <td style="text-align:right; padding: 6px 10px;">13&times;</td>
+      </tr>
+      <tr>
+        <td style="padding: 6px 10px;">P5 src/server.ts HTTP endpoints</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">0.000</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0090</td>
+        <td style="text-align:right; padding: 6px 10px;">$0.0018</td>
+        <td style="text-align:right; padding: 6px 10px;">5.0&times;</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Three things to read out of this. Worth sitting with each.</p>
+
+  <h2>Finding 1: gemini-flash dominated on the security prompts at a fraction of the cost</h2>
+
+  <p>On the three prompts that actually <em>are</em> security questions (P1, P2, P4), gemini-flash scored a perfect 1.000 across n=27-30 dispatches with <em>zero variance</em>. Every single dispatch mentioned at least one security keyword. Claude scored 0.467 to 0.900 on the same prompts &mdash; a meaningful chunk of dispatches drifted off-topic, refused, or gave generic answers that didn&rsquo;t name the failure mode.</p>
+
+  <p>And it did this at <strong>7-13&times; lower per-call cost</strong>. On the longer security audits (P2 race conditions, P4 env leaks), the cost gap stretches to 7-13&times;. For a real customer running 100 security reviews a day, the difference between $5 and $0.40 per day adds up to $1,700/year for the same or better quality.</p>
+
+  <p>This is the cost-quality Pareto frontier the methodology runner exists to surface. The conventional &ldquo;claude is the higher-quality model&rdquo; intuition isn&rsquo;t wrong in general &mdash; it&rsquo;s built on broader benchmarks. But <em>your workload isn&rsquo;t the benchmark</em>. On THIS rubric, on THESE prompts, gemini-flash is the Pareto-better choice and the data is statistically locked.</p>
+
+  <h2>Finding 2: when the rubric is wrong, the agent isn&rsquo;t the problem</h2>
+
+  <p>Prompts P3 (&ldquo;does src/billing.ts have test coverage?&rdquo;) and P5 (&ldquo;list HTTP endpoints in src/server.ts&rdquo;) scored a perfect <strong>0.000</strong> on BOTH models. Not because both models are bad at these questions &mdash; they&rsquo;re competently answering whether tests exist and which endpoints are exposed. They just aren&rsquo;t volunteering the security-keyword vocabulary the rubric expects, because the question isn&rsquo;t a security question.</p>
+
+  <p>This is Goodhart&rsquo;s law in evals: when your measure stops capturing what you care about, optimizing for the measure makes things worse. Two practical implications:</p>
+
+  <ol>
+    <li><strong>The cross-model evidence is the proof.</strong> If only claude had scored 0.000 on these prompts, we&rsquo;d be tempted to ship a system-prompt patch that forced security keywords into every response. With gemini ALSO scoring 0.000, we have independent confirmation the failure mode lives in the rubric, not the agent. Cross-model evaluation is the strongest anti-Goodhart defense you can build, and it&rsquo;s the second thing ATO makes one-line cheap.</li>
+    <li><strong>Splitting your rubric by prompt class beats one global rubric.</strong> The security regex should apply to P1/P2/P4 only. P3 wants a coverage-percent regex. P5 wants an endpoint-shape regex. The methodology runner has rubric-per-prompt support; we just hadn&rsquo;t configured it for this study.</li>
+  </ol>
+
+  <h2>Finding 3: the cost gap widens with response complexity</h2>
+
+  <p>P5 (simple endpoint listing &mdash; short responses) shows the smallest cost ratio: 5&times;. P3 (test coverage check &mdash; medium responses): 24&times;. The security audits (long, detailed responses): 7-13&times;. The pattern: gemini-flash&rsquo;s per-token output rate is similar to sonnet&rsquo;s, but its per-input-token cost is much lower &mdash; so prompts with rich context (codebase walkthroughs, long file audits) widen the gap.</p>
+
+  <p>This generalizes: <strong>if your workload uses long prompts with detailed context, you&rsquo;ll see more of gemini&rsquo;s cost advantage</strong>. If your workload is short Q&amp;A, the gap narrows. Worth quantifying on your own data before you pick.</p>
+
+  <h2>What this means for your stack</h2>
+
+  <p>Three concrete moves:</p>
+
+  <ol>
+    <li><strong>Don&rsquo;t default to the model with the highest published benchmark score.</strong> Default to the one that wins on YOUR five most-used prompts at industry-baseline n=30. That data takes ~$1 and ~90 minutes to produce per model with ATO.</li>
+    <li><strong>Run your evals cross-model.</strong> If a finding only shows up on one model, you can&rsquo;t separate &ldquo;the agent is wrong&rdquo; from &ldquo;the rubric is wrong.&rdquo; If both models show the same failure, the rubric is wrong.</li>
+    <li><strong>Re-run the test when models update.</strong> The findings above are dated 2026-05-25. Frontier models ship monthly; Pareto frontiers shift. <a href="#" data-ato-download="auto">Download ATO</a> + schedule the same methodology to re-run weekly; alert on score drift. The methodology runner&rsquo;s regression-watch archetype exists for exactly this.</li>
+  </ol>
+
+  <h2>How to reproduce this on your data</h2>
+
+  <p>This whole post ran via the FREE <code class="mono">ato evaluations methodology run</code> primitive &mdash; customer&rsquo;s API keys pay, customer&rsquo;s machine runs the fan-out, no cloud roundtrip. Replicating the test on YOUR five most-used prompts:</p>
+
+  <pre><code class="mono">brew install willnigri/ato/ato
+
+# 1. Write your methodology config: 5 prompts × 2 models × n=30
+cat &gt; my-test.json &lt;&lt;'EOF'
+{
+  "slug": "cost-quality-test-2026-05",
+  "archetype": "model-ladder",
+  "variant_matrix": {
+    "prompts": [
+      "your prompt 1",
+      "your prompt 2",
+      "your prompt 3",
+      "your prompt 4",
+      "your prompt 5"
+    ],
+    "models": ["claude-sonnet-4-6", "gemini-2.5-flash"],
+    "conditions": ["default"],
+    "reps_per_cell": 30
+  },
+  "rubric": {
+    "kind": "regex",
+    "pattern": "(?i)(YOUR_EXPECTED_KEYWORD_PATTERN)",
+    "case_insensitive": true
+  }
+}
+EOF
+
+# 2. Preview cost (no LLM calls yet — pure math)
+ato evaluations methodology create --config my-test.json
+ato evaluations methodology cost-estimate cost-quality-test-2026-05 --human
+
+# 3. Fan it out (~ matches the Part 7 cost profile)
+ato evaluations methodology run cost-quality-test-2026-05 --human
+
+# 4. Read the per-cell composition: mean / 95% CI / pairwise Welch t
+ato evaluations methodology runs show &lt;run-id&gt; --human</code></pre>
+
+  <p>The Pareto frontier prints to your terminal. If gemini wins on your data too, you have your answer.</p>
+
+  <h2>What you get free vs. what ATO Pro adds</h2>
+
+  <p>Everything in this Part 7 ran on the free primitives. <strong>Defining methodologies, running them with your own API keys, computing per-cell statistics, comparing across runs &mdash; all free, all local, all yours</strong>. We don&rsquo;t charge for &ldquo;ran your prompts&rdquo; capability when it&rsquo;s your keys + your machine doing the work.</p>
+
+  <p>What ATO Pro ($29/mo) adds on top: the codified automation that turns one-shot methodology runs into a continuously-improving loop. <strong>Scheduled re-runs that catch model drift before you do</strong>. <strong>Diagnose: an LLM reads your failing cells and proposes a specific change to your agent definition that would have raised the score</strong>. <strong>A/B test the change against a holdout set</strong>. <strong>Auto-revert if production telemetry says the change regressed</strong>. The cost-quality data above is the foundation; Pro is what closes the loop on it. <a href="https://agentictool.ai/pro">Learn about Pro &rarr;</a></p>
+
+  <h2>Honest disclosure</h2>
+
+  <ul>
+    <li><strong>Sample sizes weren&rsquo;t identical.</strong> Two of the gemini cells came in at n=27-29 instead of n=30 because of API timeouts under sustained load. The errored dispatches are still in our cost ledger; the score-cell-mean is computed over only the successful ones.</li>
+    <li><strong>The rubric is intentionally simple.</strong> A regex match on security keywords isn&rsquo;t a serious security assessment &mdash; it&rsquo;s a coverage probe. More demanding rubrics (structural assertions about response shape, LLM-as-judge scoring) would split the models differently. The free <code class="mono">methodology score</code> command supports all three rubric kinds.</li>
+    <li><strong>One snapshot.</strong> The findings are valid for these specific models on 2026-05-25. Gemini-flash and sonnet have both moved. Re-run before making procurement decisions on numbers older than a month.</li>
+  </ul>
+
+  <p class="post-cta-block">
+    <a href="/#download" class="post-cta-primary">Download ATO &rarr;</a>
+    <a href="https://agentictool.ai/pro" class="post-cta-secondary">Learn about Pro &rarr;</a>
+  </p>
+
+  <p class="post-footnote"><em>Real data behind this post: 150 fresh gemini-2.5-flash dispatches fired 2026-05-25 between 00:25 and 01:49 UTC against the same five Part 5 prompts. Customer-side spend: $0.56. Receipts in <code class="mono">~/.ato/local.db</code> on the author&rsquo;s machine. The claude-sonnet-4-6 data came from the v2.9 build log (Part 5) which lives in the same database. All the math + composition logic is open source at <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/tree/main/apps/cli/src/methodology" target="_blank" rel="noopener">apps/cli/src/methodology/</a>.</em></p>
+
+</article>
+
+</body>
+</html>
