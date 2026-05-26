@@ -151,7 +151,7 @@ commands::dispatch::run(
   <ul>
     <li><strong>+1 structural upgrade.</strong> The <code class="mono">with_tools</code> routing IS correct. The error fired from INSIDE <code class="mono">api_dispatch_tools</code> (the function-calling tool loop), which is empirical proof the branch engaged. The failure was the well-documented dev-build / prod-keychain ACL mismatch from 2026-05-17 &mdash; the locally-built debug binary couldn&rsquo;t decrypt the API key that the prod desktop wrote to the macOS keychain. Unrelated to PR-3&rsquo;s routing logic.</li>
     <li><strong>+1 new empirical signal.</strong> The strict-mode <code class="mono">violation</code> verdict path was empirically demonstrated for the first time today. Prior PRs only exercised the <code class="mono">advisory</code> path (soft mode). The verdict ladder now has every rung walked: <code class="mono">not_enforced</code>, <code class="mono">advisory</code>, <code class="mono">compliant</code>, <code class="mono">violation</code>.</li>
-    <li><strong>Open gap.</strong> A clean end-to-end replay (gemini lifting from <code class="mono">advisory + unmet hallucination</code> to <code class="mono">compliant + observed read_file</code>) is blocked locally until the API keys are re-entered through the desktop&rsquo;s Settings &rarr; API Keys, which fixes the keychain ACL mismatch. The same dispatch through a signed prod desktop binary at v2.9.0 wouldn&rsquo;t hit this. Documented for the next release-test pass.</li>
+    <li><strong>Gap (now fixed in v2.11 PR-12.6, 2026-05-25).</strong> The clean end-to-end replay above was blocked locally by the dev-build / prod-keychain ACL mismatch &mdash; the locally-built debug binary couldn&rsquo;t decrypt API keys the prod desktop had encrypted. v2.11 PR-12.6 shipped the <code class="mono">ATO_CLI_PATH</code> env override + <code class="mono">cli_path::resolve_ato_binary</code> fallback chain that lets a dev binary delegate to the prod app-bundle&rsquo;s <code class="mono">ato</code> for any keychain-bound dispatch. The same dispatch through a signed prod desktop binary at v2.9.0 never hit this; this paragraph is preserved as a build-log breadcrumb only.</li>
   </ul>
 
   <h2>Part 4 &mdash; PR-4: refuse-with-options for parserless runtimes</h2>
@@ -217,7 +217,7 @@ verdict couldn&rsquo;t be honestly computed. Three options:
       </tr>
       <tr>
         <td>API providers (15+)</td>
-        <td>✓ routed through <code class="mono">api_dispatch_tools.rs</code>&rsquo; function-calling loop when grounding is non-<code class="mono">off</code> (PR-3); end-to-end empirical replay blocked by a local keychain ACL gap, structural proof captured</td>
+        <td>✓ routed through <code class="mono">api_dispatch_tools.rs</code>&rsquo; function-calling loop when grounding is non-<code class="mono">off</code> (PR-3). The Part 5 footer + Part 6 n=30 update show the clean end-to-end replay after v2.11 PR-12.6&rsquo;s <code class="mono">ATO_CLI_PATH</code> env override unblocked the keychain ACL.</td>
       </tr>
       <tr>
         <td>Ollama / OpenClaw / Hermes</td>

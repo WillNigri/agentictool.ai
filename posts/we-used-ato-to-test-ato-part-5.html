@@ -76,7 +76,7 @@
     </li>
     <li><strong>3 conditions</strong>: cold (no grounding), soft (<code class="mono">--mode-override soft --require-tools Bash</code>), strict (<code class="mono">--mode-override strict --require-tools Bash</code>)</li>
     <li><strong>n=10 per cell</strong> &mdash; 5 &times; 3 &times; 10 = 150 dispatches total</li>
-    <li><strong>Runtime</strong>: claude (only runtime with a working keychain ACL on the dev build for the grounded path; gemini end-to-end still blocked by the same dev-build keychain issue from Parts 2&ndash;4)</li>
+    <li><strong>Runtime</strong>: claude. The original Part 5 run used claude-only because Parts 2&ndash;4&rsquo;s dev-build / prod-keychain ACL mismatch blocked API-provider dispatches from the dev binary. v2.11 PR-12.6 (2026-05-25) shipped the <code class="mono">ATO_CLI_PATH</code> env override that closes that gap; the gemini n=30 cross-model run lives in the &ldquo;Cross-model footer&rdquo; below + the full Part 7.</li>
   </ul>
 
   <p>Cost in practice (real receipts, real $): <strong>$6.22</strong> for the 150 dispatches across 12 minutes wall-clock with batches of 5 in parallel. That's an order of magnitude over what we'd have spent on the n=1 version, and an order of magnitude under what a customer running the same methodology weekly at n=30 would pay (~$33). On the eval-cost ladder we&rsquo;re reaching for, n=10 is mid-tier &mdash; enough to compute defensible confidence intervals on every cell.</p>
@@ -132,7 +132,7 @@
 
   <p>Part 4 reported: <em>&ldquo;gemini hallucinated MORE under soft-mode hints (5454 &rarr; 11378 chars, +109%). The mandatory-rule prompt note acted as scaffolding for fake findings.&rdquo;</em> One sentence, one data point, marketed as a research finding.</p>
 
-  <p>What the n=150 data actually shows when we compare cold vs soft response length per prompt (on claude, not gemini &mdash; the keychain issue remains &mdash; but the methodological point holds):</p>
+  <p>What the n=150 data actually shows when we compare cold vs soft response length per prompt (on claude here; the gemini cross-model n=30 run that became possible after v2.11 PR-12.6 fixed the keychain delegation lives in the Cross-model footer below):</p>
 
   <table class="post-table">
     <thead>
