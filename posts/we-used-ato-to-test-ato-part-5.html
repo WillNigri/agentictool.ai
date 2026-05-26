@@ -49,7 +49,7 @@
     </ul>
   </div>
 
-  <p class="post-lede">Parts 1&ndash;4 of this series shipped a feature, scored each PR against a bench, and admitted in writing that the sample size was below industry baseline. Part 5 is what happened when we took that critique seriously, fired 150 dispatches in a structured n=10/cell sweep, and computed confidence intervals on every claim. Three of the directional findings from Parts 1&ndash;4 hold up. <strong>One of them gets actively falsified by the data.</strong> That's not embarrassing &mdash; that's the entire point of an eval product. The blog post for the methodology runner that ships next has to demonstrate the same loop.</p>
+  <p class="post-lede">Parts 1&ndash;4 of this series shipped a feature, scored each PR against a bench, and admitted in writing that the sample size was below industry baseline. Part 5 is what happened when we took that critique seriously, fired 150 dispatches in a structured n=10/cell sweep, and computed confidence intervals on every claim. Three of the directional findings from Parts 1&ndash;4 hold up. <strong>One of them gets actively falsified by the data.</strong> That's not embarrassing &mdash; that's the entire point of an eval product. The methodology runner that ran in this post shipped as v2.10/v2.11 (<a href="we-used-ato-to-test-ato-part-6.html">Part 6</a> + <a href="we-used-ato-to-test-ato-part-7.html">Part 7</a> are the build logs).</p>
 
   <h2>The promise from Parts 1&ndash;4 was: bench → impl → score, with receipts</h2>
 
@@ -251,7 +251,7 @@ GROUP BY cond;
 SQL
 </code></pre>
 
-  <p>This is the methodology runner&rsquo;s minimum viable shape, hand-rolled in bash. The Pro version ships next: variant matrix expansion, LLM-judge rubric, cross-model laddering, confidence intervals computed into the receipt, scheduled regression-watch &mdash; all with the dual cost accounting (your LLM invoice + our compute) the open-source <code class="mono">packages/ato-pricing/pricing.json</code> rate card publishes.</p>
+  <p>This is the methodology runner&rsquo;s minimum viable shape, hand-rolled in bash. The Pro version <strong>shipped in v2.10 PR-3 (2026-05-25) + v2.11 PR-12.x</strong>: variant matrix expansion, LLM-judge rubric, cross-model laddering (PR-13), confidence intervals computed into the receipt, scheduled regression-watch (PR-7), <code class="mono">--apply</code> with lineage tracking (PR-12.4), auto-extension on holdout regression (PR-15) &mdash; all with the dual cost accounting (your LLM invoice + our compute) the rate card publishes. <a href="we-used-ato-to-test-ato-part-6.html">Part 6</a> is the methodology runner build log.</p>
 
   <h2 id="cross-model-update">Update 2026-05-25 PM &mdash; the cross-model n=30 data</h2>
 
