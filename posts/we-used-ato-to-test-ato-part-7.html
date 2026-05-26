@@ -208,9 +208,11 @@ ato evaluations methodology runs show &lt;run-id&gt; --human</code></pre>
 
   <h2>What you get free vs. what ATO Pro adds</h2>
 
-  <p>Everything in this Part 7 ran on the free primitives. <strong>Defining methodologies, running them with your own API keys, computing per-cell statistics, comparing across runs &mdash; all free, all local, all yours</strong>. We don&rsquo;t charge for &ldquo;ran your prompts&rdquo; capability when it&rsquo;s your keys + your machine doing the work.</p>
+  <p>The principle is simple: <strong>free = the building blocks you can script with; Pro = the codified one-button automations on top of those blocks</strong>. If you want to do something by hand, you can. If you want us to do it for you, that&rsquo;s what you&rsquo;re paying for.</p>
 
-  <p>What ATO Pro ($29/mo) adds on top: the codified automation that turns one-shot methodology runs into a continuously-improving loop. <strong>Scheduled re-runs that catch model drift before you do</strong>. <strong>Diagnose: an LLM reads your failing cells and proposes a specific change to your agent definition that would have raised the score</strong>. <strong>A/B test the change against a holdout set</strong>. <strong>Auto-revert if production telemetry says the change regressed</strong>. The cost-quality data above is the foundation; Pro is what closes the loop on it. <a href="https://agentictool.ai/pro">Learn about Pro &rarr;</a></p>
+  <p><strong>Free.</strong> <code class="mono">ato dispatch</code>, war-rooms, sessions, replay, the SQLite receipt log, the agent file format, the rubric library (regex / structural / LLM-as-judge), the math (Welch t, normal-CDF approximation, per-cell stats), the methodology config format, viewing past runs. Everything you need to reproduce a study like this one by writing a 100-line bash script around <code class="mono">ato dispatch</code> and your own JSON parser. Your keys, your machine, your data.</p>
+
+  <p><strong>ATO Pro ($29/mo).</strong> The codified one-button versions of those same workflows: <code class="mono">ato evaluations methodology run &lt;slug&gt;</code> (the orchestrator that fans the variant matrix out for you instead of you writing the loop); <code class="mono">ato evaluations methodology diagnose &lt;run-id&gt;</code> (an LLM reads your failing cells and proposes a specific change to your agent definition); <code class="mono">--apply</code> with lineage tracking, the holdout-set A/B, scheduled re-runs that catch model drift before you do, auto-revert when production telemetry says a change regressed. The Pro tier is the harness; the free tier is the parts to build one. <a href="https://agentictool.ai/pro">Learn about Pro &rarr;</a></p>
 
   <h2>Honest disclosure</h2>
 
@@ -225,7 +227,7 @@ ato evaluations methodology runs show &lt;run-id&gt; --human</code></pre>
     <a href="https://agentictool.ai/pro" class="post-cta-secondary">Learn about Pro &rarr;</a>
   </p>
 
-  <p class="post-footnote"><em>Real data behind this post: 150 fresh gemini-2.5-flash dispatches fired 2026-05-25 between 00:25 and 01:49 UTC against the same five Part 5 prompts. Customer-side spend: $0.56. Receipts in <code class="mono">~/.ato/local.db</code> on the author&rsquo;s machine. The claude-sonnet-4-6 data came from the v2.9 build log (Part 5) which lives in the same database. All the math + composition logic is open source at <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/tree/main/apps/cli/src/methodology" target="_blank" rel="noopener">apps/cli/src/methodology/</a>.</em></p>
+  <p class="post-footnote"><em>Real data behind this post: 150 fresh gemini-2.5-flash dispatches fired 2026-05-25 between 00:25 and 01:49 UTC against the same five Part 5 prompts. Customer-side spend: $0.56. Receipts in <code class="mono">~/.ato/local.db</code> on the author&rsquo;s machine. The claude-sonnet-4-6 data came from the v2.9 build log (Part 5) which lives in the same database. We ran these with Pro&rsquo;s <code class="mono">methodology run</code> orchestrator because it&rsquo;s our own work; the same 150 dispatches were reproducible by hand with the free <code class="mono">ato dispatch</code> primitive and a short bash loop &mdash; that&rsquo;s the boundary we drew.</em></p>
 
 </article>
 
