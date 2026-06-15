@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>v2.18 — Your war room, now in any browser, tethered to your laptop — ATO</title>
+<meta name="description" content="ATO v2.18 ships read-only Team Workspaces on the web, a browser-to-desktop tether with end-to-end encryption, team management from the cloud, war-room auto-close, and subagent observability for Claude Code's Task tool. Receipts everywhere.">
+<meta name="keywords" content="ATO v2.18, multi-LLM team workspace, browser desktop tether, AI receipts, multi-runtime AI war room, claude code subagent, war-rooms sweep">
+<meta name="author" content="Beatriz Nigri">
+<link rel="canonical" href="https://agentictool.ai/posts/v2.18-team-workspaces-and-tether.html">
+<meta property="og:type" content="article">
+<meta property="og:title" content="v2.18 — Your war room, now in any browser, tethered to your laptop">
+<meta property="og:description" content="Team Workspaces on the web. Browser ↔ Desktop tether with X25519 + AEAD. Subagent log for Claude Code. War-rooms that auto-close. All in v2.18.">
+<meta property="og:url" content="https://agentictool.ai/posts/v2.18-team-workspaces-and-tether.html">
+<meta property="og:site_name" content="ATO">
+<meta property="article:published_time" content="2026-06-15T00:00:00Z">
+<meta property="article:author" content="Beatriz Nigri">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="v2.18 — Your war room, now in any browser, tethered to your laptop">
+<meta name="twitter:description" content="Team Workspaces on the web. Browser ↔ Desktop tether with X25519 + AEAD. Subagent log for Claude Code. War-rooms that auto-close. All in v2.18.">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Article","headline":"v2.18 — Your war room, now in any browser, tethered to your laptop","description":"ATO v2.18 ships read-only Team Workspaces on the web, browser-to-desktop tether, team management from the cloud, war-room auto-close, and subagent observability.","datePublished":"2026-06-15","author":{"@type":"Person","name":"Beatriz Nigri"},"publisher":{"@type":"Organization","name":"ATO","url":"https://agentictool.ai"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://agentictool.ai/posts/v2.18-team-workspaces-and-tether.html"}}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/posts/post.css">
+</head>
+<body>
+
+<header class="post-header">
+  <div class="post-header-inner">
+    <a href="/" class="post-back">&larr; agentictool.ai</a>
+    <a href="/#download" class="post-cta">Download &rarr;</a>
+  </div>
+</header>
+
+<article>
+  <div class="post-meta">2026-06-15 &middot; v2.18.0 release &middot; 5 min read</div>
+
+  <h1>v2.18 &mdash; Your war room, now in any browser, tethered to your laptop</h1>
+
+  <p>The thing that bugged me about ATO for the last six months: you had to be at your desktop to see what your team was doing. War-rooms, shared sessions, mission boards &mdash; all rendered beautifully in the desktop app, all invisible from anywhere else.</p>
+
+  <p>v2.18 fixes that. It also fixes the other thing &mdash; war-rooms that just sit there, idle, never closing, never showing up in the Sessions feed because someone forgot to type <code class="mono">ato war-rooms close &lt;id&gt;</code>. And it brings Claude Code&rsquo;s Agent (Task) tool into the same receipt ledger as everything else, because subagent dispatches were the last black box.</p>
+
+  <p>Three clusters, one release. Let&rsquo;s walk through them.</p>
+
+  <h2>1. Read-only Team Workspaces on the web</h2>
+
+  <p>Sign in at <a href="https://agentictool.ai">agentictool.ai</a> with your cloud account. You see every shared session, war-room, chat, loop, and mission your team has published &mdash; rendered with the same fidelity as the desktop app. Session turns with role chips. War-room seats with verdict badges. Chat messages with per-message initiator attribution. Mission cards with the dispatch metadata you&rsquo;d see in a kanban.</p>
+
+  <p>It&rsquo;s read-only on purpose. The desktop is still where you author. The web is where you observe &mdash; from a meeting, from your phone in line at the coffee shop, from the conference room TV while the team walks through a multi-LLM review.</p>
+
+  <p>Pagination + load-more on event streams so a 2-week-old session doesn&rsquo;t blow up the page. Connection-state indicator pill in the top right (green / amber / red) so you know when the live event stream is healthy. Mobile-responsive with a hamburger nav that actually works with a screen reader.</p>
+
+  <h2>2. Browser &harr; Desktop tether</h2>
+
+  <p>This is the part I&rsquo;m most proud of. If your team shares an end-to-end-encrypted session, the cloud relay forwarding the events doesn&rsquo;t have the team key &mdash; it lives in your desktop&rsquo;s OS keychain. So how does the browser decrypt? It asks your desktop.</p>
+
+  <p>v2.18 ships a per-browser tether channel: <strong>X25519 ephemeral DH</strong> for key agreement, <strong>HKDF-SHA256</strong> to derive the session key, <strong>XChaCha20-Poly1305 AEAD</strong> for every frame, with the nonce bound to direction + sequence to make replay impossible. The cloud relay forwards opaque ciphertext only. It cannot read what your browser asks your desktop to decrypt.</p>
+
+  <p>Pairing has a 12-character fingerprint &mdash; <code class="mono">browser_pubkey_fp</code> &mdash; displayed in both the browser tether card and the desktop approval modal. You compare them with your eyes before clicking Approve. It&rsquo;s the same trick Signal uses for safety numbers. If someone in your office sits down at your laptop while you&rsquo;re away from your desk, they don&rsquo;t get to silently approve a browser pairing because the fingerprint they see in their browser won&rsquo;t match the one on your desktop. (Defense-in-depth: even if the cloud were compromised and lied about the fingerprint, the desktop still cross-checks the local <code class="mono">tether_approvals</code> table before promoting an &ldquo;Allow always&rdquo;.)</p>
+
+  <h2>3. Create teams + invite teammates from the web</h2>
+
+  <p>You used to need the desktop to create a team. Now you don&rsquo;t. The web has <strong>+ New team</strong>, invite-by-email with role picker, per-member role change, remove, and a danger-zone delete with name-typing confirmation. A new <strong>Account</strong> sidebar panel shows your profile, plan tier, joined date, and a sign-out button that clears local state even if the API call fails.</p>
+
+  <p>What stays on the desktop: your LLM provider API keys (they live in the OS keychain &mdash; we&rsquo;re not putting them in localStorage), your runtime detection (we have to actually look at your filesystem to find your Claude CLI binary), your skills + MCP installs (filesystem ops), and your end-to-end team-key material (same keychain story). The web shows you a clear note about what&rsquo;s where.</p>
+
+  <h2>4. <code class="mono">ato war-rooms sweep</code> &mdash; war-rooms that close themselves</h2>
+
+  <p>The #1 UX trap of multi-LLM review was the manual close step. You&rsquo;d fire <code class="mono">ato dispatch claude</code> + <code class="mono">ato dispatch codex</code> + <code class="mono">ato dispatch google</code> with a shared <code class="mono">--war-room-id</code>, get three independent reviews back, and then&hellip; you&rsquo;d forget to run <code class="mono">ato war-rooms close &lt;id&gt;</code>. The war-room would sit there with three replies and no summary. The Sessions feed wouldn&rsquo;t show it. You&rsquo;d open the app a week later and wonder where your reviews went.</p>
+
+  <p>v2.18 ships <code class="mono">ato war-rooms sweep</code>. Wire it to launchd or cron:</p>
+
+  <pre><code class="mono">*/5 * * * *  /opt/homebrew/bin/ato war-rooms sweep --idle-minutes 15 --max-per-run 5</code></pre>
+
+  <p>Every 5 minutes, it scans <code class="mono">execution_logs</code> for war-rooms idle &gt; 15 minutes, excludes already-closed ones, and runs the same coordinator-summary close orchestrator that <code class="mono">ato war-rooms close &lt;id&gt;</code> uses &mdash; capped to 5 closes per tick so a backlog doesn&rsquo;t blow your bill. Default coordinator is Google (free quota, cheap summarization). Single-JSON envelope output for downstream tooling. Clap-layer validators on every flag.</p>
+
+  <p>One-shot R1 fan-outs self-close once the seats land. The Sessions feed populates without you thinking about it.</p>
+
+  <h2>5. <code class="mono">ato subagent log</code> &mdash; receipts for Claude Code&rsquo;s Task tool</h2>
+
+  <p>When Claude Code uses the Task tool to spin up a subagent, that subagent runs in a fresh context window with its own prompt, its own model, its own cost, its own tool calls. From the parent session, you see one line: &ldquo;Task tool invocation succeeded.&rdquo; You don&rsquo;t see what the subagent did. You don&rsquo;t see what it cost. You don&rsquo;t see what files it touched.</p>
+
+  <p>v2.18 adds <code class="mono">ato subagent log create</code>. Bracket every Agent tool call:</p>
+
+  <pre><code class="mono">ato subagent log create \
+  --prompt "review this diff for correctness" \
+  --agent-slug pr-reviewer \
+  --war-room-id $WR_ID \
+  --auth-mode subscription \
+  --billing-surface claude_code_subscription</code></pre>
+
+  <p>The subagent dispatch now appears in <code class="mono">execution_logs</code> alongside everything else, with the same canonical <code class="mono">auth_mode</code> + <code class="mono">billing_surface</code> vocab so PRO analytics can group across CLI / desktop / browser / subagent uniformly. The git commit SHA at dispatch time is captured per receipt via a bounded 2-second timeout so we never block on a slow <code class="mono">git rev-parse</code>. UTF-8 truncation is safe on multi-byte prompts (the same bug also lived in <code class="mono">dispatch.rs</code>; we ported the fix).</p>
+
+  <p>Multi-agent fan-outs can share a <code class="mono">--war-room-id</code> and get summarized by <code class="mono">ato war-rooms close &lt;id&gt;</code> or auto-closed by the sweep above.</p>
+
+  <h2>The smaller things</h2>
+
+  <ul>
+    <li><strong>Sign-in screen redesigned.</strong> Minimal centered card. Marketing copy stays on agentictool.ai; the dashboard entry point is one focused viewport with logo + tagline + sign-in card + 3 outbound footer links. No more hero + features + sign-in stack.</li>
+    <li><strong>Onboarding rewritten as 3-step setup.</strong> Install SDK, save key as <code class="mono">.env</code>, wrap the client. Each step explains <em>why</em>. The &ldquo;I&rsquo;ve copied my key&rdquo; button is disabled until you actually copy. Non-technical users have a path now.</li>
+    <li><strong>Cost Dashboard date picker</strong> no longer renders OS-default white chrome against the dark theme.</li>
+    <li><strong>Deprecated Google models auto-filtered</strong> from the chat picker. <code class="mono">gemini-2.0-flash-001</code> 404s are gone.</li>
+  </ul>
+
+  <h2>What&rsquo;s next</h2>
+
+  <p>The v2.18 architecture doc &mdash; <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/docs/v2.18-active-workstation.md">docs/v2.18-active-workstation.md</a> &mdash; sketches the next wave: <strong>browser-driven dispatch</strong> over the tether channel. Today the tether carries a single frame kind (<code class="mono">decrypt_events</code>); next wave adds <code class="mono">dispatch_request</code> / <code class="mono">dispatch_chunk</code> / <code class="mono">dispatch_complete</code> so the browser becomes a real cockpit instead of just an observation deck. The desktop still runs the LLM call &mdash; same keys, same receipts &mdash; the browser just orchestrates.</p>
+
+  <p>Also queued: in-chat model picker for CLI runtimes (claude / codex / gemini CLI), full Loop Composer node-kind coverage (<code class="mono">diagnose</code> / <code class="mono">apply</code> / <code class="mono">review</code> / <code class="mono">war_room</code> / <code class="mono">score</code> / <code class="mono">input</code> / <code class="mono">output</code>), and PRO-tier UI gating so free users don&rsquo;t hit dead-end 403s when they click the new team-management buttons.</p>
+
+  <h2>Get it</h2>
+
+  <p><a href="https://github.com/WillNigri/Agentic-Tool-Optimization/releases/latest" class="post-cta-inline"><strong>Download v2.18.0 &rarr;</strong></a> &nbsp;&middot;&nbsp; <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/CHANGELOG.md">Full changelog</a></p>
+
+  <p>If you&rsquo;re already on a prior version, the desktop app will detect the new release and walk you through the update on next launch. The first time you open v2.18, a &ldquo;What&rsquo;s new&rdquo; modal pops up summarizing the changes &mdash; click through it once, never again. Brand-new installs see the Onboarding flow instead.</p>
+
+  <p>As always: MIT licensed, local-first, every byte stays on your machine unless you opt into Pro sync.</p>
+
+  <p><em>&mdash; Beatriz Nigri</em></p>
+</article>
+
+</body>
+</html>

@@ -83,6 +83,13 @@
     <priority>0.9</priority>
   </url>
   <url>
+    <loc>https://agentictool.ai/posts/v2.18-team-workspaces-and-tether.html</loc>
+    <lastmod>2026-06-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <url>
     <loc>https://agentictool.ai/posts/llm-council-tool-calls.html</loc>
     <lastmod>2026-05-13</lastmod>
     <changefreq>monthly</changefreq>
