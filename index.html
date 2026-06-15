@@ -164,7 +164,7 @@
     <section class="hero">
         <div class="hero-inner">
             <div class="hero-top">
-                <a href="/posts/compare-claude-codex-gemini.html" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.8 &middot; Claude / Codex / Gemini under your rules &middot; See a real review &rarr;</a>
+                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/CHANGELOG.md" class="hero-badge" style="text-decoration:none;cursor:pointer;">v2.18 &middot; Team Workspaces on the web &middot; Browser &harr; Desktop tether &middot; See what's new &rarr;</a>
                 <p class="hero-kicker">// your AIs already have hands. who's flying? &darr;</p>
                 <h1 class="hero-title">
                     <span class="line">EVERY AI</span>
@@ -299,12 +299,17 @@
             <div class="section-label fade-in">Features</div>
             <h2 class="section-title fade-in">The war-room engine, plus everything you&rsquo;d want around it</h2>
 
-            <!-- NEW IN v1.5.5 -->
+            <!-- NEW IN v2.18 -->
             <div class="feature-block fade-in" style="margin-bottom: 3rem;">
                 <div class="feature-info">
-                    <h3 style="color: var(--accent-cyan);">New in v2.6 &mdash; Compare any AI on your actual task</h3>
-                    <p><code class="mono">ato review --reviewer @security-specialist --reviewer @perf-reviewer --reviewer claude --reviewer minimax</code> &bull; Function-calling tools (<code class="mono">read_file</code>, <code class="mono">grep</code>, <code class="mono">git_log</code>) &bull; Persistent specialist agents with system prompts &bull; Per-turn audit trail in the GUI &mdash; verified-via-N-tool-calls vs prompt-only badges &bull; Lean mode forces the LLMs to walk the live repo</p>
+                    <h3 style="color: var(--accent-cyan);">New in v2.18 &mdash; Bring your war room to the browser</h3>
+                    <p><strong>Team Workspaces on the web</strong> &bull; <strong>Browser &harr; Desktop tether (X25519 + AEAD)</strong> &bull; <strong>Create + manage teams from any browser</strong> &bull; <code class="mono">ato war-rooms sweep</code> auto-closes idle war-rooms from cron &bull; <code class="mono">ato subagent log</code> brings Claude Code&rsquo;s Task tool into the same execution log</p>
                     <ul class="feature-bullets">
+                        <li><strong>Read-only Team Workspaces on the web</strong> &mdash; Sign in at agentictool.ai. Browse every shared session, war-room, chat, loop, and mission with desktop-level fidelity. Snapshot renderers per kind. Pagination on shares + load-more on the event stream. Mobile-responsive, accessible.</li>
+                        <li><strong>Browser &harr; Desktop tether</strong> &mdash; Pair your browser to a running desktop in 12 hex chars of <code class="mono">browser_pubkey_fp</code>. X25519 DH + HKDF-SHA256 + XChaCha20-Poly1305 over a cloud relay that never sees plaintext. Defense-in-depth &ldquo;Allow always&rdquo; lives in a local <code class="mono">tether_approvals</code> table on the desktop, not the cloud.</li>
+                        <li><strong>Create teams + invite teammates from the web</strong> &mdash; &ldquo;+ New team&rdquo;, invite by email + role, change role per member, danger-zone delete with name-typing confirmation. Account page with profile + plan + sign-out. (LLM keys, runtimes, skills stay in the desktop where the OS keychain is.)</li>
+                        <li><strong><code class="mono">ato war-rooms sweep</code></strong> &mdash; Auto-closes idle war-rooms with a coordinator summary. Single-JSON envelope output, clap-layer validators. Wire to launchd / cron and one-shot R1 multi-LLM reviews self-close once seats land &mdash; no more invisible war-rooms in the Sessions feed.</li>
+                        <li><strong><code class="mono">ato subagent log</code></strong> &mdash; Claude Code&rsquo;s Agent (Task) tool dispatches now show up in execution_logs alongside outer-session work. Canonical <code class="mono">auth_mode</code> + <code class="mono">billing_surface</code> vocab. Git commit SHA per receipt. UTF-8-safe truncation on multibyte prompts.</li>
                         <li><strong>Live runs panel</strong> &mdash; See every in-flight dispatch with agent slug, runtime, workspace, and elapsed time. Kill stuck dispatches with one click &mdash; no more reading every terminal buffer to find the runaway. Shows up the moment you fire something via Quick Test, the chat pane, scheduled cron, or MCP <code class="mono">run_agent</code>.</li>
                         <li><strong>File attribution per dispatch</strong> &mdash; Every run captures the list of files touched in the project root via mtime-snapshot diff. Works across <em>every</em> runtime since it&rsquo;s filesystem-level, not stream-parsing. Click any file in the dashboard to see every dispatch that ever touched it &mdash; agent, runtime, timestamp, prompt summary, sibling files.</li>
                         <li><strong>Cross-runtime regression detection</strong> &mdash; Switch <code class="mono">@reviewer</code> from Sonnet 4.6 to Opus 4.7 and the dashboard flags &ldquo;success rate dropped 17pp across 412 conversations.&rdquo; Joins the configuration-change ledger with trace windows automatically. Severity-tagged: regressions first, improvements second, neutral hidden by default.</li>
