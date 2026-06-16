@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATO Pro — Replays your prompts overnight. Tells you what to switch.</title>
+    <meta name="description" content="ATO Pro ($29/mo) automates what you'd do manually with the free CLI: scheduled re-runs, codified learning loop, cloud trace retention, cross-device regression alerts, auto-PR after A/B wins. Every Pro row is automation we built on the free primitives. You can DIY for free — Pro buys you the button.">
+    <meta name="keywords" content="ato pro, agentic tool optimization pro, llm regression alerts, methodology runner, ato cloud, llm a/b testing, cron evaluator, llm-as-judge cloud">
+
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://agentictool.ai/pro">
+    <meta property="og:title" content="ATO Pro — Replays your prompts overnight. Tells you what to switch.">
+    <meta property="og:description" content="$29/mo. Cloud trace retention, scheduled methodology re-runs, cross-device regression detection, codified learning loop (failure → agent change → A/B), auto-revert watch + auto-PR after wins.">
+    <meta property="og:site_name" content="Agentic Tool Optimization">
+    <meta property="og:image" content="https://agentictool.ai/og.png">
+
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="ATO Pro — Replays your prompts overnight. Tells you what to switch.">
+    <meta name="twitter:description" content="$29/mo. The automation layer on top of the free CLI. Same model as GitLab, Sentry, Supabase.">
+    <meta name="twitter:image" content="https://agentictool.ai/og.png">
+
+    <link rel="canonical" href="https://agentictool.ai/pro">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/site.css">
+
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Product",
+        "name": "ATO Pro",
+        "url": "https://agentictool.ai/pro",
+        "description": "The automation tier on top of the free ATO CLI. Cloud trace retention, scheduled methodology re-runs, cross-device regression alerts, codified learning loop, auto-PR after A/B wins.",
+        "brand": {
+            "@type": "Brand",
+            "name": "ATO"
+        },
+        "offers": {
+            "@type": "Offer",
+            "price": "29",
+            "priceCurrency": "USD",
+            "priceSpecification": {
+                "@type": "UnitPriceSpecification",
+                "price": "29",
+                "priceCurrency": "USD",
+                "billingDuration": "P1M",
+                "billingIncrement": 1,
+                "unitText": "MONTH"
+            },
+            "availability": "https://schema.org/InStock"
+        }
+    }
+    </script>
+</head>
+<body>
+
+    <nav>
+        <div class="nav-inner">
+            <a href="/" class="nav-logo">
+                <div class="nav-logo-mark">A</div>
+                <span class="nav-logo-text">ATO_</span>
+            </a>
+            <button class="nav-mobile-toggle" onclick="document.querySelector('.nav-links').classList.toggle('open')" aria-label="Toggle menu">&#9776;</button>
+            <div class="nav-links">
+                <a href="/#features">Features</a>
+                <a href="/pro" style="color:var(--accent-cyan);">Pro</a>
+                <a href="/#download">Download</a>
+                <a href="/posts/">Blog</a>
+                <a href="https://github.com/WillNigri/Agentic-Tool-Optimization" target="_blank" rel="noopener">GitHub</a>
+                <a href="/#download" data-ato-download="auto" class="nav-cta">Download &rarr;</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-inner">
+            <div class="hero-top">
+                <a href="/" class="hero-badge" style="text-decoration:none;cursor:pointer;">$29/mo &middot; Cancel anytime &middot; Free tier stays free &mdash; <span style="text-decoration:underline;">back to homepage</span></a>
+                <p class="hero-kicker">// pro replays your prompts overnight. tells you what to switch. &darr;</p>
+                <h1 class="hero-title">
+                    The automation layer<br>
+                    on top of the free CLI.
+                </h1>
+                <p class="hero-sub" style="max-width:780px;">
+                    Every Pro row is automation we built on the free primitives. You can DIY every one of them with <code class="mono">ato dispatch</code>, <code class="mono">crontab</code>, and your own LLM prompts &mdash; Pro buys you the button. Same model as GitLab, Sentry, Supabase.
+                </p>
+            </div>
+
+            <div class="hero-bottom" style="display:flex;gap:14px;flex-wrap:wrap;justify-content:center;margin-top:24px;">
+                <a href="#how" class="btn-primary">See what Pro automates &darr;</a>
+                <a href="/#download" data-ato-download="auto" class="btn-outline">Install ATO first (free) &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- WHAT PRO AUTOMATES -->
+    <section class="features" id="how" style="border-top:1px solid var(--border);">
+        <div class="container">
+            <div class="section-label fade-in">What Pro automates</div>
+            <h2 class="section-title fade-in">Five things you'd build a Bash loop for. We built it.</h2>
+            <p class="section-subtitle fade-in" style="margin:0 auto 48px auto;">If you've ever set a cron job to re-run your eval suite and Slack you when scores drop, you've built half of ATO Pro by hand. Here's what we ship.</p>
+
+            <div class="problem-grid fade-in">
+
+                <!-- 1. Scheduled methodology re-runs -->
+                <article class="problem-card">
+                    <div class="problem-card-icon">&#x1F551;</div>
+                    <h3>Scheduled methodology re-runs</h3>
+                    <p><code class="mono">methodology schedule create</code> &mdash; pick a methodology, pick a cron, get a fresh Welch-t + 95% CI report on every wake. No bash, no <code class="mono">crontab -e</code>, no parsing JSON.</p>
+                    <p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem;">Free DIY: <code class="mono">crontab</code> + <code class="mono">ato methodology run</code> + a wrapper script.</p>
+                </article>
+
+                <!-- 2. methodology diagnose — codified learning loop -->
+                <article class="problem-card">
+                    <div class="problem-card-icon">&#x1F501;</div>
+                    <h3>Codified learning loop (<code class="mono">methodology diagnose</code>)</h3>
+                    <p>Failed regression on Friday? Pro spawns a 3-LLM diagnose war-room over the weekend, proposes a concrete agent change (prompt, model, tool list), runs the A/B, and tells you which version won. Monday morning you have a verdict instead of a backlog.</p>
+                    <p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem;">Free DIY: 3 <code class="mono">ato dispatch</code> calls + your own merging prompts + a follow-up <code class="mono">methodology run</code>.</p>
+                </article>
+
+                <!-- 3. Cloud trace retention + cross-device regression detection -->
+                <article class="problem-card">
+                    <div class="problem-card-icon">&#x1F4CA;</div>
+                    <h3>Cloud trace retention + regression alerts</h3>
+                    <p>Every dispatch from every machine you use streams to <code class="mono">ato-cloud</code> (30-day retention). When tool success rate drops 17pp after a model swap, you get an alert &mdash; not a six-week-late realization. Cross-device by design: your laptop's evals and the CI box's are in one ledger.</p>
+                    <p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem;">Free DIY: nothing, this needs a server you'd have to run yourself.</p>
+                </article>
+
+                <!-- 4. Auto-revert watch + auto-PR -->
+                <article class="problem-card">
+                    <div class="problem-card-icon">&#x21B6;</div>
+                    <h3>Auto-revert watch + auto-PR after A/B wins</h3>
+                    <p>When <code class="mono">methodology diagnose</code> finds the new version beats baseline at p&lt;0.05, Pro opens the PR for you &mdash; agent file change, methodology results in the PR body, before/after numbers. When it loses, you get a revert PR instead.</p>
+                    <p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem;">Free DIY: GitHub API + parsing methodology JSON + churning out the PR body.</p>
+                </article>
+
+                <!-- 5. Cloud sync of methodology runs -->
+                <article class="problem-card">
+                    <div class="problem-card-icon">&#x2601;</div>
+                    <h3>Cloud sync of methodology runs + scheduled evaluators</h3>
+                    <p>Run a methodology on your laptop at 3pm. Open ATO on the desktop at home, the run's there. Schedule an evaluator to fire nightly &mdash; Pro runs it in the cloud even when your laptop's closed. Your free tier still does everything locally; Pro just keeps the lights on while you're asleep.</p>
+                    <p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem;">Free DIY: sync a SQLite file across machines + run a self-hosted scheduler.</p>
+                </article>
+
+                <!-- 6. Hosted LLM-as-judge -->
+                <article class="problem-card">
+                    <div class="problem-card-icon">&#x2696;</div>
+                    <h3>Hosted LLM-as-judge quality scoring</h3>
+                    <p>You can already use any provider as a judge with your own API key (free tier). Pro adds a hosted judge endpoint with retry, cache, rate-limit handling, and a managed prompt library &mdash; so your overnight evals don't crash on a transient 429.</p>
+                    <p style="margin-top:12px;color:var(--text-muted);font-size:0.85rem;">Free DIY: <code class="mono">ato dispatch</code> with your own judge prompt + retry wrapper.</p>
+                </article>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- PRICING -->
+    <section class="features" id="pricing" style="border-top:1px solid var(--border);">
+        <div class="container">
+            <div class="section-label fade-in">Pricing</div>
+            <h2 class="section-title fade-in">$29/mo. Cancel anytime.</h2>
+            <p class="section-subtitle fade-in" style="margin:0 auto 32px auto;">Team workspaces (shared agents + skills + methodologies, encrypted provider key store) live on the $49/mo Team tier. <a href="/#pricing" style="color:var(--accent-cyan);">See the full tier table on the homepage &rarr;</a></p>
+
+            <div style="max-width:560px;margin:0 auto;padding:40px 32px;border:2px solid var(--accent-cyan);border-radius:16px;background:rgba(0,255,178,0.05);" class="fade-in">
+                <div style="text-align:center;">
+                    <div style="font-family:'JetBrains Mono',monospace;color:var(--accent-cyan);font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:12px;">ATO Pro</div>
+                    <div style="font-size:3rem;font-weight:600;color:var(--text-primary);line-height:1;">$29<span style="font-size:1rem;color:var(--text-muted);font-weight:400;">/month</span></div>
+                    <p style="color:var(--text-muted);margin-top:12px;">Everything in Free, plus the six automations above.</p>
+                </div>
+                <div style="text-align:center;margin-top:32px;">
+                    <a href="/#download" data-ato-download="auto" class="btn-primary" style="display:inline-block;">Install ATO &rarr;</a>
+                    <p style="color:var(--text-muted);font-size:0.85rem;margin-top:16px;">Pro unlocks inside the app after install. Sign in once, billed via Stripe.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="features" style="border-top:1px solid var(--border);">
+        <div class="container">
+            <div class="section-label fade-in">FAQ</div>
+            <h2 class="section-title fade-in">The questions we keep getting.</h2>
+
+            <div style="max-width:780px;margin:0 auto;" class="fade-in">
+
+                <div style="padding:20px 0;border-bottom:1px solid var(--border);">
+                    <h3 style="color:var(--text-primary);margin-bottom:8px;">Why would I pay $29/mo when the free tier already does multi-LLM war-rooms?</h3>
+                    <p style="color:var(--text-muted);">Because the free tier needs you to be at your laptop. Pro is what runs while you sleep, alerts you on a real regression, and opens the fix PR. Same shape as Sentry free vs. Sentry paid: the SDK is free; the cron job, the alert routing, and the retention live in the paid plan.</p>
+                </div>
+
+                <div style="padding:20px 0;border-bottom:1px solid var(--border);">
+                    <h3 style="color:var(--text-primary);margin-bottom:8px;">What stays free, forever?</h3>
+                    <p style="color:var(--text-muted);">Dispatch + compare across runtimes. War-rooms, sessions, replay, receipts. <code class="mono">ato review</code> with tool calls. The full <code class="mono">methodology</code> runner (Welch t + 95% CI). The MCP server with 27 tools. Tauri desktop, embedded terminal, skills marketplace, agent wizard. Local-first, MIT, bring your own keys. None of that moves to Pro &mdash; we don't even reserve the right to.</p>
+                </div>
+
+                <div style="padding:20px 0;border-bottom:1px solid var(--border);">
+                    <h3 style="color:var(--text-primary);margin-bottom:8px;">Do you store my prompts or my API keys?</h3>
+                    <p style="color:var(--text-muted);">API keys never leave your desktop &mdash; even on Pro. Prompts and responses get encrypted at rest before they go to cloud retention; we use envelope encryption with a key only your desktop holds. See <a href="/legal/privacy.html" style="color:var(--accent-cyan);">Privacy</a> and <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/docs/grounding.md" style="color:var(--accent-cyan);">the grounding architecture</a> for the full story.</p>
+                </div>
+
+                <div style="padding:20px 0;border-bottom:1px solid var(--border);">
+                    <h3 style="color:var(--text-primary);margin-bottom:8px;">Can I plug ATO into Sentry, OpenTelemetry, Slack, etc.?</h3>
+                    <p style="color:var(--text-muted);">Adapter pattern is on the roadmap &mdash; every dispatch already emits a structured event internally; the missing piece is the output layer to common collectors. If you want to be the first design partner on that, <a href="https://github.com/WillNigri/Agentic-Tool-Optimization/issues/new" style="color:var(--accent-cyan);">open an issue</a> and we'll talk shape.</p>
+                </div>
+
+                <div style="padding:20px 0;border-bottom:1px solid var(--border);">
+                    <h3 style="color:var(--text-primary);margin-bottom:8px;">Team / Enterprise?</h3>
+                    <p style="color:var(--text-muted);">Team is $49/mo &mdash; multi-user shared workspaces, the encrypted provider-key store, cron usage poller. Enterprise (SSO, audit retention, custom SLA) is in the roadmap; talk to us if you need it now.</p>
+                </div>
+
+                <div style="padding:20px 0;">
+                    <h3 style="color:var(--text-primary);margin-bottom:8px;">How do I cancel?</h3>
+                    <p style="color:var(--text-muted);">One button in Settings &rarr; Cloud. We don't gate the cancel behind a sales conversation.</p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="download" style="border-top:1px solid var(--border);">
+        <div class="container">
+            <div class="section-label fade-in">Try it</div>
+            <h2 class="section-title fade-in">Install ATO. Unlock Pro from inside.</h2>
+            <p class="section-subtitle fade-in" style="margin:0 auto 32px auto;">Free tier first &mdash; you don't pay anything until you decide the automations are worth $29. No credit card to install.</p>
+            <div style="text-align:center;" class="fade-in">
+                <a href="/#download" data-ato-download="auto" class="btn-primary">Install ATO (free) &rarr;</a>
+                <a href="/" class="btn-outline" style="margin-left:8px;">Back to homepage &rarr;</a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h4>Agentic Tool Optimization</h4>
+                    <p>AI agents that work together. Across every runtime. Open source, local-first, built with Tauri.</p>
+                </div>
+                <div class="footer-col">
+                    <h5>Product</h5>
+                    <ul>
+                        <li><a href="/#features">Features</a></li>
+                        <li><a href="/pro">Pro</a></li>
+                        <li><a href="/#download">Download</a></li>
+                        <li><a href="https://github.com/WillNigri/Agentic-Tool-Optimization" target="_blank" rel="noopener">GitHub</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Developers</h5>
+                    <ul>
+                        <li><a href="https://github.com/WillNigri/Agentic-Tool-Optimization#readme" target="_blank" rel="noopener">Documentation</a></li>
+                        <li><a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/AGENTS.md" target="_blank" rel="noopener">AGENTS.md (for coding agents)</a></li>
+                        <li><a href="https://github.com/WillNigri/Agentic-Tool-Optimization/issues" target="_blank" rel="noopener">GitHub Issues</a></li>
+                        <li><a href="https://github.com/WillNigri/Agentic-Tool-Optimization/blob/main/CONTRIBUTING.md" target="_blank" rel="noopener">Contributing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h5>Legal</h5>
+                    <ul>
+                        <li><a href="/legal/privacy.html">Privacy Policy</a></li>
+                        <li><a href="/legal/terms.html">Terms of Service</a></li>
+                        <li><a href="/legal/cookies.html">Cookie Notice</a></li>
+                        <li><a href="/legal/subprocessors.html">Subprocessors</a></li>
+                        <li><a href="/legal/data-request.html">Submit a data request</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <span>&copy; 2026 Agentic Tool Optimization</span>
+                <span class="ecosystem-tag">MIT licensed &middot; built with Tauri_</span>
+                <span style="margin-left:auto;display:inline-flex;align-items:center;gap:14px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);">
+                    <a href="#" onclick="if(window.AtoCookies)AtoCookies.openPreferences();return false;" style="color:var(--text-muted);">Cookie preferences</a>
+                </span>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/js/cookie-consent.js" defer></script>
+    <script src="/js/site.js" defer></script>
+</body>
+</html>
