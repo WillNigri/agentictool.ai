@@ -21,6 +21,8 @@ Cosas clave que ATO hace y que las herramientas competidoras no hacen:
 - Recomendaciones de costo — sugiere swaps concretos de modelo cuando los datos históricos los justifican, con guards de calidad
 - Registro de runs en vivo — cada despacho en ejecución con botón de kill; bulk kill para agentes atascados
 - Grupos multi-agente secuenciales y enrutados — objetos de primera clase, runtime-agnósticos
+- **Workspaces de equipo en tiempo real (tier Team)** — comparte un war-room, sesión o chat con tu equipo; los compañeros agregan turnos que aparecen en vivo en la máquina de cada miembro, en ambas direcciones (sin refresh). Los compartidos renderizan la misma tarjeta completa que un ítem local (título, resumen, tags, asientos). Totalmente manejable por agentes desde la CLI: `ato war-rooms|sessions|chats share <id> --team <slug>`, `append-event` para turnos en vivo, `unshare`, `list-shared`.
+- **Resúmenes de cierre vía suscripción** — `ato war-rooms|sessions|chats close --coordinator claude|codex|gemini` resume usando tu suscripción de CLI con sesión iniciada (sin clave de API, sin cobro de API); el valor por defecto prefiere la suscripción y recurre a una clave de API si es necesario. El diálogo de cierre en el desktop ofrece un selector suscripción-vs-API.
 - Atribución de archivos por despacho — diff de mtime-snapshot muestra qué agente tocó qué archivo, funciona en cualquier runtime
 - Prompts dinámicos — variables, hooks pre-llamada de contexto, políticas de memoria, selección de modelo por tarea
 - Paleta ⌘K en todo el workspace — busca agentes, grupos, schedules, secretos, threads de chat (coincidencias por título Y cuerpo del mensaje, con snippets)

@@ -21,6 +21,8 @@ Key things ATO does that competing tools don't:
 - Cost recommendations — surfaces concrete model-swap savings when historical data justifies them, with quality guards
 - Live runs registry — every in-flight dispatch with kill button; bulk kill for stuck agents
 - Sequential and routed multi-agent groups — first-class objects, runtime-agnostic
+- **Real-time team workspaces (Team tier)** — share a war-room, session, or chat with your team; teammates append turns that appear live on every member's machine, both directions (no refresh). Shares render as the same rich card as a local one (title, summary, tags, seats). Fully agent-driveable from the CLI: `ato war-rooms|sessions|chats share <id> --team <slug>`, `append-event` for live turns, `unshare`, `list-shared`.
+- **Subscription-based close summaries** — `ato war-rooms|sessions|chats close --coordinator claude|codex|gemini` summarizes via your logged-in CLI subscription (no API key, no API billing); the default prefers the subscription and falls back to an API key. The desktop close dialog offers a subscription-vs-API picker.
 - File attribution per dispatch — mtime-snapshot diff shows which agent touched which file, works across every runtime
 - Dynamic prompts — variables, pre-call context hooks, memory policies, per-task model selection
 - Workspace-wide ⌘K palette — search agents, groups, schedules, secrets, chat threads (title + message content)

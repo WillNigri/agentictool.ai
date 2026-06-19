@@ -305,9 +305,9 @@
             <div class="feature-block fade-in" style="margin-bottom: 3rem;">
                 <div class="feature-info">
                     <h3 style="color: var(--accent-cyan);">New in v2.18 &mdash; Bring your war room to the browser</h3>
-                    <p><strong>Team Workspaces on the web</strong> &bull; <strong>Browser &harr; Desktop tether (X25519 + AEAD)</strong> &bull; <strong>Create + manage teams from any browser</strong> &bull; <code class="mono">ato war-rooms sweep</code> auto-closes idle war-rooms from cron &bull; <code class="mono">ato subagent log</code> brings Claude Code&rsquo;s Task tool into the same execution log</p>
+                    <p><strong>Real-time team workspaces (GUI + CLI)</strong> &bull; <strong>Browser &harr; Desktop tether (X25519 + AEAD)</strong> &bull; <strong>Create + manage teams from any browser</strong> &bull; <code class="mono">ato war-rooms sweep</code> auto-closes idle war-rooms from cron &bull; <code class="mono">ato subagent log</code> brings Claude Code&rsquo;s Task tool into the same execution log</p>
                     <ul class="feature-bullets">
-                        <li><strong>Read-only Team Workspaces on the web</strong> &mdash; Sign in at agentictool.ai. Browse every shared session, war-room, chat, loop, and mission with desktop-level fidelity. Snapshot renderers per kind. Pagination on shares + load-more on the event stream. Mobile-responsive, accessible.</li>
+                        <li><strong>Real-time team participation</strong> &mdash; Share a war-room, session, or chat with your team; teammates open it and append turns that show up <strong>live on every member&rsquo;s machine, both directions</strong> &mdash; no refresh. Each share renders as the <strong>same rich card</strong> as a local one (title, summary, tags, seats + runtime badges) with a 👥 team badge, &ldquo;shared by&rdquo;, and member avatars. Drive it from the GUI <em>or</em> the CLI &mdash; <code class="mono">ato war-rooms&middot;sessions&middot;chats share</code> and <code class="mono">append-event</code> &mdash; so your agents collaborate too. Browse from any browser, mobile-responsive.</li>
                         <li><strong>Browser &harr; Desktop tether</strong> &mdash; Pair your browser to a running desktop in 12 hex chars of <code class="mono">browser_pubkey_fp</code>. X25519 DH + HKDF-SHA256 + XChaCha20-Poly1305 over a cloud relay that never sees plaintext. Defense-in-depth &ldquo;Allow always&rdquo; lives in a local <code class="mono">tether_approvals</code> table on the desktop, not the cloud.</li>
                         <li><strong>Create teams + invite teammates from the web</strong> &mdash; &ldquo;+ New team&rdquo;, invite by email + role, change role per member, danger-zone delete with name-typing confirmation. Account page with profile + plan + sign-out. (LLM keys, runtimes, skills stay in the desktop where the OS keychain is.)</li>
                         <li><strong><code class="mono">ato war-rooms sweep</code></strong> &mdash; Auto-closes idle war-rooms with a coordinator summary. Single-JSON envelope output, clap-layer validators. Wire to launchd / cron and one-shot R1 multi-LLM reviews self-close once seats land &mdash; no more invisible war-rooms in the Sessions feed.</li>
@@ -928,7 +928,7 @@
                         <li>Regression alerts when an agent&rsquo;s success rate drops</li>
                         <li>Scheduled evaluators (hourly / daily / weekly)</li>
                         <li>Cloud-relay mesh for NAT-traversed dispatch</li>
-                        <li>Team sessions + shared war-rooms</li>
+                        <li>Real-time shared war-rooms, sessions &amp; chats (live participation)</li>
                     </ul>
                 </div>
             </div>
@@ -1025,7 +1025,7 @@
                             <td style="text-align:center; padding:10px 16px; color:var(--accent-cyan);">&check;</td>
                         </tr>
                         <tr style="border-bottom:1px solid var(--border);">
-                            <td style="padding:10px 16px 10px 0;">Team workspaces (multi-user shared agents + skills + methodologies)</td>
+                            <td style="padding:10px 16px 10px 0;">Team workspaces (multi-user shared agents + skills + methodologies; real-time shared war-rooms/sessions/chats with live append)</td>
                             <td style="text-align:center; padding:10px 16px; color:var(--text-muted);">&mdash;</td>
                             <td style="text-align:center; padding:10px 16px; background:rgba(0,255,178,0.03); color:var(--text-muted);">&mdash;</td>
                             <td style="text-align:center; padding:10px 16px; color:var(--accent-cyan);">&check;</td>
