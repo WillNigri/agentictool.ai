@@ -331,6 +331,81 @@
                 </div>
             </div>
 
+            <div class="feature-block fade-in" style="margin-bottom: 3rem;">
+                <div class="feature-info">
+                    <h3 style="color: var(--accent-cyan);">Nuevo en v2.18 &mdash; Lleva tu sala de guerra al navegador</h3>
+                    <p><strong>Workspaces de equipo en tiempo real (GUI + CLI)</strong> &bull; <strong>Tether navegador &harr; desktop (X25519 + AEAD)</strong> &bull; <strong>Crea + gestiona equipos desde cualquier navegador</strong> &bull; <code class="mono">ato war-rooms sweep</code> cierra war-rooms inactivos vía cron &bull; <code class="mono">ato subagent log</code> trae el Task tool de Claude Code al mismo execution log</p>
+                    <ul class="feature-bullets">
+                        <li><strong>Participación de equipo en tiempo real</strong> &mdash; Comparte un war-room, sesión o chat con tu equipo; los compañeros lo abren y agregan turnos que aparecen <strong>en vivo en la máquina de cada miembro, en ambas direcciones</strong> &mdash; sin refresh. Cada compartido renderiza la <strong>misma tarjeta completa</strong> que un ítem local (título, resumen, tags, asientos + badges de runtime) con un badge 👥 de equipo, &ldquo;compartido por&rdquo; y avatares de los miembros. Manéjalo desde la GUI <em>o</em> la CLI &mdash; <code class="mono">ato war-rooms&middot;sessions&middot;chats share</code> y <code class="mono">append-event</code> &mdash; para que tus agentes también colaboren. Navega desde cualquier navegador, responsive en móvil.</li>
+                        <li><strong>Tether navegador &harr; desktop</strong> &mdash; Vincula tu navegador a un desktop en ejecución con 12 caracteres hex de <code class="mono">browser_pubkey_fp</code>. X25519 DH + HKDF-SHA256 + XChaCha20-Poly1305 sobre un relay en la nube que nunca ve texto plano. El &ldquo;Permitir siempre&rdquo; (defensa en profundidad) vive en una tabla local <code class="mono">tether_approvals</code> en el desktop, no en la nube.</li>
+                        <li><strong>Crea equipos + invita compañeros desde la web</strong> &mdash; &ldquo;+ Nuevo equipo&rdquo;, invitación por email + rol, cambio de rol por miembro, borrado en zona de peligro con confirmación escribiendo el nombre. Página de cuenta con perfil + plan + cerrar sesión. (Las claves de LLM, runtimes y skills quedan en el desktop, donde está el keychain del SO.)</li>
+                        <li><strong><code class="mono">ato war-rooms sweep</code></strong> &mdash; Cierra war-rooms inactivos con un resumen del coordinador. Salida en envelope JSON único, validadores en la capa clap. Conéctalo a launchd / cron y las revisiones multi-LLM R1 one-shot se cierran solas cuando llegan los asientos &mdash; no más war-rooms invisibles en el feed de Sesiones.</li>
+                        <li><strong><code class="mono">ato subagent log</code></strong> &mdash; Los despachos del Agent (Task) tool de Claude Code ahora aparecen en execution_logs junto al trabajo de la sesión externa. Vocabulario canónico <code class="mono">auth_mode</code> + <code class="mono">billing_surface</code>. SHA del commit por recibo. Truncado seguro en UTF-8 para prompts multibyte.</li>
+                        <li><strong>Panel de runs en vivo</strong> &mdash; Ve cada despacho en ejecución con slug del agente, runtime, workspace y tiempo transcurrido. Mata despachos atascados con un clic. Aparece en el momento en que disparas algo vía Quick Test, panel de chat, cron programado o MCP <code class="mono">run_agent</code>.</li>
+                        <li><strong>Atribución de archivos por despacho</strong> &mdash; Cada run captura la lista de archivos tocados en la raíz del proyecto vía diff de snapshot de mtime. Funciona en <em>todos</em> los runtimes por ser a nivel de filesystem. Haz clic en cualquier archivo del dashboard para ver cada despacho que lo tocó &mdash; agente, runtime, timestamp, resumen del prompt, archivos hermanos.</li>
+                        <li><strong>Detección de regresión entre runtimes</strong> &mdash; Cambia <code class="mono">@reviewer</code> de Sonnet 4.6 a Opus 4.7 y el dashboard señala &ldquo;la tasa de éxito cayó 17pp en 412 conversaciones.&rdquo; Se une al ledger de cambios de configuración con ventanas de trace automáticamente.</li>
+                        <li><strong>Resúmenes de cierre vía suscripción</strong> &mdash; El coordinador de cierre resume usando tu suscripción de CLI con sesión iniciada (Claude Code / Codex / Gemini) &mdash; sin clave de API, sin cobro de API. <code class="mono">--coordinator claude|codex|gemini</code>; el valor por defecto prefiere la suscripción y recurre a una clave de API si es necesario.</li>
+                        <li><strong>15+ proveedores, 6 runtimes nativos</strong> &mdash; Claude Code, Codex, Gemini CLI, OpenClaw, Hermes, Ollama + Anthropic, OpenAI, Google AI, Mistral, Groq, xAI, Together, Fireworks, DeepSeek, Qwen, MiniMax, Kimi, GLM, Yi vía clave de API.</li>
+                    </ul>
+                </div>
+                <div class="feature-mockup">
+                    <div class="feature-mockup-header">
+                        <div class="feature-mockup-dot red"></div>
+                        <div class="feature-mockup-dot yellow"></div>
+                        <div class="feature-mockup-dot green"></div>
+                        <span style="margin-left:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--text-muted);">Insights &middot; Runs en vivo &middot; 3 en curso</span>
+                    </div>
+                    <div style="padding:10px 8px 8px 8px;">
+                        <div style="display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+                            <span style="position:relative;display:inline-flex;width:8px;height:8px;flex-shrink:0;">
+                                <span style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);"></span>
+                                <span class="cursor-blink" style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);opacity:0.5;"></span>
+                            </span>
+                            <div style="flex:1;min-width:0;">
+                                <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                                    <span style="color:#fff;">@code-writer</span>
+                                    <span style="background:#e8594c;color:#000;padding:0 5px;border-radius:3px;font-size:9px;font-weight:700;">CLAUDE</span>
+                                    <span style="color:var(--text-muted);font-size:10px;">14s</span>
+                                </div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;">&#x1F4C1; ato/repo-a</div>
+                            </div>
+                            <button style="background:transparent;border:1px solid var(--accent-red);color:var(--accent-red);padding:3px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;flex-shrink:0;">&#9633; Matar</button>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+                            <span style="position:relative;display:inline-flex;width:8px;height:8px;flex-shrink:0;">
+                                <span style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);"></span>
+                                <span class="cursor-blink" style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);opacity:0.5;"></span>
+                            </span>
+                            <div style="flex:1;min-width:0;">
+                                <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                                    <span style="color:#fff;">@security-reviewer</span>
+                                    <span style="background:#22c55e;color:#000;padding:0 5px;border-radius:3px;font-size:9px;font-weight:700;">CODEX</span>
+                                    <span style="color:var(--text-muted);font-size:10px;">8s</span>
+                                </div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;">&#x1F4C1; ato/repo-a &middot; <span style="color:#eab308;">&#9888; ambiguo &times;1</span></div>
+                            </div>
+                            <button style="background:transparent;border:1px solid var(--accent-red);color:var(--accent-red);padding:3px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;flex-shrink:0;">&#9633; Matar</button>
+                        </div>
+                        <div style="display:flex;align-items:center;gap:10px;background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:10px 12px;">
+                            <span style="position:relative;display:inline-flex;width:8px;height:8px;flex-shrink:0;">
+                                <span style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);"></span>
+                                <span class="cursor-blink" style="position:absolute;inset:0;border-radius:9999px;background:var(--accent-cyan);opacity:0.5;"></span>
+                            </span>
+                            <div style="flex:1;min-width:0;">
+                                <div style="display:flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-size:0.78rem;">
+                                    <span style="color:#fff;">@docs-summarizer</span>
+                                    <span style="background:#3b82f6;color:#fff;padding:0 5px;border-radius:3px;font-size:9px;font-weight:700;">GEMINI</span>
+                                    <span style="color:var(--text-muted);font-size:10px;">2m 04s</span>
+                                </div>
+                                <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:2px;">&#x1F4C1; ato/docs-site</div>
+                            </div>
+                            <button style="background:transparent;border:1px solid var(--accent-red);color:var(--accent-red);padding:3px 10px;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;cursor:pointer;flex-shrink:0;">&#9633; Matar</button>
+                        </div>
+                        <div style="font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--text-muted);margin-top:10px;text-align:center;">3 despachos en 3 runtimes &middot; 2 compartiendo repo-a &middot; haz clic en cualquier archivo del historial de trace para ver el linaje entre runs</div>
+                    </div>
+                </div>
+            </div>
+
             <!-- v2.1 Replay + Compare + Cost recs -->
             <div class="feature-block fade-in" style="margin-bottom: 3rem;">
                 <div class="feature-info">
